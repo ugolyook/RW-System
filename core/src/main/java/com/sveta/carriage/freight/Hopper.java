@@ -4,4 +4,9 @@ package com.sveta.carriage.freight;
 public class Hopper extends FreightCarriage{
     int maxCargoWeight = 70;
     int cargoVolume = 60;
+
+    @Override
+    public int getKgWeight() {
+        return 0;
+    }
 }

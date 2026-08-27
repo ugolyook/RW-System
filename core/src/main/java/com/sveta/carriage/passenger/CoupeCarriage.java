@@ -5,12 +5,13 @@ import com.sveta.carriage.passenger.models.Seat;
 import java.util.ArrayList;
 import java.util.List;
 
-public class Seated extends PassengerCarriage{
-    private final static int SEATS_LIMIT = 48;
-    public List<Seat> seats = new ArrayList<>(SEATS_LIMIT);
+public class CoupeCarriage extends PassengerCarriage {
+    private final static int DEFAULT_COUPE_LIMIT = 9;
 
-    int bicycleSpots;
-    double seatPitch;
+    private final List<Coupe> coupes = new ArrayList<>(DEFAULT_COUPE_LIMIT);
+
+    private boolean allowsGenderSpecificCompartments;
+    private boolean hasPetFriendlyCompartments;
 
     @Override
     public int getNumberOfPlaces() {
@@ -25,5 +26,9 @@ public class Seated extends PassengerCarriage{
     @Override
     public int getKgWeight() {
         return 0;
+    }
+
+    public static class Coupe {
+        public int place;
     }
 }

@@ -4,4 +4,9 @@ package com.sveta.carriage.freight;
 public class Tank extends FreightCarriage{
     int maxCargoWeight =60;
     int cargoVolume = 54;
+
+    @Override
+    public int getKgWeight() {
+        return 0;
+    }
 }

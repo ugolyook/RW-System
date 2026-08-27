@@ -2,15 +2,11 @@ package com.sveta.carriage.passenger;
 
 import com.sveta.carriage.passenger.models.Seat;
 
-import java.util.ArrayList;
 import java.util.List;
 
-public class Seated extends PassengerCarriage{
-    private final static int SEATS_LIMIT = 48;
-    public List<Seat> seats = new ArrayList<>(SEATS_LIMIT);
-
-    int bicycleSpots;
-    double seatPitch;
+public class DiningCarriage extends PassengerCarriage {
+    int seatingCapacity;
+    boolean hasHotKitchen;
 
     @Override
     public int getNumberOfPlaces() {

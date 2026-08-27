@@ -1,6 +1,6 @@
 package com.sveta.train;
 
 public class Locomotive {
-    int size;
+    int sizeLimit = 1000;
     int wagonLimit;
 }

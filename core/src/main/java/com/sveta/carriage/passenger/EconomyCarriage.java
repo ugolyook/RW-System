@@ -5,13 +5,13 @@ import com.sveta.carriage.passenger.models.Seat;
 import java.util.ArrayList;
 import java.util.List;
 
-public class Seated extends PassengerCarriage{
-    private final static int SEATS_LIMIT = 48;
+public class EconomyCarriage extends PassengerCarriage {
+    private final static int SEATS_LIMIT = 54;
     public List<Seat> seats = new ArrayList<>(SEATS_LIMIT);
 
-    int bicycleSpots;
-    double seatPitch;
+    boolean hasBioToilet;
 
+//    public Economy(int seats);
     @Override
     public int getNumberOfPlaces() {
         return 0;
