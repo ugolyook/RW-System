@@ -6,24 +6,46 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class EconomyCarriage extends PassengerCarriage {
-    private final static int SEATS_LIMIT = 54;
+    private int SEATS_LIMIT = 54;
     public List<Seat> seats = new ArrayList<>(SEATS_LIMIT);
 
-    boolean hasBioToilet;
+    boolean hasBioToilets;
 
-//    public Economy(int seats);
+    public EconomyCarriage(int SEATS_LIMIT, boolean hasBioToilets) {
+        this.SEATS_LIMIT = SEATS_LIMIT;
+        this.hasBioToilets = hasBioToilets;
+    }
+
+    public EconomyCarriage(boolean hasBioToilets) {
+        this.hasBioToilets = hasBioToilets;
+    }
+
+    @Override
+    public double getPrice() {
+        return 3.0;
+    }
+
     @Override
     public int getNumberOfPlaces() {
-        return 0;
+        return seats.size();
     }
 
     @Override
     public List<Seat> getAllSeats() {
-        return List.of();
+        return seats;
     }
 
     @Override
     public int getKgWeight() {
-        return 0;
+        int SEATS_KG = 15;
+        int TOILET_KG = 150;
+        int NUMBER_OF_TOILETS = 2;
+
+        int weight = (SEATS_LIMIT * SEATS_KG) + (getNumberOfPlaces() * avPeopleWeight);
+        if (hasBioToilets) {
+            weight = weight + (NUMBER_OF_TOILETS * TOILET_KG);
+        }
+
+        return weight;
     }
 }

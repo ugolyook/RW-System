@@ -8,4 +8,5 @@ public class TrainRun {
     Train train;
     Route route;
     LocalDateTime departureTime;
+    boolean speed;
 }
