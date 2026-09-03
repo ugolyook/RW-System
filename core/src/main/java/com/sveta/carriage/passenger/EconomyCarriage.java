@@ -26,6 +26,11 @@ public class EconomyCarriage extends PassengerCarriage {
     }
 
     @Override
+    public int getPassengerCapacity() {
+        return SEATS_LIMIT;
+    }
+
+    @Override
     public int getNumberOfPlaces() {
         return seats.size();
     }
@@ -40,12 +45,24 @@ public class EconomyCarriage extends PassengerCarriage {
         int SEATS_KG = 15;
         int TOILET_KG = 150;
         int NUMBER_OF_TOILETS = 2;
+        int CARRIAGE_KG = 56000;
 
-        int weight = (SEATS_LIMIT * SEATS_KG) + (getNumberOfPlaces() * avPeopleWeight);
+        int weight = (SEATS_LIMIT * SEATS_KG) +
+                (getNumberOfPlaces() * avPeopleWeight) + CARRIAGE_KG;
+
         if (hasBioToilets) {
             weight = weight + (NUMBER_OF_TOILETS * TOILET_KG);
         }
 
         return weight;
+    }
+
+    @Override
+    public String toString() {
+        return "EconomyCarriage{" +
+                "SEATS_LIMIT=" + SEATS_LIMIT +
+                ", seats=" + seats +
+                ", hasBioToilets=" + hasBioToilets +
+                '}';
     }
 }

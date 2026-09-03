@@ -28,6 +28,11 @@ public class CoupeCarriage extends PassengerCarriage {
     }
 
     @Override
+    public int getPassengerCapacity() {
+        return Coupe.SEATS_LIMIT;
+    }
+
+    @Override
     public int getNumberOfPlaces() {
         return coupes.size();
     }
@@ -48,7 +53,8 @@ public class CoupeCarriage extends PassengerCarriage {
     @Override
     public int getKgWeight() {
         int COUPE_KG = 800;
-        return COUPE_KG * DEFAULT_COUPE_LIMIT;
+        int CARRIAGE_KG = 58000;
+        return (COUPE_KG * DEFAULT_COUPE_LIMIT) + CARRIAGE_KG;
     }
 
     public static class Coupe {
@@ -68,5 +74,13 @@ public class CoupeCarriage extends PassengerCarriage {
             int avPeopleWeight = 62;
             return (SEATS_LIMIT * SEATS_KG) + (getNumberOfPlaces() * avPeopleWeight);
         }
+    }
+
+    @Override
+    public String toString() {
+        return "CoupeCarriage{" +
+                "DEFAULT_COUPE_LIMIT=" + DEFAULT_COUPE_LIMIT +
+                ", coupes=" + coupes +
+                '}';
     }
 }

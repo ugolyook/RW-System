@@ -16,6 +16,11 @@ public class Tank extends FreightCarriage {
         return maxCargoWeight;
     }
 
+    @Override
+    public int getPassengerCapacity() {
+        return 0;
+    }
+
     public int getCargoVolume() {
         return cargoVolume;
     }

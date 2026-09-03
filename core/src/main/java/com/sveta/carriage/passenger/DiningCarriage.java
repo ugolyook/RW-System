@@ -36,6 +36,11 @@ public class DiningCarriage extends PassengerCarriage {
     }
 
     @Override
+    public int getPassengerCapacity() {
+        return SEATS_LIMIT;
+    }
+
+    @Override
     public int getNumberOfPlaces() {
         return seats.size();
     }
@@ -49,12 +54,30 @@ public class DiningCarriage extends PassengerCarriage {
     public int getKgWeight() {
         int KITCHEN_KG = 60000;
         int SEATS_KG = 15;
+        int CARRIAGE_KG = 60000;
 
-        int weight = (SEATS_LIMIT * SEATS_KG) + (getNumberOfPlaces() * avPeopleWeight);
+        int weight = (SEATS_LIMIT * SEATS_KG) +
+                (getNumberOfPlaces() * avPeopleWeight) + CARRIAGE_KG;
+
         if (hasHotKitchen) {
             int kitchenWeight = KITCHEN_KG - weight;
             weight = weight + kitchenWeight;
         }
         return weight;
+    }
+
+    @Override
+    public String toString() {
+        return "DiningCarriage{" +
+                "SEATS_LIMIT=" + SEATS_LIMIT +
+                ", seats=" + seats +
+                ", food=" + food +
+                ", hasHotKitchen=" + hasHotKitchen +
+                ", deliveryToTheRoom=" + deliveryToTheRoom +
+                '}';
+    }
+
+    public Object order(Food food, int quantity) {
+        return null;
     }
 }
