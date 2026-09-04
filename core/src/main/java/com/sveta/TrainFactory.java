@@ -2,8 +2,11 @@ package com.sveta;
 
 import com.sveta.carriage.Carriage;
 import com.sveta.carriage.passenger.*;
+import com.sveta.dto.CarriageInfoDTO;
+import com.sveta.train.Locomotive;
 import com.sveta.train.PassengerTrain;
 import com.sveta.train.Train;
+import com.sveta.validator.TrainValidator;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -14,7 +17,7 @@ public class TrainFactory {
     int sizeLimit;
     int lengthLimit = 18;
     int maxDiningCar = 1;
-    final AtomicLong counter = new AtomicLong((int) System.currentTimeMillis());
+    final AtomicLong trainNumber = new AtomicLong((int) System.currentTimeMillis());
 
     public TrainFactory(int sizeLimit) {
         this.sizeLimit = sizeLimit;
@@ -29,10 +32,17 @@ public class TrainFactory {
     }
 
     public Train createTrain(int numberOfCarr) {
+        Locomotive locomotive = new Locomotive(18, 570, 85000);
+
         Train train = new PassengerTrain(generateTrainNumber());
+        train.setLocomotive(locomotive);
+
         List<Carriage> carriages = generateCarriages(numberOfCarr);
 
-        if (!isValid(carriages)) {
+        TrainValidator trainValidator = new TrainValidator();
+        CarriageInfoDTO dto = new CarriageInfoDTO(carriages, sizeLimit, maxDiningCar, lengthLimit);
+
+        if (!trainValidator.isResultTrainValid(dto)) {
             throw new IllegalStateException("Train configuration exceeds limits!");
         }
 
@@ -51,81 +61,54 @@ public class TrainFactory {
             );
         }
 
-        Scanner scanner = new Scanner(System.in);
-        List<Carriage> carriages = new ArrayList<>();
+        List<Carriage> carriages;
+        try (Scanner scanner = new Scanner(System.in)) {
+            DiningCarriage diningCarriage =
+                    new DiningCarriage(true, true);
 
-        createTypeOfCarriages(numberOfCarr, scanner, carriages);
-        createDinerCarriage(scanner, carriages);
+            carriages = createTypeOfCarriages(numberOfCarr, scanner);
+            diningCarriage.createDinerCarriage(scanner, carriages, maxDiningCar);
+        }
 
-        scanner.close();
         return carriages;
     }
 
-    private void createDinerCarriage(Scanner scanner, List<Carriage> carriages) {
-        long currentDiningCount = carriages.stream()
-                .filter(c -> c instanceof DiningCarriage)
-                .count();
+    private List<Carriage> createTypeOfCarriages(int numberOfCarr, Scanner scanner) {
+        List<Carriage> carriages = new ArrayList<>();
+        Carriage carriage = null;
 
-        if (currentDiningCount >= maxDiningCar) {
-            System.out.println("Max dining carriages already reached (" + maxDiningCar + ")");
-            return;
-        }
-
-        System.out.println("\nWould u like to have dining carriages ?");
-        String input = scanner.nextLine().trim().toLowerCase();
-
-        if (input.startsWith("y")) {
-            Carriage carriage = new DiningCarriage(true, true);
-            carriages.add(carriage);
-        }
-    }
-
-
-    private void createTypeOfCarriages(int numberOfCarr, Scanner scanner, List<Carriage> carriages) {
-        Carriage carriage;
         for (int i = 0; i < numberOfCarr; i++) {
-            System.out.println("What type of carriage would u prefer: ");
-            System.out.println("Coupe \nEconomy \nSeated:");
+            System.out.println("""
+                    What type of carriage would u prefer:
+                    Coupe
+                    Economy
+                    Seated""");
+
             String input = scanner.nextLine().trim().toLowerCase();
 
-            if (input.startsWith("c")) {
-                carriage = new CoupeCarriage(
-                        false,
-                        true);
-            } else if (input.startsWith("e")) {
-                carriage = new EconomyCarriage(true);
-            } else {
-                carriage = new SeatedCarriage(2, 2.0);
+            switch (input) {
+                case "coupe": {
+                    carriage = new CoupeCarriage(
+                            false,
+                            true);
+                    break;
+                }
+                case "economy":
+                    carriage = new EconomyCarriage(true);
+                    break;
+                case "seated":
+                    carriage = new SeatedCarriage(2, 2.0);
+                    break;
+                default:
+                    carriage = new EconomyCarriage(false);
             }
             carriages.add(carriage);
         }
-    }
-
-    private boolean isValid(List<Carriage> carriages) {
-        if (carriages.size() > sizeLimit) {
-            System.out.println("Size limit exceeded: " + carriages.size() + " > " + sizeLimit);
-            return false;
-        }
-
-        long diningCount = carriages.stream()
-                .filter(c -> c instanceof DiningCarriage)
-                .count();
-        if (diningCount > maxDiningCar) {
-            System.out.println("Too many dining cars: " + diningCount + " > " + maxDiningCar);
-            return false;
-        }
-
-        if (carriages.size() >lengthLimit) {
-            System.out.println("Too many carriages: " + carriages.size() +
-                    " > " + lengthLimit);
-            return false;
-        }
-
-        return true;
+        return carriages;
     }
 
     public int nextUnique() {
-        return Math.toIntExact(counter.incrementAndGet());
+        return Math.toIntExact(trainNumber.incrementAndGet());
     }
 }
 

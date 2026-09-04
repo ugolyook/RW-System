@@ -6,9 +6,9 @@ import com.sveta.carriage.passenger.models.Seat;
 import java.util.List;
 
 public abstract class PassengerCarriage extends Carriage {
-    public int avPeopleWeight = 62;
+    public static final int AV_PEOPLE_WEIGHT = 62;
 
-    public abstract double getPrice();
+    public abstract double getPriceInByn();
     public abstract int getNumberOfPlaces();
     public abstract List<Seat> getAllSeats();
 

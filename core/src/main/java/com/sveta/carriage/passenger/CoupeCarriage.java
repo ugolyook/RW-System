@@ -22,9 +22,11 @@ public class CoupeCarriage extends PassengerCarriage {
     }
 
     @Override
-    public double getPrice() {
-        return (20 * 4);
-        //20 - price, 4 - places in coupe
+    public double getPriceInByn() {
+        int placesInCoupe = 4;
+        int price = 20;
+
+        return (price * placesInCoupe);
     }
 
     @Override

@@ -1,13 +1,11 @@
 package com.sveta.train;
 
 import com.sveta.carriage.Carriage;
-import com.sveta.carriage.passenger.DiningCarriage;
-import com.sveta.carriage.passenger.models.Food;
+import com.sveta.dto.TrainInfoDTO;
 
 import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.List;
-import java.util.Optional;
 
 public abstract class Train {
     private Locomotive locomotive;
@@ -16,6 +14,14 @@ public abstract class Train {
 
     public Train(int trainNumber) {
         this.trainNumber = trainNumber;
+    }
+
+    public void setLocomotive(Locomotive locomotive) {
+        this.locomotive = locomotive;
+    }
+
+    public Locomotive getLocomotive() {
+        return locomotive;
     }
 
     public void addCarriage(Carriage carriage) {
@@ -50,25 +56,13 @@ public abstract class Train {
         return carriages.size();
     }
 
-    public void printTrainInfo() {
-        System.out.println("Train №" + trainNumber);
-        System.out.println("Carriages: " + getCarriageCount());
-        System.out.println("Passenger seats: " + getTotalPassengerCap());
-        System.out.println("Total weight: " + getTotalWeight() + " т");
-        System.out.println("--- List of railcars ---");
-        carriages.forEach(System.out::println);
-    }
-
-    public Optional<DiningCarriage> findRestaurant() {
-        return carriages.stream()
-                .filter(c -> c instanceof DiningCarriage)
-                .map(c -> (DiningCarriage) c)
-                .findFirst();
-    }
-
-    public double orderInRestaurant(Food item, int quantity) {
-        return (double) findRestaurant()
-                .map(r -> r.order(item, quantity))
-                .orElseThrow(() -> new IllegalStateException("There are no dining carriage"));
+    public String printTrainInfo() {
+        TrainInfoDTO trainInfoDTO = new TrainInfoDTO(
+                trainNumber,
+                getCarriageCount(),
+                getTotalPassengerCap(),
+                getTotalWeight(),
+                carriages);
+        return trainInfoDTO.toString();
     }
 }

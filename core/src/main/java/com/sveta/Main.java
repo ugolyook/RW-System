@@ -6,36 +6,31 @@ public class Main {
     public static void main(String[] args) {
         TrainFactory factory = new TrainFactory(18);
         try {
-            // 3. Создаём поезд с 5 вагонами
-            System.out.println("=== СОЗДАНИЕ ПОЕЗДА ===");
+            System.out.println("=== TRAIN CREATION ===");
             Train train = factory.createTrain(5);
 
-            // 4. Выводим информацию о поезде
-            System.out.println("\n=== ИНФОРМАЦИЯ О ПОЕЗДЕ ===");
+            System.out.println("\n=== TRAIN INFORMATION ===");
             System.out.println(train);
 
-            // 5. Дополнительные проверки
-            System.out.println("\n=== ДОПОЛНИТЕЛЬНАЯ ИНФОРМАЦИЯ ===");
-            System.out.println("Количество вагонов: " + train.getCarriageCount());
-            System.out.println("Общая вместимость: " + train.getTotalPassengerCap() + " мест");
+            System.out.println("\n=== ADDITIONAL INFORMATION ===");
+            System.out.println("Number of carriages: " + train.getCarriageCount());
+            System.out.println("Total passenger capacity: " + train.getTotalPassengerCap() + " seats");
 
         } catch (IllegalArgumentException | IllegalStateException e) {
-            System.err.println("❌ Ошибка: " + e.getMessage());
+            System.err.println("Error: " + e.getMessage());
         }
 
-        // 6. Пример с ошибкой (слишком много вагонов)
-        System.out.println("\n=== ПРОВЕРКА ЛИМИТОВ ===");
+        System.out.println("\n=== LIMIT TEST ===");
         testLimit(factory);
     }
 
-    // Метод для проверки ограничений
     private static void testLimit(TrainFactory factory) {
         try {
-            System.out.println("Попытка создать поезд с 20 вагонами (максимум 18)...");
+            System.out.println("Attempting to create a train with 20 carriages (maximum is 18)...");
             Train bigTrain = factory.createTrain(20);
             System.out.println(bigTrain);
         } catch (IllegalArgumentException e) {
-            System.out.println("✅ Ожидаемая ошибка: " + e.getMessage());
+            System.out.println("Expected error: " + e.getMessage());
         }
     }
 }

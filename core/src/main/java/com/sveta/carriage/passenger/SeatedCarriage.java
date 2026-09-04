@@ -6,14 +6,14 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class SeatedCarriage extends PassengerCarriage {
-    private int SEATS_LIMIT = 48;
-    public List<Seat> seats = new ArrayList<>(SEATS_LIMIT);
+    private int seatsLimit = 48;
+    public List<Seat> seats = new ArrayList<>(seatsLimit);
 
     int bicycleSpots;
     double seatPitchSm;
 
     public SeatedCarriage(int SEATS_LIMIT, int bicycleSpots, double seatPitchSm) {
-        this.SEATS_LIMIT = SEATS_LIMIT;
+        this.seatsLimit = SEATS_LIMIT;
         this.bicycleSpots = bicycleSpots;
         this.seatPitchSm = seatPitchSm;
     }
@@ -24,13 +24,13 @@ public class SeatedCarriage extends PassengerCarriage {
     }
 
     @Override
-    public double getPrice() {
+    public double getPriceInByn() {
         return 11.8;
     }
 
     @Override
     public int getPassengerCapacity() {
-        return SEATS_LIMIT;
+        return seatsLimit;
     }
 
     @Override
@@ -49,9 +49,9 @@ public class SeatedCarriage extends PassengerCarriage {
         int BICYCLE_KG = 11;
         int CARRIAGE_KG = 45000;
         return (
-                (SEATS_LIMIT * SEATS_KG) +
+                (seatsLimit * SEATS_KG) +
                         (bicycleSpots * BICYCLE_KG) +
-                        (getNumberOfPlaces() * avPeopleWeight) +
+                        (getNumberOfPlaces() * AV_PEOPLE_WEIGHT) +
                         CARRIAGE_KG
         );
     }
@@ -59,7 +59,7 @@ public class SeatedCarriage extends PassengerCarriage {
     @Override
     public String toString() {
         return "Seated{" +
-                "SEATS_LIMIT=" + SEATS_LIMIT +
+                "SEATS_LIMIT=" + seatsLimit +
                 ", seats=" + seats +
                 ", bicycleSpots=" + bicycleSpots +
                 ", seatPitchSm=" + seatPitchSm +
