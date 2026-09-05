@@ -1,27 +1,31 @@
 package com.sveta.train;
 
 import com.sveta.carriage.Carriage;
-import com.sveta.dto.TrainInfoDTO;
+import com.sveta.dto.TrainInfoFormater;
 
 import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.List;
 
 public abstract class Train {
-    private Locomotive locomotive;
     private final List<Carriage> carriages = new ArrayList<>();
     private final int trainNumber;
+    private Locomotive locomotive;
 
     public Train(int trainNumber) {
         this.trainNumber = trainNumber;
+    }
+
+    public int getTrainNumber() {
+        return trainNumber;
     }
 
     public void setLocomotive(Locomotive locomotive) {
         this.locomotive = locomotive;
     }
 
-    public Locomotive getLocomotive() {
-        return locomotive;
+    public boolean checkLocomotiveExists() {
+        return locomotive != null;
     }
 
     public void addCarriage(Carriage carriage) {
@@ -56,13 +60,8 @@ public abstract class Train {
         return carriages.size();
     }
 
-    public String printTrainInfo() {
-        TrainInfoDTO trainInfoDTO = new TrainInfoDTO(
-                trainNumber,
-                getCarriageCount(),
-                getTotalPassengerCap(),
-                getTotalWeight(),
-                carriages);
-        return trainInfoDTO.toString();
+    public String printTrainInfo(Train train) {
+        TrainInfoFormater printer = new TrainInfoFormater();
+        return printer.format(train);
     }
 }

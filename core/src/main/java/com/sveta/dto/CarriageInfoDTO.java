@@ -5,10 +5,10 @@ import com.sveta.carriage.Carriage;
 import java.util.List;
 
 public class CarriageInfoDTO {
-    private int sizeLimit;
-    private int maxDiningCar;
+    private final int sizeLimit;
+    private final int maxDiningCar;
     private final List<Carriage> carriages;
-    private int lengthLimit;
+    private final int lengthLimit;
 
     public CarriageInfoDTO(
             List<Carriage> carriages,

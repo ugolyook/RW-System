@@ -1,16 +1,14 @@
 package com.sveta.validator;
 
 import com.sveta.carriage.passenger.DiningCarriage;
-import com.sveta.exeptions.TrainCapacityException;
-import com.sveta.exeptions.TrainDiningCarriageException;
 import com.sveta.dto.CarriageInfoDTO;
+import com.sveta.exeptions.TrainExceptions;
+import com.sveta.train.Train;
 
 public class TrainValidator {
-    public boolean isResultTrainValid(CarriageInfoDTO dto) {
+    public void isResultTrainValid(CarriageInfoDTO dto, Train train) {
         if (dto.getCarriages().size() > dto.getSizeLimit()) {
-            throw new TrainCapacityException("Size limit exceeded: "
-                    + dto.getCarriages().size()
-                    + " > " + dto.getSizeLimit());
+            throw new TrainExceptions.TrainCapacityException(dto.getCarriages().size(), dto.getSizeLimit());
         }
 
         long diningCount = dto.getCarriages().stream()
@@ -18,17 +16,15 @@ public class TrainValidator {
                 .count();
 
         if (diningCount > dto.getMaxDiningCar()) {
-            throw new TrainDiningCarriageException("Too many dining cars: "
-                    + diningCount + " > "
-                    + dto.getMaxDiningCar());
+            throw new TrainExceptions.ToManyDiningCarriageTrainException(diningCount, dto.getMaxDiningCar());
         }
 
         if (dto.getCarriages().size() > dto.getLengthLimit()) {
-            throw new TrainCapacityException("Too many carriages: " + dto.getCarriages().size() +
-                    " > " + dto.getLengthLimit());
+            throw new TrainExceptions.TrainCapacityException(dto.getCarriages().size(), dto.getLengthLimit());
         }
-        //добавить проверку на наличие локомотива
 
-        return true;
+        if (!train.checkLocomotiveExists()) {
+            throw new TrainExceptions.LocomotiveNotFoundException();
+        }
     }
 }

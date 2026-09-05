@@ -1,11 +1,12 @@
 package com.sveta.carriage.passenger;
 
+import com.sveta.carriage.ElectricCarriage;
 import com.sveta.carriage.passenger.models.Seat;
 
 import java.util.ArrayList;
 import java.util.List;
 
-public class CoupeCarriage extends PassengerCarriage {
+public class CoupeCarriage extends PassengerCarriage implements ElectricCarriage {
     private int DEFAULT_COUPE_LIMIT = 9;
     private final List<Coupe> coupes = new ArrayList<>(DEFAULT_COUPE_LIMIT);
 

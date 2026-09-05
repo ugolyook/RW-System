@@ -1,7 +1,7 @@
 package com.sveta.carriage.passenger;
 
-import com.sveta.TrainFactory;
 import com.sveta.carriage.Carriage;
+import com.sveta.carriage.ElectricCarriage;
 import com.sveta.carriage.passenger.models.Food;
 import com.sveta.carriage.passenger.models.Seat;
 
@@ -11,7 +11,8 @@ import java.util.Optional;
 import java.util.Scanner;
 import java.util.logging.Logger;
 
-public class DiningCarriage extends PassengerCarriage {
+public class DiningCarriage extends PassengerCarriage implements ElectricCarriage {
+    final Logger LOGGER = Logger.getLogger(DiningCarriage.class.getName());
     private int seatsLimit = 32;
     public List<Seat> seats = new ArrayList<>(seatsLimit);
 
@@ -36,13 +37,12 @@ public class DiningCarriage extends PassengerCarriage {
     }
 
     public void createDinerCarriage(Scanner scanner, List<Carriage> carriages, int maxDiningCar) {
-        final Logger logger = Logger.getLogger(TrainFactory.class.getName());
         long currentDiningCount = carriages.stream()
                 .filter(c -> c instanceof DiningCarriage)
                 .count();
 
         if (currentDiningCount >= maxDiningCar) {
-            logger.warning("Max dining carriages already reached (" + maxDiningCar + ")");
+            LOGGER.warning("Max dining carriages already reached (" + maxDiningCar + ")");
             return;
         }
 

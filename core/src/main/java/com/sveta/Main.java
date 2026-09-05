@@ -1,5 +1,6 @@
 package com.sveta;
 
+import com.sveta.factory.TrainFactory;
 import com.sveta.train.Train;
 
 public class Main {
