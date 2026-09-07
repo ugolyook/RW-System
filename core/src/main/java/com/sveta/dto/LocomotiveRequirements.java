@@ -13,4 +13,20 @@ public class LocomotiveRequirements {
         this.totalWeight = totalWeight;
         this.isElectric = isElectric;
     }
+
+    public boolean isElectric() {
+        return isElectric;
+    }
+
+    public int getRequiredTraction() {
+        return requiredTraction;
+    }
+
+    public int getTotalWeight() {
+        return totalWeight;
+    }
+
+    public int getRequiredPower() {
+        return requiredPower;
+    }
 }

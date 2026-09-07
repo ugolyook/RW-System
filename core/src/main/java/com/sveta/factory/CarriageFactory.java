@@ -9,28 +9,45 @@ import com.sveta.carriage.passenger.SeatedCarriage;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Scanner;
+import java.util.logging.Logger;
 
 public class CarriageFactory {
-    public List<Carriage> generateCarriages(int numberOfCarr) {
-        if (numberOfCarr >= lengthLimit) {
+    final Logger LOGGER = Logger.getLogger(CarriageFactory.class.getName());
+    Scanner scanner;
+
+    public void createDinerCarriage( List<Carriage> carriages, int maxDiningCar) {
+        long currentDiningCount = carriages.stream()
+                .filter(c -> c instanceof DiningCarriage)
+                .count();
+
+        if (currentDiningCount >= maxDiningCar) {
+            LOGGER.warning("Max dining carriages already reached (" + maxDiningCar + ")");
+            return;
+        }
+
+        System.out.println("\nWould u like to have dining carriages ?");
+        String input = scanner.nextLine().trim().toLowerCase();
+
+        if (input.equals("yes")) {
+            Carriage carriage = new DiningCarriage(true, true);
+            carriages.add(carriage);
+        }
+    }
+
+    public List<Carriage> generateCarriages(int numberOfCarr, TrainFactory factory) {
+        if (numberOfCarr > factory.lengthLimit) {
             throw new IllegalArgumentException("Number of carriages " +
-                    "(" + numberOfCarr + ") exceeds size limit (" + sizeLimit + ")"
+                    "(" + numberOfCarr + ") exceeds size limit (" + factory.sizeLimit + ")"
             );
         }
 
-        List<Carriage> carriages;
-        try (Scanner scanner = new Scanner(System.in)) {
-            DiningCarriage diningCarriage =
-                    new DiningCarriage(true, true);
-
-            carriages = createTypeOfCarriages(numberOfCarr, scanner);
-            diningCarriage.createDinerCarriage(scanner, carriages, maxDiningCar);
-        }
+        List<Carriage> carriages = createTypeOfCarriages(numberOfCarr   );
+        createDinerCarriage( carriages, factory.maxDiningCar);
 
         return carriages;
     }
 
-    private List<Carriage> createTypeOfCarriages(int numberOfCarr, Scanner scanner) {
+    private List<Carriage> createTypeOfCarriages(int numberOfCarr) {
         List<Carriage> carriages = new ArrayList<>();
 
         for (int i = 0; i < numberOfCarr; i++) {

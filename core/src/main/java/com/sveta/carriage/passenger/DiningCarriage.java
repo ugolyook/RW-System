@@ -8,11 +8,8 @@ import com.sveta.carriage.passenger.models.Seat;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
-import java.util.Scanner;
-import java.util.logging.Logger;
 
 public class DiningCarriage extends PassengerCarriage implements ElectricCarriage {
-    final Logger LOGGER = Logger.getLogger(DiningCarriage.class.getName());
     private int seatsLimit = 32;
     public List<Seat> seats = new ArrayList<>(seatsLimit);
 
@@ -34,25 +31,6 @@ public class DiningCarriage extends PassengerCarriage implements ElectricCarriag
             boolean deliveryToTheRoom) {
         this.hasHotKitchen = hasHotKitchen;
         this.deliveryToTheRoom = deliveryToTheRoom;
-    }
-
-    public void createDinerCarriage(Scanner scanner, List<Carriage> carriages, int maxDiningCar) {
-        long currentDiningCount = carriages.stream()
-                .filter(c -> c instanceof DiningCarriage)
-                .count();
-
-        if (currentDiningCount >= maxDiningCar) {
-            LOGGER.warning("Max dining carriages already reached (" + maxDiningCar + ")");
-            return;
-        }
-
-        System.out.println("\nWould u like to have dining carriages ?");
-        String input = scanner.nextLine().trim().toLowerCase();
-
-        if (input.equals("yes")) {
-            Carriage carriage = new DiningCarriage(true, true);
-            carriages.add(carriage);
-        }
     }
 
     @Override

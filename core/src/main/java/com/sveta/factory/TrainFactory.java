@@ -7,6 +7,7 @@ import com.sveta.dto.CarriageInfoDTO;
 import com.sveta.dto.LocomotiveRequirements;
 import com.sveta.exeptions.TrainExceptions;
 import com.sveta.train.Locomotive;
+import com.sveta.train.PassengerTrain;
 import com.sveta.train.Train;
 import com.sveta.validator.TrainValidator;
 
@@ -81,12 +82,11 @@ public class TrainFactory {
             throw new RuntimeException("No suitable locomotive found!");
         }
 
-        TrainFactory factory = new TrainFactory();
-        Train train = factory.createTrain(trainNumber);
+        Train train = new PassengerTrain(generateTrainNumber())  ;
         train.setLocomotive(locomotive);
 
         CarriageFactory carriageFactory = new CarriageFactory();
-        List<Carriage> carriages = carriageFactory.generateCarriages(numberOfCarr);
+        List<Carriage> carriages = carriageFactory.generateCarriages(numberOfCarr,this);
 
         CarriageInfoDTO dto = new CarriageInfoDTO(carriages, sizeLimit, maxDiningCar, lengthLimit);
 
