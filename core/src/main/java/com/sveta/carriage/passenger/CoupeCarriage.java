@@ -55,8 +55,8 @@ public class CoupeCarriage extends PassengerCarriage implements ElectricCarriage
 
     @Override
     public int getKgWeight() {
-        int COUPE_KG = 800;
-        int CARRIAGE_KG = 58000;
+        int COUPE_KG = 500;
+        int CARRIAGE_KG = 50000;
         return (COUPE_KG * DEFAULT_COUPE_LIMIT) + CARRIAGE_KG;
     }
 

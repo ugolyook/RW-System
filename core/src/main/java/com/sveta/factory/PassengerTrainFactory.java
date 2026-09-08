@@ -21,6 +21,7 @@ public class PassengerTrainFactory {
 
     private static final double WEIGHT_TO_POWER_RATIO = 15.0;
     private static final double WEIGHT_TO_TRACTION_RATIO = 5.0;
+    private static final double SAFETY_FACTOR = 1.0;
 
     private final CarriageFactory carriageFactory = new CarriageFactory();
     private final LocomotiveFactory locomotiveFactory = new LocomotiveFactory();
@@ -58,7 +59,7 @@ public class PassengerTrainFactory {
             throw new TrainExceptions.NotOneTypeException();
         }
 
-        int totalCarriagesWeight = carriageList.stream()
+        int totalCarriagesWeightInKg = carriageList.stream()
                 .mapToInt(Carriage::getKgWeight)
                 .sum();
 
@@ -68,14 +69,16 @@ public class PassengerTrainFactory {
 
         carriageValidator(carriageList, diningCount);
 
-        int requiredPower = (int) ((totalCarriagesWeight / WEIGHT_TO_POWER_RATIO) * 1.2);
-        int requiredTraction = (int) ((totalCarriagesWeight / WEIGHT_TO_TRACTION_RATIO) * 1.2);
+        int totalWeightInTons = totalCarriagesWeightInKg / 1000;
+
+        int requiredPower = (int) ((totalCarriagesWeightInKg / WEIGHT_TO_POWER_RATIO) * SAFETY_FACTOR);
+        int requiredTraction = (int) ((totalCarriagesWeightInKg / WEIGHT_TO_TRACTION_RATIO) * SAFETY_FACTOR);
 
         boolean isNeedElectric = carriageList.stream()
                 .anyMatch(c -> c instanceof ElectricCarriage);
 
         LocomotiveRequirements requirements = new LocomotiveRequirements(
-                requiredPower, requiredTraction, totalCarriagesWeight, isNeedElectric
+                requiredPower, requiredTraction, totalCarriagesWeightInKg, isNeedElectric
         );
 
         Locomotive locomotive = locomotiveFactory.findLocomotive(requirements);
@@ -88,7 +91,7 @@ public class PassengerTrainFactory {
 
         CarriageInfoDTO dto = new CarriageInfoDTO
                 (carriageList, sizeLimit, maxDiningCar,
-                lengthLimit, totalCarriagesWeight);
+                        lengthLimit, totalWeightInTons);
 
         TrainValidator trainValidator = new TrainValidator();
         trainValidator.isResultTrainValid(dto, train, locomotive);

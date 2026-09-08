@@ -55,9 +55,9 @@ public class DiningCarriage extends PassengerCarriage implements ElectricCarriag
 
     @Override
     public int getKgWeight() {
-        int KITCHEN_KG = 60000;
+        int KITCHEN_KG = 10000;
         int SEATS_KG = 15;
-        int CARRIAGE_KG = 60000;
+        int CARRIAGE_KG = 48000;
 
         int weight = (seatsLimit * SEATS_KG) +
                 (getNumberOfPlaces() * AV_PEOPLE_WEIGHT) + CARRIAGE_KG;
