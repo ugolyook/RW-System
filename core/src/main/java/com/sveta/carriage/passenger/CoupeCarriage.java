@@ -23,7 +23,7 @@ public class CoupeCarriage extends PassengerCarriage implements ElectricCarriage
     }
 
     @Override
-    public double getPriceInByn() {
+    public double getPriceInBY() {
         int placesInCoupe = 4;
         int price = 20;
 

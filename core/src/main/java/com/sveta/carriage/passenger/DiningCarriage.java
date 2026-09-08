@@ -34,7 +34,7 @@ public class DiningCarriage extends PassengerCarriage implements ElectricCarriag
     }
 
     @Override
-    public double getPriceInByn() {
+    public double getPriceInBY() {
         return 1;
     }
 

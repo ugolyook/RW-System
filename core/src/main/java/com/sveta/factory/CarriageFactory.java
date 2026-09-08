@@ -13,28 +13,9 @@ import java.util.logging.Logger;
 
 public class CarriageFactory {
     final Logger LOGGER = Logger.getLogger(CarriageFactory.class.getName());
-    Scanner scanner;
+    Scanner scanner = new Scanner(System.in);
 
-    public void createDinerCarriage( List<Carriage> carriages, int maxDiningCar) {
-        long currentDiningCount = carriages.stream()
-                .filter(c -> c instanceof DiningCarriage)
-                .count();
-
-        if (currentDiningCount >= maxDiningCar) {
-            LOGGER.warning("Max dining carriages already reached (" + maxDiningCar + ")");
-            return;
-        }
-
-        System.out.println("\nWould u like to have dining carriages ?");
-        String input = scanner.nextLine().trim().toLowerCase();
-
-        if (input.equals("yes")) {
-            Carriage carriage = new DiningCarriage(true, true);
-            carriages.add(carriage);
-        }
-    }
-
-    public List<Carriage> generateCarriages(int numberOfCarr, TrainFactory factory) {
+    public List<Carriage> createCarriages(int numberOfCarr, PassengerTrainFactory factory) {
         if (numberOfCarr > factory.lengthLimit) {
             throw new IllegalArgumentException("Number of carriages " +
                     "(" + numberOfCarr + ") exceeds size limit (" + factory.sizeLimit + ")"
@@ -70,5 +51,24 @@ public class CarriageFactory {
             carriages.add(carriage);
         }
         return carriages;
+    }
+
+    private void createDinerCarriage( List<Carriage> carriages, int maxDiningCar) {
+        long currentDiningCount = carriages.stream()
+                .filter(c -> c instanceof DiningCarriage)
+                .count();
+
+        if (currentDiningCount >= maxDiningCar) {
+            LOGGER.warning("Max dining carriages already reached (" + maxDiningCar + ")");
+            return;
+        }
+
+        System.out.println("\nWould u like to have dining carriages ?");
+        String input = scanner.nextLine().trim().toLowerCase();
+
+        if (input.equals("yes")) {
+            Carriage carriage = new DiningCarriage(true, true);
+            carriages.add(carriage);
+        }
     }
 }

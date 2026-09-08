@@ -1,11 +1,11 @@
 package com.sveta;
 
-import com.sveta.factory.TrainFactory;
+import com.sveta.factory.PassengerTrainFactory;
 import com.sveta.train.Train;
 
 public class Main {
     public static void main(String[] args) {
-        TrainFactory factory = new TrainFactory(18);
+        PassengerTrainFactory factory = new PassengerTrainFactory(18);
         try {
             System.out.println("=== TRAIN CREATION ===");
             Train train = factory.createTrain(5);
@@ -25,7 +25,7 @@ public class Main {
         testLimit(factory);
     }
 
-    private static void testLimit(TrainFactory factory) {
+    private static void testLimit(PassengerTrainFactory factory) {
         try {
             System.out.println("Attempting to create a train with 20 carriages (maximum is 18)...");
             Train bigTrain = factory.createTrain(20);

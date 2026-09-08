@@ -14,13 +14,16 @@ import com.sveta.validator.TrainValidator;
 import java.util.List;
 import java.util.concurrent.atomic.AtomicLong;
 
-public class TrainFactory {
+public class PassengerTrainFactory {
     int sizeLimit;
     int lengthLimit = 18;
     int maxDiningCar = 1;
 
     private static final double WEIGHT_TO_POWER_RATIO = 15.0;
     private static final double WEIGHT_TO_TRACTION_RATIO = 5.0;
+
+    private final CarriageFactory carriageFactory = new CarriageFactory();
+    private final LocomotiveFactory locomotiveFactory = new LocomotiveFactory();
 
     final AtomicLong trainNumber = new AtomicLong((int) System.currentTimeMillis());
 
@@ -32,7 +35,7 @@ public class TrainFactory {
         return nextUnique();
     }
 
-    public TrainFactory(int sizeLimit) {
+    public PassengerTrainFactory(int sizeLimit) {
         this.sizeLimit = sizeLimit;
     }
 
@@ -44,14 +47,18 @@ public class TrainFactory {
         this.maxDiningCar = maxDiningCar;
     }
 
+    public CarriageFactory getCarriageFactory() {
+        return carriageFactory;
+    }
+
     public Train createTrain(int numberOfCarr, List<Carriage> carriageList) {
-        boolean result = carriageList.stream()
+        boolean isAllPassengerCarriages = carriageList.stream()
                 .allMatch(carriage -> carriage instanceof PassengerCarriage);
-        if (!result) {
+        if (!isAllPassengerCarriages) {
             throw new TrainExceptions.NotOneTypeException();
         }
 
-        int totalWeight = carriageList.stream()
+        int totalCarriagesWeight = carriageList.stream()
                 .mapToInt(Carriage::getKgWeight)
                 .sum();
 
@@ -59,6 +66,38 @@ public class TrainFactory {
                 .filter(c -> c instanceof DiningCarriage)
                 .count();
 
+        carriageValidator(carriageList, diningCount);
+
+        int requiredPower = (int) ((totalCarriagesWeight / WEIGHT_TO_POWER_RATIO) * 1.2);
+        int requiredTraction = (int) ((totalCarriagesWeight / WEIGHT_TO_TRACTION_RATIO) * 1.2);
+
+        boolean isNeedElectric = carriageList.stream()
+                .anyMatch(c -> c instanceof ElectricCarriage);
+
+        LocomotiveRequirements requirements = new LocomotiveRequirements(
+                requiredPower, requiredTraction, totalCarriagesWeight, isNeedElectric
+        );
+
+        Locomotive locomotive = locomotiveFactory.findLocomotive(requirements);
+        if (locomotive == null) {
+            throw new RuntimeException("No suitable locomotive found!");
+        }
+
+        Train train = new PassengerTrain(generateTrainNumber());
+        train.setLocomotive(locomotive);
+
+        CarriageInfoDTO dto = new CarriageInfoDTO
+                (carriageList, sizeLimit, maxDiningCar,
+                lengthLimit, totalCarriagesWeight);
+
+        TrainValidator trainValidator = new TrainValidator();
+        trainValidator.isResultTrainValid(dto, train, locomotive);
+
+        carriageList.forEach(train::addCarriage);
+        return train;
+    }
+
+    private void carriageValidator(List<Carriage> carriageList, long diningCount) {
         if (diningCount > maxDiningCar) {
             throw new TrainExceptions.ToManyDiningCarriageTrainException(diningCount, maxDiningCar);
         }
@@ -66,35 +105,6 @@ public class TrainFactory {
         if (carriageList.size() > lengthLimit) {
             throw new TrainExceptions.TrainCapacityException(carriageList.size(), lengthLimit);
         }
-
-        int requiredPower = (int) ((totalWeight / WEIGHT_TO_POWER_RATIO) * 1.2);
-        int requiredTraction = (int) ((totalWeight / WEIGHT_TO_TRACTION_RATIO) * 1.2);
-
-        boolean needElectric = carriageList.stream()
-                .anyMatch(c -> c instanceof ElectricCarriage);
-
-        LocomotiveRequirements requirements = new LocomotiveRequirements(
-                requiredPower, requiredTraction, totalWeight, needElectric
-        );
-
-        Locomotive locomotive = LocomotiveFactory.findLocomotive(requirements);
-        if (locomotive == null) {
-            throw new RuntimeException("No suitable locomotive found!");
-        }
-
-        Train train = new PassengerTrain(generateTrainNumber())  ;
-        train.setLocomotive(locomotive);
-
-        CarriageFactory carriageFactory = new CarriageFactory();
-        List<Carriage> carriages = carriageFactory.generateCarriages(numberOfCarr,this);
-
-        CarriageInfoDTO dto = new CarriageInfoDTO(carriages, sizeLimit, maxDiningCar, lengthLimit);
-
-        TrainValidator trainValidator = new TrainValidator();
-        trainValidator.isResultTrainValid(dto, train);
-
-        carriages.forEach(train::addCarriage);
-        return train;
     }
 }
 

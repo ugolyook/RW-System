@@ -21,7 +21,7 @@ public class EconomyCarriage extends PassengerCarriage {
     }
 
     @Override
-    public double getPriceInByn() {
+    public double getPriceInBY() {
         return 3.0;
     }
 
