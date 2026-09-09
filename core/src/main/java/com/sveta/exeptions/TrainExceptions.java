@@ -30,11 +30,11 @@ public class TrainExceptions extends RuntimeException {
     }
 
     public static class TrainWeightExceedsLocomotiveCapacityException extends TrainExceptions {
-        public TrainWeightExceedsLocomotiveCapacityException(int totalWeight, int maxWeight) {
+        public TrainWeightExceedsLocomotiveCapacityException(int totalWeightInKg, int maxWeightInKg) {
             super(String.format(
                     "Total train weight (%d kg) exceeds locomotive max capacity (%d kg)",
-                    totalWeight,
-                    maxWeight
+                    totalWeightInKg,
+                    maxWeightInKg
             ));
         }
     }

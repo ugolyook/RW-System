@@ -8,29 +8,29 @@ import com.sveta.train.Train;
 
 public class TrainValidator {
     public void isResultTrainValid(CarriageInfoDTO dto, Train train, Locomotive locomotive) {
-        if (dto.getCarriages().size() > dto.getSizeLimit()) {
-            throw new TrainExceptions.TrainCapacityException(dto.getCarriages().size(), dto.getSizeLimit());
+        if (dto.carriages().size() > dto.sizeLimit()) {
+            throw new TrainExceptions.TrainCapacityException(dto.carriages().size(), dto.sizeLimit());
         }
 
-        long diningCount = dto.getCarriages().stream()
+        long diningCount = dto.carriages().stream()
                 .filter(c -> c instanceof DiningCarriage)
                 .count();
 
-        if (diningCount > dto.getMaxDiningCar()) {
-            throw new TrainExceptions.ToManyDiningCarriageTrainException(diningCount, dto.getMaxDiningCar());
+        if (diningCount > dto.maxDiningCar()) {
+            throw new TrainExceptions.ToManyDiningCarriageTrainException(diningCount, dto.maxDiningCar());
         }
 
-        if (dto.getCarriages().size() > dto.getLengthLimit()) {
-            throw new TrainExceptions.TrainCapacityException(dto.getCarriages().size(), dto.getLengthLimit());
+        if (dto.carriages().size() > dto.lengthLimit()) {
+            throw new TrainExceptions.TrainCapacityException(dto.carriages().size(), dto.lengthLimit());
         }
 
         if (!train.checkLocomotiveExists()) {
             throw new TrainExceptions.LocomotiveNotFoundException();
         }
 
-        if (dto.getTotalCarriagesWeight() > locomotive.getMaxTransportedWeight()) {
+        if (dto.totalCarriagesWeight() > locomotive.getMaxTransportedWeight()) {
             throw new TrainExceptions.TrainWeightExceedsLocomotiveCapacityException(
-                    dto.getTotalCarriagesWeight(),
+                    dto.totalCarriagesWeight(),
                     locomotive.getMaxTransportedWeight()
             );
         }

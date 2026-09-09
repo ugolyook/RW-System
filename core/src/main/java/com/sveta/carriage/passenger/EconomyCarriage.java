@@ -22,7 +22,7 @@ public class EconomyCarriage extends PassengerCarriage implements ElectricCarria
     }
 
     @Override
-    public double getPriceInBY() {
+    public double getPriceInBYN() {
         return 3.0;
     }
 

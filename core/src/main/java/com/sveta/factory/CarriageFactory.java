@@ -22,8 +22,8 @@ public class CarriageFactory {
             );
         }
 
-        List<Carriage> carriages = createTypeOfCarriages(numberOfCarr   );
-        createDinerCarriage( carriages, factory.maxDiningCar);
+        List<Carriage> carriages = createTypeOfCarriages(numberOfCarr);
+        createDinerCarriage(carriages, factory.maxDiningCar);
 
         return carriages;
     }
@@ -53,7 +53,7 @@ public class CarriageFactory {
         return carriages;
     }
 
-    private void createDinerCarriage( List<Carriage> carriages, int maxDiningCar) {
+    private void createDinerCarriage(List<Carriage> carriages, int maxDiningCar) {
         long currentDiningCount = carriages.stream()
                 .filter(c -> c instanceof DiningCarriage)
                 .count();

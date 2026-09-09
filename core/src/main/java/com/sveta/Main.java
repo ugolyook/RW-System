@@ -16,7 +16,7 @@ public class Main {
             List<Carriage> carriages = factory.getCarriageFactory()
                     .createCarriages(5, factory);
 
-            Train train = factory.createTrain(5, carriages);
+            Train train = factory.createTrain(carriages);
 
             System.out.println("\n=== TRAIN INFORMATION ===");
             System.out.println(train);
@@ -43,7 +43,7 @@ public class Main {
             List<Carriage> carriages = factory.getCarriageFactory()
                     .createCarriages(20, factory);
 
-            Train bigTrain = factory.createTrain(20, carriages);
+            Train bigTrain = factory.createTrain(carriages);
             System.out.println(bigTrain);
 
         } catch (IllegalArgumentException e) {

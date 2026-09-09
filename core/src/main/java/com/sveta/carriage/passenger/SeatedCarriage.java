@@ -25,7 +25,7 @@ public class SeatedCarriage extends PassengerCarriage implements ElectricCarriag
     }
 
     @Override
-    public double getPriceInBY() {
+    public double getPriceInBYN() {
         return 11.8;
     }
 

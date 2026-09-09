@@ -52,22 +52,13 @@ public class PassengerTrainFactory {
         return carriageFactory;
     }
 
-    public Train createTrain(int numberOfCarr, List<Carriage> carriageList) {
-        boolean isAllPassengerCarriages = carriageList.stream()
-                .allMatch(carriage -> carriage instanceof PassengerCarriage);
-        if (!isAllPassengerCarriages) {
-            throw new TrainExceptions.NotOneTypeException();
-        }
+    public Train createTrain(List<Carriage> carriageList) {
+        validateAllPassengerCarriage(carriageList);
 
-        int totalCarriagesWeightInKg = carriageList.stream()
-                .mapToInt(Carriage::getKgWeight)
-                .sum();
+        int totalCarriagesWeightInKg = calculateTotalWeight(carriageList);
+        long diningCount = countDiningCarriages(carriageList);
 
-        long diningCount = carriageList.stream()
-                .filter(c -> c instanceof DiningCarriage)
-                .count();
-
-        carriageValidator(carriageList, diningCount);
+        validateCarriageLimits(carriageList, diningCount);
 
         int totalWeightInTons = totalCarriagesWeightInKg / 1000;
 
@@ -81,26 +72,51 @@ public class PassengerTrainFactory {
                 requiredPower, requiredTraction, totalCarriagesWeightInKg, isNeedElectric
         );
 
-        Locomotive locomotive = locomotiveFactory.findLocomotive(requirements);
-        if (locomotive == null) {
-            throw new RuntimeException("No suitable locomotive found!");
-        }
+        Locomotive locomotive = findSuitableLocomotive(requirements);
 
         Train train = new PassengerTrain(generateTrainNumber());
         train.setLocomotive(locomotive);
 
+        validateTrainWithValidator(carriageList, totalWeightInTons, train, locomotive);
+
+        carriageList.forEach(train::addCarriage);
+        return train;
+    }
+
+    private void validateTrainWithValidator(List<Carriage> carriageList, int totalWeightInTons, Train train, Locomotive locomotive) {
         CarriageInfoDTO dto = new CarriageInfoDTO
                 (carriageList, sizeLimit, maxDiningCar,
                         lengthLimit, totalWeightInTons);
 
         TrainValidator trainValidator = new TrainValidator();
         trainValidator.isResultTrainValid(dto, train, locomotive);
-
-        carriageList.forEach(train::addCarriage);
-        return train;
     }
 
-    private void carriageValidator(List<Carriage> carriageList, long diningCount) {
+    private Locomotive findSuitableLocomotive(LocomotiveRequirements requirements) {
+        return locomotiveFactory.createLocomotive(requirements);
+    }
+
+    private static long countDiningCarriages(List<Carriage> carriageList) {
+        return carriageList.stream()
+                .filter(c -> c instanceof DiningCarriage)
+                .count();
+    }
+
+    private static int calculateTotalWeight(List<Carriage> carriageList) {
+        return carriageList.stream()
+                .mapToInt(Carriage::getKgWeight)
+                .sum();
+    }
+
+    private static void validateAllPassengerCarriage(List<Carriage> carriageList) {
+        boolean isAllPassengerCarriages = carriageList.stream()
+                .allMatch(carriage -> carriage instanceof PassengerCarriage);
+        if (!isAllPassengerCarriages) {
+            throw new TrainExceptions.NotOneTypeException();
+        }
+    }
+
+    private void validateCarriageLimits(List<Carriage> carriageList, long diningCount) {
         if (diningCount > maxDiningCar) {
             throw new TrainExceptions.ToManyDiningCarriageTrainException(diningCount, maxDiningCar);
         }

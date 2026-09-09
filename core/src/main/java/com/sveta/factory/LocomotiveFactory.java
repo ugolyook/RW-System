@@ -3,12 +3,9 @@ package com.sveta.factory;
 import com.sveta.dto.LocomotiveRequirements;
 import com.sveta.train.Locomotive;
 
-import java.util.ArrayList;
-import java.util.List;
 import java.util.Objects;
 
 public class LocomotiveFactory {
-    private final List<Locomotive> AVAILABLE_LOCOMOTIVES = new ArrayList<>();
     private static final int VL80C_WAGON_LIMIT = 80;
     private static final int VL80C_MAX_SPEED = 110;
     private static final int VL80C_MAX_TRANSPORTED_WEIGHT = 6000;
@@ -65,116 +62,189 @@ public class LocomotiveFactory {
     private static final int TEM18_TRACTION_FORCE = 120;
     private static final boolean TEM18_IS_ELECTRIC = false;
 
-    {
-        AVAILABLE_LOCOMOTIVES.add(
-                new Locomotive(
-                        VL80C_WAGON_LIMIT,
-                        VL80C_MAX_SPEED,
-                        VL80C_MAX_TRANSPORTED_WEIGHT,
-                        VL80C_POWER,
-                        VL80C_TRACTION_FORCE,
-                        VL80C_IS_ELECTRIC
-                )
-        );
-
-        AVAILABLE_LOCOMOTIVES.add(
-                new Locomotive(
-                        VL85_WAGON_LIMIT,
-                        VL85_MAX_SPEED,
-                        VL85_MAX_TRANSPORTED_WEIGHT,
-                        VL85_POWER,
-                        VL85_TRACTION_FORCE,
-                        VL85_IS_ELECTRIC
-                )
-        );
-
-        AVAILABLE_LOCOMOTIVES.add(
-                new Locomotive(
-                        EP20_WAGON_LIMIT,
-                        EP20_MAX_SPEED,
-                        EP20_MAX_TRANSPORTED_WEIGHT,
-                        EP20_POWER,
-                        EP20_TRACTION_FORCE,
-                        EP20_IS_ELECTRIC
-                )
-        );
-
-        AVAILABLE_LOCOMOTIVES.add(
-                new Locomotive(
-                        ES4K_WAGON_LIMIT,
-                        ES4K_MAX_SPEED,
-                        ES4K_MAX_TRANSPORTED_WEIGHT,
-                        ES4K_POWER,
-                        ES4K_TRACTION_FORCE,
-                        ES4K_IS_ELECTRIC
-                )
-        );
-
-        AVAILABLE_LOCOMOTIVES.add(
-                new Locomotive(
-                        TEP116_WAGON_LIMIT,
-                        TEP116_MAX_SPEED,
-                        TEP116_MAX_TRANSPORTED_WEIGHT,
-                        TEP116_POWER,
-                        TEP116_TRACTION_FORCE,
-                        TEP116_IS_ELECTRIC
-                )
-        );
-
-        AVAILABLE_LOCOMOTIVES.add(
-                new Locomotive(
-                        TEP70_WAGON_LIMIT,
-                        TEP70_MAX_SPEED,
-                        TEP70_MAX_TRANSPORTED_WEIGHT,
-                        TEP70_POWER,
-                        TEP70_TRACTION_FORCE,
-                        TEP70_IS_ELECTRIC
-                )
-        );
-
-        AVAILABLE_LOCOMOTIVES.add(
-                new Locomotive(
-                        PERESVET_WAGON_LIMIT,
-                        PERESVET_MAX_SPEED,
-                        PERESVET_MAX_TRANSPORTED_WEIGHT,
-                        PERESVET_POWER,
-                        PERESVET_TRACTION_FORCE,
-                        PERESVET_IS_ELECTRIC
-                )
-        );
-
-        AVAILABLE_LOCOMOTIVES.add(
-                new Locomotive(
-                        TEM18_WAGON_LIMIT,
-                        TEM18_MAX_SPEED,
-                        TEM18_MAX_TRANSPORTED_WEIGHT,
-                        TEM18_POWER,
-                        TEM18_TRACTION_FORCE,
-                        TEM18_IS_ELECTRIC
-                )
-        );
-    }
-
-    public Locomotive findLocomotive(LocomotiveRequirements requirements) {
+    public Locomotive createLocomotive(LocomotiveRequirements requirements) {
         if (Objects.isNull(requirements)) {
             throw new IllegalArgumentException("Requirements cant be null...");
         }
-
-        return AVAILABLE_LOCOMOTIVES.stream()
-                .filter(l -> l.isElectric() == requirements.isElectric())
-                .filter(l -> l.getPower() >= requirements.getRequiredPower())
-                .filter(l -> l.getTractionForce() >= requirements.requiredTraction())
-                .filter(l -> l.getMaxTransportedWeight() >= requirements.totalWeightInKg())
-                .min((l1, l2) -> compareLocomotiveRelativePwr(requirements, l1, l2))
-                .orElseThrow(() -> new RuntimeException("No suitable locomotive found!"));
+        if (requirements.isElectric()) {
+            return createElectricLocomotive(requirements);
+        } else {
+            return createDieselLocomotive(requirements);
+        }
     }
 
-    private static int compareLocomotiveRelativePwr(LocomotiveRequirements requirements, Locomotive l1, Locomotive l2) {
-        int diff1 = l1.getPower() - requirements.getRequiredPower();
-        int diff2 = l2.getPower() - requirements.getRequiredPower();
-        return Integer.compare(diff1, diff2);
+    private Locomotive createElectricLocomotive(LocomotiveRequirements requirements) {
+        if (canCreateVL80C(requirements)) {
+            return createVL80C();
+        }
+
+        if (canCreateES4K(requirements)) {
+            return createES4K();
+        }
+
+        if (canCreateVL85(requirements)) {
+            return createVL85();
+        }
+
+        if (canCreateEP20(requirements)) {
+            return createEP20();
+        }
+
+        throw new RuntimeException("No suitable electric locomotive found for requirements: " + requirements);
+    }
+
+    private boolean canCreateVL80C(LocomotiveRequirements requirements) {
+        return requirements.getRequiredPower() <= VL80C_POWER &&
+                requirements.requiredTraction() <= VL80C_TRACTION_FORCE &&
+                requirements.totalWeightInKg() / 1000 <= VL80C_MAX_TRANSPORTED_WEIGHT;
+    }
+
+    private boolean canCreateES4K(LocomotiveRequirements requirements) {
+        return requirements.getRequiredPower() <= ES4K_POWER &&
+                requirements.requiredTraction() <= ES4K_TRACTION_FORCE &&
+                requirements.totalWeightInKg() / 1000 <= ES4K_MAX_TRANSPORTED_WEIGHT;
+    }
+
+    private boolean canCreateVL85(LocomotiveRequirements requirements) {
+        return requirements.getRequiredPower() <= VL85_POWER &&
+                requirements.requiredTraction() <= VL85_TRACTION_FORCE &&
+                requirements.totalWeightInKg() / 1000 <= VL85_MAX_TRANSPORTED_WEIGHT;
+    }
+
+    private boolean canCreateEP20(LocomotiveRequirements requirements) {
+        return requirements.getRequiredPower() <= EP20_POWER &&
+                requirements.requiredTraction() <= EP20_TRACTION_FORCE &&
+                requirements.totalWeightInKg() / 1000 <= EP20_MAX_TRANSPORTED_WEIGHT;
+    }
+
+    private Locomotive createVL80C() {
+        return new Locomotive(
+                VL80C_WAGON_LIMIT,
+                VL80C_MAX_SPEED,
+                VL80C_MAX_TRANSPORTED_WEIGHT,
+                VL80C_POWER,
+                VL80C_TRACTION_FORCE,
+                VL80C_IS_ELECTRIC
+        );
+    }
+
+    private Locomotive createES4K() {
+        return new Locomotive(
+                ES4K_WAGON_LIMIT,
+                ES4K_MAX_SPEED,
+                ES4K_MAX_TRANSPORTED_WEIGHT,
+                ES4K_POWER,
+                ES4K_TRACTION_FORCE,
+                ES4K_IS_ELECTRIC
+        );
+    }
+
+    private Locomotive createVL85() {
+        return new Locomotive(
+                VL85_WAGON_LIMIT,
+                VL85_MAX_SPEED,
+                VL85_MAX_TRANSPORTED_WEIGHT,
+                VL85_POWER,
+                VL85_TRACTION_FORCE,
+                VL85_IS_ELECTRIC
+        );
+    }
+
+    private Locomotive createEP20() {
+        return new Locomotive(
+                EP20_WAGON_LIMIT,
+                EP20_MAX_SPEED,
+                EP20_MAX_TRANSPORTED_WEIGHT,
+                EP20_POWER,
+                EP20_TRACTION_FORCE,
+                EP20_IS_ELECTRIC
+        );
+    }
+
+    private Locomotive createDieselLocomotive(LocomotiveRequirements requirements) {
+        if (canCreatePeresvet(requirements)) {
+            return createPeresvet();
+        }
+
+        if (canCreateTEP116(requirements)) {
+            return createTEP116();
+        }
+
+        if (canCreateTEP70(requirements)) {
+            return createTEP70();
+        }
+
+        if (canCreateTEM18(requirements)) {
+            return createTEM18();
+        }
+
+        throw new RuntimeException("No suitable diesel locomotive found for requirements: " + requirements);
+    }
+    private boolean canCreatePeresvet(LocomotiveRequirements requirements) {
+        return requirements.getRequiredPower() <= PERESVET_POWER &&
+                requirements.requiredTraction() <= PERESVET_TRACTION_FORCE &&
+                requirements.totalWeightInKg() / 1000 <= PERESVET_MAX_TRANSPORTED_WEIGHT;
+    }
+
+    private boolean canCreateTEP116(LocomotiveRequirements requirements) {
+        return requirements.getRequiredPower() <= TEP116_POWER &&
+                requirements.requiredTraction() <= TEP116_TRACTION_FORCE &&
+                requirements.totalWeightInKg() / 1000 <= TEP116_MAX_TRANSPORTED_WEIGHT;
+    }
+
+    private boolean canCreateTEP70(LocomotiveRequirements requirements) {
+        return requirements.getRequiredPower() <= TEP70_POWER &&
+                requirements.requiredTraction() <= TEP70_TRACTION_FORCE &&
+                requirements.totalWeightInKg() / 1000 <= TEP70_MAX_TRANSPORTED_WEIGHT;
+    }
+
+    private boolean canCreateTEM18(LocomotiveRequirements requirements) {
+        return requirements.getRequiredPower() <= TEM18_POWER &&
+                requirements.requiredTraction() <= TEM18_TRACTION_FORCE &&
+                requirements.totalWeightInKg() / 1000 <= TEM18_MAX_TRANSPORTED_WEIGHT;
+    }
+
+    private Locomotive createPeresvet() {
+        return new Locomotive(
+                PERESVET_WAGON_LIMIT,
+                PERESVET_MAX_SPEED,
+                PERESVET_MAX_TRANSPORTED_WEIGHT,
+                PERESVET_POWER,
+                PERESVET_TRACTION_FORCE,
+                PERESVET_IS_ELECTRIC
+        );
+    }
+
+    private Locomotive createTEP116() {
+        return new Locomotive(
+                TEP116_WAGON_LIMIT,
+                TEP116_MAX_SPEED,
+                TEP116_MAX_TRANSPORTED_WEIGHT,
+                TEP116_POWER,
+                TEP116_TRACTION_FORCE,
+                TEP116_IS_ELECTRIC
+        );
+    }
+
+    private Locomotive createTEP70() {
+        return new Locomotive(
+                TEP70_WAGON_LIMIT,
+                TEP70_MAX_SPEED,
+                TEP70_MAX_TRANSPORTED_WEIGHT,
+                TEP70_POWER,
+                TEP70_TRACTION_FORCE,
+                TEP70_IS_ELECTRIC
+        );
+    }
+
+    private Locomotive createTEM18() {
+        return new Locomotive(
+                TEM18_WAGON_LIMIT,
+                TEM18_MAX_SPEED,
+                TEM18_MAX_TRANSPORTED_WEIGHT,
+                TEM18_POWER,
+                TEM18_TRACTION_FORCE,
+                TEM18_IS_ELECTRIC
+        );
     }
 }
-
-
-
