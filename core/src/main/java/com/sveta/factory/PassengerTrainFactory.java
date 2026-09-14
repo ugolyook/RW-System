@@ -15,15 +15,14 @@ import java.util.List;
 import java.util.concurrent.atomic.AtomicLong;
 
 public class PassengerTrainFactory {
-    int sizeLimit;
-    int lengthLimit = 18;
-    int maxDiningCar = 1;
+    private final int sizeLimit;
+    private int lengthLimit = 18;
+    private int maxDiningCar = 1;
 
     private static final double WEIGHT_TO_POWER_RATIO = 15.0;
     private static final double WEIGHT_TO_TRACTION_RATIO = 5.0;
     private static final double SAFETY_FACTOR = 1.0;
 
-    private final CarriageFactory carriageFactory = new CarriageFactory();
     private final LocomotiveFactory locomotiveFactory = new LocomotiveFactory();
 
     final AtomicLong trainNumber = new AtomicLong((int) System.currentTimeMillis());
@@ -36,6 +35,14 @@ public class PassengerTrainFactory {
         return nextUnique();
     }
 
+    public int getLengthLimit() {
+        return lengthLimit;
+    }
+
+    public int getSizeLimit() {
+        return sizeLimit;
+    }
+
     public PassengerTrainFactory(int sizeLimit) {
         this.sizeLimit = sizeLimit;
     }
@@ -46,10 +53,6 @@ public class PassengerTrainFactory {
 
     public void setMaxDiningCar(int maxDiningCar) {
         this.maxDiningCar = maxDiningCar;
-    }
-
-    public CarriageFactory getCarriageFactory() {
-        return carriageFactory;
     }
 
     public Train createTrain(List<Carriage> carriageList) {

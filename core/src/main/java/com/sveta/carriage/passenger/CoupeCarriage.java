@@ -7,37 +7,49 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class CoupeCarriage extends PassengerCarriage implements ElectricCarriage {
-    private int DEFAULT_COUPE_LIMIT = 9;
-    private final List<Coupe> coupes = new ArrayList<>(DEFAULT_COUPE_LIMIT);
+    private int coupeLimit;
+    private int coupeWeightKg;
+    private int baseCarriageWeightKg;
+
+    private boolean allowsGenderSpecificCompartments;
+    private boolean hasPetFriendlyCompartments;
+
+    private final List<Coupe> coupes;
 
     public CoupeCarriage(
-            int DEFAULT_COUPE_LIMIT,
+            int coupeLimit,
+            int coupeWeightKg,
+            int baseCarriageWeightKg,
             boolean allowsGenderSpecificCompartments,
             boolean hasPetFriendlyCompartments) {
-        this.DEFAULT_COUPE_LIMIT = DEFAULT_COUPE_LIMIT;
+        this.coupeLimit = coupeLimit;
+        this.coupeWeightKg = coupeWeightKg;
+        this.baseCarriageWeightKg = baseCarriageWeightKg;
+        this.allowsGenderSpecificCompartments = allowsGenderSpecificCompartments;
+        this.hasPetFriendlyCompartments = hasPetFriendlyCompartments;
+        this.coupes = new ArrayList<>(coupeLimit);
     }
 
     public CoupeCarriage(
             boolean allowsGenderSpecificCompartments,
             boolean hasPetFriendlyCompartments) {
-    }
-
-    @Override
-    public double getPriceInBYN() {
-        int placesInCoupe = 4;
-        int price = 20;
-
-        return (price * placesInCoupe);
+        this(
+                9,
+                500,
+                50000,
+                allowsGenderSpecificCompartments,
+                hasPetFriendlyCompartments
+        );
     }
 
     @Override
     public int getPassengerCapacity() {
-        return Coupe.SEATS_LIMIT;
+        return coupeLimit * Coupe.SEATS_PER_COUPE;
     }
 
     @Override
     public int getNumberOfPlaces() {
-        return coupes.size();
+        return getAllSeats().size();
     }
 
     @Override
@@ -49,20 +61,67 @@ public class CoupeCarriage extends PassengerCarriage implements ElectricCarriage
         return all;
     }
 
-    public List<Coupe> getAllCoupes() {
-        return coupes;
-    }
-
     @Override
     public int getKgWeight() {
-        int COUPE_KG = 500;
-        int CARRIAGE_KG = 50000;
-        return (COUPE_KG * DEFAULT_COUPE_LIMIT) + CARRIAGE_KG;
+        return (coupeWeightKg * coupeLimit) + baseCarriageWeightKg;
+    }
+
+    public int getCoupeLimit() {
+        return coupeLimit;
+    }
+
+    public void setCoupeLimit(int coupeLimit) {
+        this.coupeLimit = coupeLimit;
+    }
+
+    public int getCoupeWeightKg() {
+        return coupeWeightKg;
+    }
+
+    public void setCoupeWeightKg(int coupeWeightKg) {
+        this.coupeWeightKg = coupeWeightKg;
+    }
+
+    public int getBaseCarriageWeightKg() {
+        return baseCarriageWeightKg;
+    }
+
+    public void setBaseCarriageWeightKg(int baseCarriageWeightKg) {
+        this.baseCarriageWeightKg = baseCarriageWeightKg;
+    }
+
+    public boolean isAllowsGenderSpecificCompartments() {
+        return allowsGenderSpecificCompartments;
+    }
+
+    public void setAllowsGenderSpecificCompartments(boolean allowsGenderSpecificCompartments) {
+        this.allowsGenderSpecificCompartments = allowsGenderSpecificCompartments;
+    }
+
+    public boolean isHasPetFriendlyCompartments() {
+        return hasPetFriendlyCompartments;
+    }
+
+    public void setHasPetFriendlyCompartments(boolean hasPetFriendlyCompartments) {
+        this.hasPetFriendlyCompartments = hasPetFriendlyCompartments;
     }
 
     public static class Coupe {
-        private final static int SEATS_LIMIT = 4;
-        public List<Seat> seats = new ArrayList<>(SEATS_LIMIT);
+        public static final int SEATS_PER_COUPE = 4; // Количество мест в купе по умолчанию
+
+        private int seatWeightKg;
+        private int averagePassengerWeightKg;
+        public List<Seat> seats;
+
+        public Coupe(int seatWeightKg, int averagePassengerWeightKg) {
+            this.seatWeightKg = seatWeightKg;
+            this.averagePassengerWeightKg = averagePassengerWeightKg;
+            this.seats = new ArrayList<>(SEATS_PER_COUPE);
+        }
+
+        public Coupe() {
+            this(11, 62);
+        }
 
         public int getNumberOfPlaces() {
             return seats.size();
@@ -73,16 +132,32 @@ public class CoupeCarriage extends PassengerCarriage implements ElectricCarriage
         }
 
         public int getKgWeight() {
-            int SEATS_KG = 11;
-            int avPeopleWeight = 62;
-            return (SEATS_LIMIT * SEATS_KG) + (getNumberOfPlaces() * avPeopleWeight);
+            return (seats.size() * seatWeightKg) + (getNumberOfPlaces() * averagePassengerWeightKg);
+        }
+
+        public int getSeatWeightKg() {
+            return seatWeightKg;
+        }
+
+        public void setSeatWeightKg(int seatWeightKg) {
+            this.seatWeightKg = seatWeightKg;
+        }
+
+        public int getAveragePassengerWeightKg() {
+            return averagePassengerWeightKg;
+        }
+
+        public void setAveragePassengerWeightKg(int averagePassengerWeightKg) {
+            this.averagePassengerWeightKg = averagePassengerWeightKg;
         }
     }
 
     @Override
     public String toString() {
         return "CoupeCarriage{" +
-                "DEFAULT_COUPE_LIMIT=" + DEFAULT_COUPE_LIMIT +
+                "coupeLimit=" + coupeLimit +
+                ", coupeWeightKg=" + coupeWeightKg +
+                ", baseCarriageWeightKg=" + baseCarriageWeightKg +
                 ", coupes=" + coupes +
                 '}';
     }

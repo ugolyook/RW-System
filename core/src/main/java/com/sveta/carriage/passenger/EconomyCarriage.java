@@ -22,11 +22,6 @@ public class EconomyCarriage extends PassengerCarriage implements ElectricCarria
     }
 
     @Override
-    public double getPriceInBYN() {
-        return 3.0;
-    }
-
-    @Override
     public int getPassengerCapacity() {
         return seatsLimit;
     }

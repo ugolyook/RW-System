@@ -34,11 +34,6 @@ public class DiningCarriage extends PassengerCarriage implements ElectricCarriag
     }
 
     @Override
-    public double getPriceInBYN() {
-        return 1;
-    }
-
-    @Override
     public int getPassengerCapacity() {
         return seatsLimit;
     }

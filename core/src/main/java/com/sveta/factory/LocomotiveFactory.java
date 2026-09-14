@@ -94,25 +94,25 @@ public class LocomotiveFactory {
     }
 
     private boolean canCreateVL80C(LocomotiveRequirements requirements) {
-        return requirements.getRequiredPower() <= VL80C_POWER &&
+        return requirements.requiredPowerInKw() <= VL80C_POWER &&
                 requirements.requiredTraction() <= VL80C_TRACTION_FORCE &&
                 requirements.totalWeightInKg() / 1000 <= VL80C_MAX_TRANSPORTED_WEIGHT;
     }
 
     private boolean canCreateES4K(LocomotiveRequirements requirements) {
-        return requirements.getRequiredPower() <= ES4K_POWER &&
+        return requirements.requiredPowerInKw() <= ES4K_POWER &&
                 requirements.requiredTraction() <= ES4K_TRACTION_FORCE &&
                 requirements.totalWeightInKg() / 1000 <= ES4K_MAX_TRANSPORTED_WEIGHT;
     }
 
     private boolean canCreateVL85(LocomotiveRequirements requirements) {
-        return requirements.getRequiredPower() <= VL85_POWER &&
+        return requirements.requiredPowerInKw() <= VL85_POWER &&
                 requirements.requiredTraction() <= VL85_TRACTION_FORCE &&
                 requirements.totalWeightInKg() / 1000 <= VL85_MAX_TRANSPORTED_WEIGHT;
     }
 
     private boolean canCreateEP20(LocomotiveRequirements requirements) {
-        return requirements.getRequiredPower() <= EP20_POWER &&
+        return requirements.requiredPowerInKw() <= EP20_POWER &&
                 requirements.requiredTraction() <= EP20_TRACTION_FORCE &&
                 requirements.totalWeightInKg() / 1000 <= EP20_MAX_TRANSPORTED_WEIGHT;
     }
@@ -180,26 +180,27 @@ public class LocomotiveFactory {
 
         throw new RuntimeException("No suitable diesel locomotive found for requirements: " + requirements);
     }
+
     private boolean canCreatePeresvet(LocomotiveRequirements requirements) {
-        return requirements.getRequiredPower() <= PERESVET_POWER &&
+        return requirements.requiredPowerInKw() <= PERESVET_POWER &&
                 requirements.requiredTraction() <= PERESVET_TRACTION_FORCE &&
                 requirements.totalWeightInKg() / 1000 <= PERESVET_MAX_TRANSPORTED_WEIGHT;
     }
 
     private boolean canCreateTEP116(LocomotiveRequirements requirements) {
-        return requirements.getRequiredPower() <= TEP116_POWER &&
+        return requirements.requiredPowerInKw() <= TEP116_POWER &&
                 requirements.requiredTraction() <= TEP116_TRACTION_FORCE &&
                 requirements.totalWeightInKg() / 1000 <= TEP116_MAX_TRANSPORTED_WEIGHT;
     }
 
     private boolean canCreateTEP70(LocomotiveRequirements requirements) {
-        return requirements.getRequiredPower() <= TEP70_POWER &&
+        return requirements.requiredPowerInKw() <= TEP70_POWER &&
                 requirements.requiredTraction() <= TEP70_TRACTION_FORCE &&
                 requirements.totalWeightInKg() / 1000 <= TEP70_MAX_TRANSPORTED_WEIGHT;
     }
 
     private boolean canCreateTEM18(LocomotiveRequirements requirements) {
-        return requirements.getRequiredPower() <= TEM18_POWER &&
+        return requirements.requiredPowerInKw() <= TEM18_POWER &&
                 requirements.requiredTraction() <= TEM18_TRACTION_FORCE &&
                 requirements.totalWeightInKg() / 1000 <= TEM18_MAX_TRANSPORTED_WEIGHT;
     }
