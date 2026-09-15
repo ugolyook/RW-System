@@ -1,11 +1,11 @@
-package com.sveta.dto;
+package com.sveta.train.formatter;
 
 import com.sveta.carriage.Carriage;
 import com.sveta.train.Train;
 
 import java.util.Iterator;
 
-public class TrainInfoFormater implements TrainFormatInfo {
+public class BaseTrainInfoFormatter implements TrainInfoFormatter {
     @Override
     public String format(Train train) {
         StringBuilder sb = new StringBuilder();

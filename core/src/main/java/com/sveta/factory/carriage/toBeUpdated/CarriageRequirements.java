@@ -1,4 +1,4 @@
-package com.sveta.dto;
+package com.sveta.factory.carriage.toBeUpdated;
 
 public class CarriageRequirements {
     private final int coupeCount;

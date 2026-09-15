@@ -1,4 +1,4 @@
-package com.sveta.dto;
+package com.sveta.factory.locomotive;
 
 public record LocomotiveRequirements(int requiredPowerInKw,
                                      int requiredTraction,
