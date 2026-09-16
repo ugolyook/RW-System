@@ -31,6 +31,20 @@ public class CoupeCarriage extends PassengerCarriage implements ElectricCarriage
     }
 
     public CoupeCarriage(
+            List<Coupe> coupes,
+            int coupeWeightKg,
+            int baseCarriageWeightKg,
+            boolean allowsGenderSpecificCompartments,
+            boolean hasPetFriendlyCompartments) {
+        this.coupeLimit = coupes.size();
+        this.coupeWeightKg = coupeWeightKg;
+        this.baseCarriageWeightKg = baseCarriageWeightKg;
+        this.allowsGenderSpecificCompartments = allowsGenderSpecificCompartments;
+        this.hasPetFriendlyCompartments = hasPetFriendlyCompartments;
+        this.coupes = new ArrayList<>(coupes);
+    }
+
+    public CoupeCarriage(
             boolean allowsGenderSpecificCompartments,
             boolean hasPetFriendlyCompartments) {
         this(

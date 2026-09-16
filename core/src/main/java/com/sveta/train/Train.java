@@ -1,7 +1,7 @@
 package com.sveta.train;
 
 import com.sveta.carriage.Carriage;
-import com.sveta.dto.TrainInfoFormater;
+import com.sveta.train.formatter.BaseTrainInfoFormatter;
 
 import java.util.ArrayList;
 import java.util.Iterator;
@@ -61,7 +61,7 @@ public abstract class Train {
     }
 
     public String printTrainInfo(Train train) {
-        TrainInfoFormater printer = new TrainInfoFormater();
+        BaseTrainInfoFormatter printer = new BaseTrainInfoFormatter();
         return printer.format(train);
     }
 }

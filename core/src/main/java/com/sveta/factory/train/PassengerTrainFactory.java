@@ -1,15 +1,15 @@
-package com.sveta.factory;
+package com.sveta.factory.train;
 
 import com.sveta.carriage.Carriage;
 import com.sveta.carriage.ElectricCarriage;
 import com.sveta.carriage.passenger.*;
 import com.sveta.dto.CarriageInfoDTO;
-import com.sveta.dto.LocomotiveRequirements;
+import com.sveta.factory.locomotive.LocomotiveRequirements;
 import com.sveta.exeptions.TrainExceptions;
+import com.sveta.factory.locomotive.LocomotiveFactory;
 import com.sveta.train.Locomotive;
 import com.sveta.train.PassengerTrain;
 import com.sveta.train.Train;
-import com.sveta.validator.TrainValidator;
 
 import java.util.List;
 import java.util.concurrent.atomic.AtomicLong;
@@ -23,7 +23,7 @@ public class PassengerTrainFactory {
     private static final double WEIGHT_TO_TRACTION_RATIO = 5.0;
     private static final double SAFETY_FACTOR = 1.0;
 
-    private final LocomotiveFactory locomotiveFactory = new LocomotiveFactory();
+    private final LocomotiveFactory locomotiveFactory;
 
     final AtomicLong trainNumber = new AtomicLong((int) System.currentTimeMillis());
 
@@ -43,8 +43,9 @@ public class PassengerTrainFactory {
         return sizeLimit;
     }
 
-    public PassengerTrainFactory(int sizeLimit) {
+    public PassengerTrainFactory(int sizeLimit, LocomotiveFactory locomotiveFactory) {
         this.sizeLimit = sizeLimit;
+        this.locomotiveFactory = locomotiveFactory;
     }
 
     public void setLengthLimit(int lengthLimit) {

@@ -1,4 +1,4 @@
-package com.sveta.validator;
+package com.sveta.factory.train;
 
 import com.sveta.carriage.passenger.DiningCarriage;
 import com.sveta.dto.CarriageInfoDTO;
