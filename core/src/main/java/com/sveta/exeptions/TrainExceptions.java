@@ -38,4 +38,10 @@ public class TrainExceptions extends RuntimeException {
             ));
         }
     }
+
+    public static class CantBuildCarriageException extends TrainExceptions {
+        public CantBuildCarriageException() {
+            super("We can't build carriage...");
+        }
+    }
 }

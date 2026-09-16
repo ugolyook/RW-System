@@ -6,6 +6,10 @@ import com.sveta.factory.carriage.CarriageRequirement;
 import com.sveta.factory.carriage.coupe.CoupeCarriageFactory;
 import com.sveta.factory.carriage.coupe.CoupeCarriageRequirement;
 import com.sveta.factory.carriage.coupe.CoupeRequirement;
+import com.sveta.factory.carriage.dining.DiningCarriageFactory;
+import com.sveta.factory.carriage.dining.DiningCarriageRequirement;
+import com.sveta.factory.carriage.economy.EconomyCarriageFactory;
+import com.sveta.factory.carriage.economy.EconomyCarriageRequirement;
 import com.sveta.factory.carriage.seated.SeatedCarriageFactory;
 import com.sveta.factory.carriage.seated.SeatedCarriageRequirement;
 import com.sveta.factory.locomotive.LocomotiveFactory;
@@ -61,6 +65,12 @@ public class Main {
                 50000
         );
 
+        var allRequirement = getCarriageRequirements(coupeCarriageReq1, coupeCarriageReq2);
+
+        return baseCarriageFactory.createAll(allRequirement);
+    }
+
+    private static List<CarriageRequirement> getCarriageRequirements(CarriageRequirement coupeCarriageReq1, CarriageRequirement coupeCarriageReq2) {
         CarriageRequirement seatedCarriageReq = new SeatedCarriageRequirement(
                 48,
                 10000,
@@ -70,16 +80,48 @@ public class Main {
                 2
         );
 
-        var allRequirement = List.of(coupeCarriageReq1, coupeCarriageReq2, seatedCarriageReq);
+        CarriageRequirement diningCarriageReq = new DiningCarriageRequirement(
+                32,
+                10000,
+                15,
+                48000,
+                List.of(),
+                null,
+                true,
+                false
+        );
 
-        return baseCarriageFactory.createAll(allRequirement);
+        CarriageRequirement economyCarriageReq = new EconomyCarriageRequirement(
+                54,
+                12,
+                150,
+                2,
+                48000,
+                List.of(),
+                true
+        );
+
+        return List.of(
+                coupeCarriageReq1,
+                coupeCarriageReq2,
+                seatedCarriageReq,
+                diningCarriageReq,
+                economyCarriageReq
+        );
     }
 
     private BaseCarriageFactory configureBaseCarriageFactory(){
         var coupeFactory = new CoupeCarriageFactory();
         var seatedFactory  = new SeatedCarriageFactory();
+        var diningFactory = new DiningCarriageFactory();
+        var economyFactory = new EconomyCarriageFactory();
 
-        var allCarriageFactories = List.of(coupeFactory,seatedFactory);
+        var allCarriageFactories = List.of(
+                coupeFactory,
+                seatedFactory,
+                diningFactory,
+                economyFactory
+        );
 
         return new BaseCarriageFactory(allCarriageFactories);
     }

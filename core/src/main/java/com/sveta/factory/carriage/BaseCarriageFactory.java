@@ -1,6 +1,7 @@
 package com.sveta.factory.carriage;
 
 import com.sveta.carriage.Carriage;
+import com.sveta.exeptions.TrainExceptions;
 
 import java.util.List;
 import java.util.Optional;
@@ -21,7 +22,7 @@ public class BaseCarriageFactory {
 
     public Carriage tryToCreate(CarriageRequirement requirement) {
         return create(requirement)
-                .orElseThrow(); // create a specific exception
+                .orElseThrow(TrainExceptions.CantBuildCarriageException::new);
     }
 
     public Optional<Carriage> create(CarriageRequirement requirement) {

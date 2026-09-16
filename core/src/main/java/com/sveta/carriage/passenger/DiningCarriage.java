@@ -10,27 +10,49 @@ import java.util.List;
 import java.util.Optional;
 
 public class DiningCarriage extends PassengerCarriage implements ElectricCarriage {
-    private int seatsLimit = 32;
-    public List<Seat> seats = new ArrayList<>(seatsLimit);
+    private int seatsLimit;
+    private int kitchenWeightKg;
+    private int seatWeightKg;
+    private int baseCarriageWeightKg;
 
+    public List<Seat> seats = new ArrayList<>(seatsLimit);
     public Food food;
     boolean hasHotKitchen;
     boolean deliveryToTheRoom;
 
     public DiningCarriage(
-            int SEATS_LIMIT,
+            int seatsLimit,
+            int kitchenWeightKg,
+            int seatWeightKg,
+            int baseCarriageWeightKg,
             boolean hasHotKitchen,
             boolean deliveryToTheRoom) {
-        this.seatsLimit = SEATS_LIMIT;
+        this.seatsLimit = seatsLimit;
+        this.kitchenWeightKg = kitchenWeightKg;
+        this.seatWeightKg = seatWeightKg;
+        this.baseCarriageWeightKg = baseCarriageWeightKg;
         this.hasHotKitchen = hasHotKitchen;
         this.deliveryToTheRoom = deliveryToTheRoom;
+        this.seats = new ArrayList<>(seatsLimit);
+    }
+
+    public DiningCarriage(
+            int seatsLimit,
+            boolean hasHotKitchen,
+            boolean deliveryToTheRoom) {
+        this(
+                seatsLimit, 10000, 15,
+                48000, hasHotKitchen, deliveryToTheRoom
+        );
     }
 
     public DiningCarriage(
             boolean hasHotKitchen,
             boolean deliveryToTheRoom) {
-        this.hasHotKitchen = hasHotKitchen;
-        this.deliveryToTheRoom = deliveryToTheRoom;
+        this(
+                32, 10000, 15,
+                48000, hasHotKitchen, deliveryToTheRoom
+        );
     }
 
     @Override
@@ -50,19 +72,33 @@ public class DiningCarriage extends PassengerCarriage implements ElectricCarriag
 
     @Override
     public int getKgWeight() {
-        int KITCHEN_KG = 10000;
-        int SEATS_KG = 15;
-        int CARRIAGE_KG = 48000;
-
-        int weight = (seatsLimit * SEATS_KG) +
-                (getNumberOfPlaces() * AV_PEOPLE_WEIGHT) + CARRIAGE_KG;
+        int weight = (seatsLimit * seatWeightKg) +
+                (getNumberOfPlaces() * AV_PEOPLE_WEIGHT) + baseCarriageWeightKg;
 
         if (hasHotKitchen) {
-            int kitchenWeight = KITCHEN_KG - weight;
+            int kitchenWeight = kitchenWeightKg - weight;
             weight = weight + kitchenWeight;
         }
         return weight;
     }
+
+    public int getSeatsLimit() { return seatsLimit; }
+    public void setSeatsLimit(int seatsLimit) { this.seatsLimit = seatsLimit; }
+
+    public int getKitchenWeightKg() { return kitchenWeightKg; }
+    public void setKitchenWeightKg(int kitchenWeightKg) { this.kitchenWeightKg = kitchenWeightKg; }
+
+    public int getSeatWeightKg() { return seatWeightKg; }
+    public void setSeatWeightKg(int seatWeightKg) { this.seatWeightKg = seatWeightKg; }
+
+    public int getBaseCarriageWeightKg() { return baseCarriageWeightKg; }
+    public void setBaseCarriageWeightKg(int baseCarriageWeightKg) { this.baseCarriageWeightKg = baseCarriageWeightKg; }
+
+    public boolean isHasHotKitchen() { return hasHotKitchen; }
+    public void setHasHotKitchen(boolean hasHotKitchen) { this.hasHotKitchen = hasHotKitchen; }
+
+    public boolean isDeliveryToTheRoom() { return deliveryToTheRoom; }
+    public void setDeliveryToTheRoom(boolean deliveryToTheRoom) { this.deliveryToTheRoom = deliveryToTheRoom; }
 
     @Override
     public String toString() {

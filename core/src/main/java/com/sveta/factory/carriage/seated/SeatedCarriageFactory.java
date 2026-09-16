@@ -21,8 +21,8 @@ public class SeatedCarriageFactory implements CarriageFactory {
     private SeatedCarriage createCarriage(SeatedCarriageRequirement seatedReq) {
         return new SeatedCarriage( // to be updated
                 seatedReq.placeNumbers(),
-                0,
-                0.0
+                seatedReq.numberOfBicyclePlaces(),
+                80.0
         );
     }
 

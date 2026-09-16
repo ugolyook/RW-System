@@ -30,7 +30,7 @@ public class CoupeCarriageFactory implements com.sveta.factory.carriage.Carriage
     private CoupeCarriage buildCoupeCarriage(List<CoupeCarriage.Coupe> coupes, CoupeCarriageRequirement coupeReq) {
         var coupeRequirements = coupeReq.coupeRequirements();
         var coupeWeightKg = coupeRequirements.stream()
-                .mapToInt(CoupeRequirement::seatNumbers)// to be updated
+                .mapToInt(CoupeRequirement::seatNumbers)
                 .sum() / Math.max(coupes.size(), 1);
         var allowsGenderSpecific = coupeRequirements.stream()
                 .anyMatch(CoupeRequirement::coupeGenderSpecific);
