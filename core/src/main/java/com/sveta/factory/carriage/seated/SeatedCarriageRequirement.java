@@ -4,10 +4,7 @@ import com.sveta.factory.carriage.CarriageRequirement;
 
 public record SeatedCarriageRequirement(
         int placeNumbers,
-        int weightInKg,
-        boolean hasWC,
-        boolean hasElectricity,
         int numberOfBicyclePlaces,
-        int numberOfLuggagePlaces
+        int baseCarriageWeightKg
 ) implements CarriageRequirement {
 }

@@ -1,6 +1,6 @@
 package com.sveta.factory.locomotive;
 
-import com.sveta.train.Locomotive;
+import com.sveta.locomotive.Locomotive;
 
 import java.util.Objects;
 

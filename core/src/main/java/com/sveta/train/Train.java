@@ -1,6 +1,7 @@
 package com.sveta.train;
 
-import com.sveta.carriage.Carriage;
+import com.sveta.locomotive.Locomotive;
+import com.sveta.train.carriage.Carriage;
 import com.sveta.train.formatter.BaseTrainInfoFormatter;
 
 import java.util.ArrayList;
@@ -10,18 +11,15 @@ import java.util.List;
 public abstract class Train {
     private final List<Carriage> carriages = new ArrayList<>();
     private final int trainNumber;
-    private Locomotive locomotive;
+    private final Locomotive locomotive;
 
-    public Train(int trainNumber) {
+    public Train(int trainNumber, Locomotive locomotive) {
         this.trainNumber = trainNumber;
+        this.locomotive = locomotive;
     }
 
     public int getTrainNumber() {
         return trainNumber;
-    }
-
-    public void setLocomotive(Locomotive locomotive) {
-        this.locomotive = locomotive;
     }
 
     public boolean checkLocomotiveExists() {
@@ -32,16 +30,8 @@ public abstract class Train {
         carriages.add(carriage);
     }
 
-    public void removeCarriage(int id) {
-        carriages.remove(id);
-    }
-
     public Iterator<Carriage> getAllCarriage() {
         return carriages.iterator();
-    }
-
-    public void insertCarriage(int id, Carriage carriage) {
-        carriages.add(id, carriage);
     }
 
     public int getTotalPassengerCap() {

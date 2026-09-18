@@ -1,7 +1,7 @@
 package com.sveta.factory.carriage.seated;
 
-import com.sveta.carriage.Carriage;
-import com.sveta.carriage.passenger.SeatedCarriage;
+import com.sveta.train.carriage.Carriage;
+import com.sveta.train.carriage.passenger.SeatedCarriage;
 import com.sveta.factory.carriage.CarriageRequirement;
 import com.sveta.factory.carriage.CarriageFactory;
 
@@ -19,10 +19,10 @@ public class SeatedCarriageFactory implements CarriageFactory {
     }
 
     private SeatedCarriage createCarriage(SeatedCarriageRequirement seatedReq) {
-        return new SeatedCarriage( // to be updated
+        return new SeatedCarriage(
                 seatedReq.placeNumbers(),
-                seatedReq.numberOfBicyclePlaces(),
-                80.0
+                seatedReq.numberOfBicyclePlaces() > 0,
+                seatedReq.baseCarriageWeightKg()
         );
     }
 

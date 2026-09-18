@@ -1,31 +1,27 @@
 package com.sveta.factory.train;
 
-import com.sveta.carriage.Carriage;
-import com.sveta.carriage.ElectricCarriage;
-import com.sveta.carriage.passenger.*;
-import com.sveta.dto.CarriageInfoDTO;
+import com.sveta.train.carriage.Carriage;
+import com.sveta.train.carriage.ElectricCarriage;
 import com.sveta.factory.locomotive.LocomotiveRequirements;
 import com.sveta.exeptions.TrainExceptions;
 import com.sveta.factory.locomotive.LocomotiveFactory;
-import com.sveta.train.Locomotive;
+import com.sveta.locomotive.Locomotive;
 import com.sveta.train.PassengerTrain;
 import com.sveta.train.Train;
+import com.sveta.train.carriage.passenger.DiningCarriage;
+import com.sveta.train.carriage.passenger.PassengerCarriage;
 
 import java.util.List;
 import java.util.concurrent.atomic.AtomicLong;
 
 public class PassengerTrainFactory {
-    private final int sizeLimit;
-    private int lengthLimit = 18;
-    private int maxDiningCar = 1;
+    final AtomicLong trainNumber = new AtomicLong((int) System.currentTimeMillis());
 
     private static final double WEIGHT_TO_POWER_RATIO = 15.0;
     private static final double WEIGHT_TO_TRACTION_RATIO = 5.0;
     private static final double SAFETY_FACTOR = 1.0;
 
     private final LocomotiveFactory locomotiveFactory;
-
-    final AtomicLong trainNumber = new AtomicLong((int) System.currentTimeMillis());
 
     public int nextUnique() {
         return Math.toIntExact(trainNumber.incrementAndGet());
@@ -35,25 +31,8 @@ public class PassengerTrainFactory {
         return nextUnique();
     }
 
-    public int getLengthLimit() {
-        return lengthLimit;
-    }
-
-    public int getSizeLimit() {
-        return sizeLimit;
-    }
-
     public PassengerTrainFactory(int sizeLimit, LocomotiveFactory locomotiveFactory) {
-        this.sizeLimit = sizeLimit;
         this.locomotiveFactory = locomotiveFactory;
-    }
-
-    public void setLengthLimit(int lengthLimit) {
-        this.lengthLimit = lengthLimit;
-    }
-
-    public void setMaxDiningCar(int maxDiningCar) {
-        this.maxDiningCar = maxDiningCar;
     }
 
     public Train createTrain(List<Carriage> carriageList) {
@@ -63,8 +42,6 @@ public class PassengerTrainFactory {
         long diningCount = countDiningCarriages(carriageList);
 
         validateCarriageLimits(carriageList, diningCount);
-
-        int totalWeightInTons = totalCarriagesWeightInKg / 1000;
 
         int requiredPower = (int) ((totalCarriagesWeightInKg / WEIGHT_TO_POWER_RATIO) * SAFETY_FACTOR);
         int requiredTraction = (int) ((totalCarriagesWeightInKg / WEIGHT_TO_TRACTION_RATIO) * SAFETY_FACTOR);
@@ -78,22 +55,10 @@ public class PassengerTrainFactory {
 
         Locomotive locomotive = findSuitableLocomotive(requirements);
 
-        Train train = new PassengerTrain(generateTrainNumber());
-        train.setLocomotive(locomotive);
-
-        validateTrainWithValidator(carriageList, totalWeightInTons, train, locomotive);
+        Train train = new PassengerTrain(generateTrainNumber(), locomotive);
 
         carriageList.forEach(train::addCarriage);
         return train;
-    }
-
-    private void validateTrainWithValidator(List<Carriage> carriageList, int totalWeightInTons, Train train, Locomotive locomotive) {
-        CarriageInfoDTO dto = new CarriageInfoDTO
-                (carriageList, sizeLimit, maxDiningCar,
-                        lengthLimit, totalWeightInTons);
-
-        TrainValidator trainValidator = new TrainValidator();
-        trainValidator.isResultTrainValid(dto, train, locomotive);
     }
 
     private Locomotive findSuitableLocomotive(LocomotiveRequirements requirements) {
@@ -121,14 +86,14 @@ public class PassengerTrainFactory {
     }
 
     private void validateCarriageLimits(List<Carriage> carriageList, long diningCount) {
+        int maxDiningCar = 1;
         if (diningCount > maxDiningCar) {
             throw new TrainExceptions.ToManyDiningCarriageTrainException(diningCount, maxDiningCar);
         }
 
+        int lengthLimit = 18;
         if (carriageList.size() > lengthLimit) {
             throw new TrainExceptions.TrainCapacityException(carriageList.size(), lengthLimit);
         }
     }
 }
-
-

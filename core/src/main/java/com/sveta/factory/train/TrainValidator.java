@@ -1,9 +1,9 @@
 package com.sveta.factory.train;
 
-import com.sveta.carriage.passenger.DiningCarriage;
+import com.sveta.train.carriage.passenger.DiningCarriage;
 import com.sveta.dto.CarriageInfoDTO;
 import com.sveta.exeptions.TrainExceptions;
-import com.sveta.train.Locomotive;
+import com.sveta.locomotive.Locomotive;
 import com.sveta.train.Train;
 
 public class TrainValidator {
@@ -14,8 +14,6 @@ public class TrainValidator {
 
         carriageSizeChecker(dto, dto.lengthLimit());
 
-        ifLocomotiveExistsChecker(train);
-
         carriageWeightChecker(dto, locomotive);
     }
 
@@ -25,12 +23,6 @@ public class TrainValidator {
                     dto.totalCarriagesWeight(),
                     locomotive.getMaxTransportedWeight()
             );
-        }
-    }
-
-    public void ifLocomotiveExistsChecker(Train train) {
-        if (!train.checkLocomotiveExists()) {
-            throw new TrainExceptions.LocomotiveNotFoundException();
         }
     }
 

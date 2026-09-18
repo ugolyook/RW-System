@@ -1,7 +1,7 @@
 package com.sveta.factory.carriage.coupe;
 
-import com.sveta.carriage.Carriage;
-import com.sveta.carriage.passenger.CoupeCarriage;
+import com.sveta.train.carriage.Carriage;
+import com.sveta.train.carriage.passenger.CoupeCarriage;
 import com.sveta.factory.carriage.CarriageRequirement;
 
 import java.util.List;
@@ -23,26 +23,14 @@ public class CoupeCarriageFactory implements com.sveta.factory.carriage.Carriage
 
     private List<CoupeCarriage.Coupe> buildCoupes(List<CoupeRequirement> coupeRequirements) {
         return coupeRequirements.stream()
-                .map(c -> new CoupeCarriage.Coupe(0, 0)) // to be updated
+                .map(c -> new CoupeCarriage.Coupe())
                 .toList();
     }
 
     private CoupeCarriage buildCoupeCarriage(List<CoupeCarriage.Coupe> coupes, CoupeCarriageRequirement coupeReq) {
-        var coupeRequirements = coupeReq.coupeRequirements();
-        var coupeWeightKg = coupeRequirements.stream()
-                .mapToInt(CoupeRequirement::seatNumbers)
-                .sum() / Math.max(coupes.size(), 1);
-        var allowsGenderSpecific = coupeRequirements.stream()
-                .anyMatch(CoupeRequirement::coupeGenderSpecific);
-        var hasPetFriendly = coupeRequirements.stream()
-                .anyMatch(CoupeRequirement::coupePetFriendly);
-
         return new CoupeCarriage(
                 coupes,
-                coupeWeightKg,
-                coupeReq.carriageBaseWeightInKg(),
-                allowsGenderSpecific,
-                hasPetFriendly
+                coupeReq.carriageBaseWeightInKg()
         );
     }
 

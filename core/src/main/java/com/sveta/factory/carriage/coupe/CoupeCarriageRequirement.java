@@ -6,9 +6,6 @@ import java.util.List;
 
 public record CoupeCarriageRequirement(
         List<CoupeRequirement> coupeRequirements,
-        boolean hasWC,
-        boolean hasBoiledWater,
         int carriageBaseWeightInKg
 ) implements CarriageRequirement {
 }
-

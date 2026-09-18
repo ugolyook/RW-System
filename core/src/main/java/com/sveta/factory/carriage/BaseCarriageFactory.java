@@ -1,6 +1,6 @@
 package com.sveta.factory.carriage;
 
-import com.sveta.carriage.Carriage;
+import com.sveta.train.carriage.Carriage;
 import com.sveta.exeptions.TrainExceptions;
 
 import java.util.List;

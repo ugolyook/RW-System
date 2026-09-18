@@ -1,6 +1,6 @@
 package com.sveta.dto;
 
-import com.sveta.carriage.Carriage;
+import com.sveta.train.carriage.Carriage;
 
 import java.util.List;
 

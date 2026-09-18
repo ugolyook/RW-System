@@ -1,4 +1,4 @@
-package com.sveta.carriage.passenger.models;
+package com.sveta.train.carriage.passenger.models;
 
 public class Seat {
     int number;

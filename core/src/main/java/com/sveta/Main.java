@@ -1,6 +1,10 @@
 package com.sveta;
 
-import com.sveta.carriage.Carriage;
+import com.sveta.route.Directions;
+import com.sveta.route.Route;
+import com.sveta.route.Station;
+import com.sveta.train.carriage.Carriage;
+import com.sveta.train.carriage.passenger.models.Food;
 import com.sveta.factory.carriage.BaseCarriageFactory;
 import com.sveta.factory.carriage.CarriageRequirement;
 import com.sveta.factory.carriage.coupe.CoupeCarriageFactory;
@@ -17,6 +21,7 @@ import com.sveta.factory.train.PassengerTrainFactory;
 import com.sveta.train.formatter.BaseTrainInfoFormatter;
 import com.sveta.train.formatter.TrainInfoFormatter;
 
+import java.time.LocalDateTime;
 import java.util.List;
 
 public class Main {
@@ -44,24 +49,40 @@ public class Main {
         var trainOutputString = trainInfoFormatter.format(train);
         System.out.println("We build a first train!");
         System.out.println(trainOutputString);
+        createTrainRun();
+    }
+
+    private static void createTrainRun() {
+        Station minsk = new Station("Minsk", 2200001);
+        Station minskPassenger = new Station("Minsk-Passenger", 2200020);
+        Station mogilev = new Station("Mogilev", 2200030);
+        Station mogilevCentral = new Station("Mogilev Central", 2200060);
+
+        List<Station> stops = List.of(minsk,minskPassenger,mogilev,mogilevCentral);
+        Route route = new Route(stops, Directions.FORWARD);
+
+        LocalDateTime departure = LocalDateTime.of(2026, 9, 20, 14, 30);
+
+        System.out.println("Route: " + route.getDirection());
+        System.out.println("Train stops:");
+        for (Station station : route.getStops()) {
+            System.out.println(" - " + station);
+        }
+        System.out.println("Departure: " + departure);
     }
 
     private List<Carriage> createCarriages() {
-        var coupeReq1 = new CoupeRequirement(111, 62, false, false,false, true);
-        var coupeReq2 = new CoupeRequirement(11, 62, true,  false,false, false);
-        var coupeReq3 = new CoupeRequirement(11, 62, false, false,true, true);
+        var coupeReq1 = new CoupeRequirement(111, 62, false, false);
+        var coupeReq2 = new CoupeRequirement(11, 62, true, false);
+        var coupeReq3 = new CoupeRequirement(11, 62, false, false);
 
         CarriageRequirement coupeCarriageReq1 = new CoupeCarriageRequirement(
                 List.of(coupeReq1, coupeReq1, coupeReq1, coupeReq1, coupeReq2, coupeReq2, coupeReq2, coupeReq3),
-                true,
-                true,
                 50000
         );
 
         CarriageRequirement coupeCarriageReq2 = new CoupeCarriageRequirement(
                 List.of(coupeReq1, coupeReq1, coupeReq2, coupeReq3, coupeReq3, coupeReq3, coupeReq3),
-                true,
-                true,
                 50000
         );
 
@@ -73,31 +94,21 @@ public class Main {
     private static List<CarriageRequirement> getCarriageRequirements(CarriageRequirement coupeCarriageReq1, CarriageRequirement coupeCarriageReq2) {
         CarriageRequirement seatedCarriageReq = new SeatedCarriageRequirement(
                 48,
-                10000,
-                true,
-                true,
-                4,
-                2
+                2,
+                10000
         );
 
         CarriageRequirement diningCarriageReq = new DiningCarriageRequirement(
                 32,
-                10000,
-                15,
-                48000,
-                List.of(),
-                null,
+                45000,
+                Food.BORSCH,
                 true,
                 false
         );
 
         CarriageRequirement economyCarriageReq = new EconomyCarriageRequirement(
                 54,
-                12,
-                150,
-                2,
                 48000,
-                List.of(),
                 true
         );
 
@@ -110,9 +121,9 @@ public class Main {
         );
     }
 
-    private BaseCarriageFactory configureBaseCarriageFactory(){
+    private BaseCarriageFactory configureBaseCarriageFactory() {
         var coupeFactory = new CoupeCarriageFactory();
-        var seatedFactory  = new SeatedCarriageFactory();
+        var seatedFactory = new SeatedCarriageFactory();
         var diningFactory = new DiningCarriageFactory();
         var economyFactory = new EconomyCarriageFactory();
 
@@ -126,7 +137,7 @@ public class Main {
         return new BaseCarriageFactory(allCarriageFactories);
     }
 
-    private PassengerTrainFactory configureTrainFactory(){
+    private PassengerTrainFactory configureTrainFactory() {
         var locomotiveFactory = new LocomotiveFactory();
         return new PassengerTrainFactory(DEFAULT_CARRIAGE_LIMIT_PER_TRAIN, locomotiveFactory);
     }

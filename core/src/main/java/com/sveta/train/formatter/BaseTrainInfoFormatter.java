@@ -1,6 +1,6 @@
 package com.sveta.train.formatter;
 
-import com.sveta.carriage.Carriage;
+import com.sveta.train.carriage.Carriage;
 import com.sveta.train.Train;
 
 import java.util.Iterator;
