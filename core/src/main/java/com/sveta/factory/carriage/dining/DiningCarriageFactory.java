@@ -10,7 +10,7 @@ import java.util.Objects;
 public class DiningCarriageFactory implements CarriageFactory {
     @Override
     public Carriage build(CarriageRequirement req) {
-        if (Objects.isNull(req) || canBuild(req)) {
+        if (Objects.isNull(req) || !canBuild(req)) {
             return null;
         }
 
@@ -34,6 +34,6 @@ public class DiningCarriageFactory implements CarriageFactory {
 
     @Override
     public boolean canBuild(CarriageRequirement req) {
-        return !(req instanceof DiningCarriageRequirement);
+        return req instanceof DiningCarriageRequirement;
     }
 }

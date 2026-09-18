@@ -10,7 +10,7 @@ import java.util.Objects;
 public class EconomyCarriageFactory implements CarriageFactory {
     @Override
     public Carriage build(CarriageRequirement req) {
-        if (Objects.isNull(req) || canBuild(req)) {
+        if (Objects.isNull(req) || !canBuild(req)) {
             return null;
         }
 
@@ -28,6 +28,6 @@ public class EconomyCarriageFactory implements CarriageFactory {
 
     @Override
     public boolean canBuild(CarriageRequirement req) {
-        return !(req instanceof EconomyCarriageRequirement);
+        return req instanceof EconomyCarriageRequirement;
     }
 }

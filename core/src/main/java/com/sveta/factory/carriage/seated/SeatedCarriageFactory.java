@@ -10,7 +10,7 @@ import java.util.Objects;
 public class SeatedCarriageFactory implements CarriageFactory {
     @Override
     public Carriage build(CarriageRequirement req) {
-        if (Objects.isNull(req) || canBuild(req)) {
+        if (Objects.isNull(req) || !canBuild(req)) {
             return null;
         }
         var seatedReq = (SeatedCarriageRequirement) req;
@@ -28,6 +28,6 @@ public class SeatedCarriageFactory implements CarriageFactory {
 
     @Override
     public boolean canBuild(CarriageRequirement req) {
-        return !(req instanceof SeatedCarriageRequirement);
+        return req instanceof SeatedCarriageRequirement;
     }
 }

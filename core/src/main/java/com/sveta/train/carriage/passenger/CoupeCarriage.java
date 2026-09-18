@@ -49,6 +49,11 @@ public class CoupeCarriage extends PassengerCarriage implements ElectricCarriage
         public List<Seat> getAllSeats() {
             return seats;
         }
+
+        @Override
+        public String toString() {
+            return "Coupe{seats=" + seats.size() + "/" + SEATS_PER_COUPE + "}";
+        }
     }
 
     @Override

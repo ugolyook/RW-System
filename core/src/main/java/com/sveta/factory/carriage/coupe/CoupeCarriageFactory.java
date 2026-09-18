@@ -10,7 +10,7 @@ import java.util.Objects;
 public class CoupeCarriageFactory implements com.sveta.factory.carriage.CarriageFactory {
     @Override
     public Carriage build(CarriageRequirement req) {
-        if (Objects.isNull(req) || canBuild(req)) {
+        if (Objects.isNull(req) || !canBuild(req)) {
             return null;
         }
 
@@ -36,6 +36,6 @@ public class CoupeCarriageFactory implements com.sveta.factory.carriage.Carriage
 
     @Override
     public boolean canBuild(CarriageRequirement req) {
-        return !(req instanceof CoupeCarriageRequirement);
+        return req instanceof CoupeCarriageRequirement;
     }
 }

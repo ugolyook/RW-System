@@ -17,8 +17,8 @@ import java.util.concurrent.atomic.AtomicLong;
 public class PassengerTrainFactory {
     final AtomicLong trainNumber = new AtomicLong((int) System.currentTimeMillis());
 
-    private static final double WEIGHT_TO_POWER_RATIO = 15.0;
-    private static final double WEIGHT_TO_TRACTION_RATIO = 5.0;
+    private static final double WEIGHT_TO_POWER_RATIO = 60.0;
+    private static final double WEIGHT_TO_TRACTION_RATIO = 15.0;
     private static final double SAFETY_FACTOR = 1.0;
 
     private final LocomotiveFactory locomotiveFactory;
@@ -44,13 +44,14 @@ public class PassengerTrainFactory {
         validateCarriageLimits(carriageList, diningCount);
 
         int requiredPower = (int) ((totalCarriagesWeightInKg / WEIGHT_TO_POWER_RATIO) * SAFETY_FACTOR);
-        int requiredTraction = (int) ((totalCarriagesWeightInKg / WEIGHT_TO_TRACTION_RATIO) * SAFETY_FACTOR);
+        int requiredTractionInKg = (int) ((totalCarriagesWeightInKg / WEIGHT_TO_TRACTION_RATIO) * SAFETY_FACTOR);
+        int requiredTractionInKn = (requiredTractionInKg / 100);
 
         boolean isNeedElectric = carriageList.stream()
                 .anyMatch(c -> c instanceof ElectricCarriage);
 
         LocomotiveRequirements requirements = new LocomotiveRequirements(
-                requiredPower, requiredTraction, totalCarriagesWeightInKg, isNeedElectric
+                requiredPower, requiredTractionInKn, totalCarriagesWeightInKg, isNeedElectric
         );
 
         Locomotive locomotive = findSuitableLocomotive(requirements);
