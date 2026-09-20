@@ -4,6 +4,8 @@ import com.sveta.train.carriage.Carriage;
 import com.sveta.train.carriage.passenger.EconomyCarriage;
 import com.sveta.factory.carriage.CarriageFactory;
 import com.sveta.factory.carriage.CarriageRequirement;
+import com.sveta.train.carriage.passenger.models.Seat;
+import com.sveta.train.carriage.passenger.models.SeatType;
 
 import java.util.Objects;
 
@@ -19,11 +21,18 @@ public class EconomyCarriageFactory implements CarriageFactory {
     }
 
     private Carriage buildEconomyCarriage(EconomyCarriageRequirement ecoReq) {
-        return new EconomyCarriage(
+        EconomyCarriage carriage = new EconomyCarriage(
                 ecoReq.seatsLimit(),
                 ecoReq.baseCarriageWeightKg(),
                 ecoReq.hasBioToilets()
         );
+
+        for (int i = 1; i <= ecoReq.seatsLimit(); i++) {
+            SeatType type = (i % 2 == 0) ? SeatType.UPPER : SeatType.LOWER;
+            carriage.seats.add(new Seat(i, type, false));
+        }
+
+        return carriage;
     }
 
     @Override

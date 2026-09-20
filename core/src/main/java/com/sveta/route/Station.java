@@ -13,4 +13,8 @@ public class Station {
     public String toString() {
         return stationName + " (код: " + code + ")";
     }
+
+    public String getStationName() {
+        return stationName;
+    }
 }

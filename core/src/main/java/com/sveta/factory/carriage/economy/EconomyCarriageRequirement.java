@@ -7,4 +7,8 @@ public record EconomyCarriageRequirement(
         int baseCarriageWeightKg,
         boolean hasBioToilets
 ) implements CarriageRequirement {
+    @Override
+    public int getWeightInKg() {
+        return baseCarriageWeightKg;
+    }
 }

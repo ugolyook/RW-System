@@ -8,4 +8,8 @@ public record CoupeCarriageRequirement(
         List<CoupeRequirement> coupeRequirements,
         int carriageBaseWeightInKg
 ) implements CarriageRequirement {
+    @Override
+    public int getWeightInKg() {
+        return carriageBaseWeightInKg;
+    }
 }

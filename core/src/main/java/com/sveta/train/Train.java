@@ -54,4 +54,8 @@ public abstract class Train {
         BaseTrainInfoFormatter printer = new BaseTrainInfoFormatter();
         return printer.format(train);
     }
+
+    public List<Carriage> getCarriages() {
+        return carriages;
+    }
 }

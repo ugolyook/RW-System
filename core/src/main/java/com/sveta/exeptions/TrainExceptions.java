@@ -17,12 +17,6 @@ public class TrainExceptions extends RuntimeException {
         }
     }
 
-    public static class LocomotiveNotFoundException extends TrainExceptions {
-        public LocomotiveNotFoundException() {
-            super("The train lacks a locomotive, it cannot move.");
-        }
-    }
-
     public static class NotOneTypeException extends TrainExceptions {
         public NotOneTypeException() {
             super("This carriage is not passenger!");

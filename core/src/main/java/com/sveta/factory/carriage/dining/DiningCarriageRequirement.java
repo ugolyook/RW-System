@@ -10,4 +10,8 @@ public record DiningCarriageRequirement(
         boolean hasHotKitchen,
         boolean deliveryToTheRoom
 ) implements CarriageRequirement {
+    @Override
+    public int getWeightInKg() {
+        return baseCarriageWeightKg;
+    }
 }

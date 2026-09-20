@@ -7,4 +7,8 @@ public record SeatedCarriageRequirement(
         int numberOfBicyclePlaces,
         int baseCarriageWeightKg
 ) implements CarriageRequirement {
+    @Override
+    public int getWeightInKg() {
+        return baseCarriageWeightKg;
+    }
 }

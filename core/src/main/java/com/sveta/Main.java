@@ -3,7 +3,11 @@ package com.sveta;
 import com.sveta.route.Directions;
 import com.sveta.route.Route;
 import com.sveta.route.Station;
+import com.sveta.route.TrainRun;
+import com.sveta.tickets.*;
+import com.sveta.train.Train;
 import com.sveta.train.carriage.Carriage;
+import com.sveta.train.carriage.passenger.CoupeCarriage;
 import com.sveta.train.carriage.passenger.models.Food;
 import com.sveta.factory.carriage.BaseCarriageFactory;
 import com.sveta.factory.carriage.CarriageRequirement;
@@ -32,15 +36,22 @@ public class Main {
     private final BaseCarriageFactory baseCarriageFactory;
     private final TrainInfoFormatter trainInfoFormatter;
 
+    private final TicketSearchService ticketSearchService;
+    private final Cashier cashier;
+
     static void main(String[] args) {
         var main = new Main();
         main.start();
     }
 
     public Main() {
-        passengerTrainFactory = configureTrainFactory();
-        baseCarriageFactory = configureBaseCarriageFactory();
-        trainInfoFormatter = new BaseTrainInfoFormatter();
+        this.passengerTrainFactory = configureTrainFactory();
+        this.baseCarriageFactory = configureBaseCarriageFactory();
+        this.trainInfoFormatter = new BaseTrainInfoFormatter();
+
+        this.ticketSearchService = new TicketSearchService();
+        TicketPriceCalculator priceCalculator = new TicketPriceCalculator();
+        this.cashier = new Cashier(priceCalculator);
     }
 
     private void start() {
@@ -49,10 +60,47 @@ public class Main {
         var trainOutputString = trainInfoFormatter.format(train);
         System.out.println("We build a first train!");
         System.out.println(trainOutputString);
-        createTrainRun();
+
+        TrainRun run = createTrainRun(train);
+        processTicketSearchAndBooking(run);
     }
 
-    private static void createTrainRun() {
+    private void processTicketSearchAndBooking(TrainRun run) {
+        Station minsk = run.route().getStops().get(0);
+        Station mogilev = run.route().getStops().get(2);
+
+        TicketSearchRequirement requirement = new TicketSearchRequirement(
+                minsk,
+                mogilev,
+                run,
+                run.route(),
+                null,
+                run.departureTime(),
+                run.train(),
+                CoupeCarriage.class
+        );
+
+        List<SearchResult> searchResults = ticketSearchService.searchSeats(List.of(run), requirement);
+        System.out.println("\n=== Ticket search results (" + searchResults.size() + " found) ===");
+
+        if (searchResults.isEmpty()) {
+            System.out.println("No available seats found.");
+            return;
+        }
+
+        searchResults.stream().limit(5).forEach(System.out::println);
+
+        SearchResult selectedResult = searchResults.get(0);
+        Ticket ticket = cashier.issueTicket("Sveta", selectedResult, minsk, mogilev);
+
+        System.out.println("\n=== Issued Ticket ===");
+        System.out.println(ticket);
+
+        List<SearchResult> updatedResults = ticketSearchService.searchSeats(List.of(run), requirement);
+        System.out.println("\n=== Free seats after booking: " + updatedResults.size() + " ===");
+    }
+
+    private static TrainRun createTrainRun(Train train) {
         Station minsk = new Station("Minsk", 2200001);
         Station minskPassenger = new Station("Minsk-Passenger", 2200020);
         Station mogilev = new Station("Mogilev", 2200030);
@@ -69,6 +117,8 @@ public class Main {
             System.out.println(" - " + station);
         }
         System.out.println("Departure: " + departure);
+
+        return new TrainRun(train, route, departure,true);
     }
 
     private List<Carriage> createCarriages() {
