@@ -11,8 +11,9 @@ public record SearchResult(
 ) {
     @Override
     public String toString() {
-        return "Рейс: " + trainRun.train().getTrainNumber() +
-                ", Вагон: " + carriage.getClass().getSimpleName() +
-                ", Место: " + seat;
+        return String.format("Run: %s, Carriage: %s, Seat: %s",
+                trainRun.train().getTrainNumber(),
+                carriage.getClass().getSimpleName(),
+                seat);
     }
 }

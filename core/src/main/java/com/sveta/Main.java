@@ -23,7 +23,8 @@ import com.sveta.factory.carriage.seated.SeatedCarriageRequirement;
 import com.sveta.factory.locomotive.LocomotiveFactory;
 import com.sveta.factory.train.PassengerTrainFactory;
 import com.sveta.train.formatter.BaseTrainInfoFormatter;
-import com.sveta.train.formatter.TrainInfoFormatter;
+import com.sveta.train.formatter.ConsoleTrainView;
+import com.sveta.train.formatter.TrainView;
 
 import java.time.LocalDateTime;
 import java.util.List;
@@ -34,20 +35,22 @@ public class Main {
 
     private final PassengerTrainFactory passengerTrainFactory;
     private final BaseCarriageFactory baseCarriageFactory;
-    private final TrainInfoFormatter trainInfoFormatter;
 
     private final TicketSearchService ticketSearchService;
     private final Cashier cashier;
 
+    private final TrainView view;
+
     static void main(String[] args) {
-        var main = new Main();
+        TrainView view = new ConsoleTrainView(new BaseTrainInfoFormatter());
+        var main = new Main(view);
         main.start();
     }
 
-    public Main() {
+    public Main(TrainView view) {
+        this.view = view;
         this.passengerTrainFactory = configureTrainFactory();
         this.baseCarriageFactory = configureBaseCarriageFactory();
-        this.trainInfoFormatter = new BaseTrainInfoFormatter();
 
         this.ticketSearchService = new TicketSearchService();
         TicketPriceCalculator priceCalculator = new TicketPriceCalculator();
@@ -57,9 +60,8 @@ public class Main {
     private void start() {
         var carriages = createCarriages();
         var train = passengerTrainFactory.createTrain(carriages);
-        var trainOutputString = trainInfoFormatter.format(train);
-        System.out.println("We build a first train!");
-        System.out.println(trainOutputString);
+
+        view.showTrainCreated(train);
 
         TrainRun run = createTrainRun(train);
         processTicketSearchAndBooking(run);
@@ -81,10 +83,9 @@ public class Main {
         );
 
         List<SearchResult> searchResults = ticketSearchService.searchSeats(List.of(run), requirement);
-        System.out.println("\n=== Ticket search results (" + searchResults.size() + " found) ===");
+        view.showSearchResults(searchResults);
 
         if (searchResults.isEmpty()) {
-            System.out.println("No available seats found.");
             return;
         }
 
@@ -93,32 +94,27 @@ public class Main {
         SearchResult selectedResult = searchResults.get(0);
         Ticket ticket = cashier.issueTicket("Sveta", selectedResult, minsk, mogilev);
 
-        System.out.println("\n=== Issued Ticket ===");
-        System.out.println(ticket);
+        view.showIssuedTicket(ticket);
 
         List<SearchResult> updatedResults = ticketSearchService.searchSeats(List.of(run), requirement);
-        System.out.println("\n=== Free seats after booking: " + updatedResults.size() + " ===");
+        view.showRemainingSeats(updatedResults.size());
     }
 
-    private static TrainRun createTrainRun(Train train) {
+    private TrainRun createTrainRun(Train train) {
         Station minsk = new Station("Minsk", 2200001);
         Station minskPassenger = new Station("Minsk-Passenger", 2200020);
         Station mogilev = new Station("Mogilev", 2200030);
         Station mogilevCentral = new Station("Mogilev Central", 2200060);
 
-        List<Station> stops = List.of(minsk,minskPassenger,mogilev,mogilevCentral);
+        List<Station> stops = List.of(minsk, minskPassenger, mogilev, mogilevCentral);
         Route route = new Route(stops, Directions.FORWARD);
 
         LocalDateTime departure = LocalDateTime.of(2026, 9, 20, 14, 30);
 
-        System.out.println("Route: " + route.getDirection());
-        System.out.println("Train stops:");
-        for (Station station : route.getStops()) {
-            System.out.println(" - " + station);
-        }
-        System.out.println("Departure: " + departure);
+        TrainRun run = new TrainRun(train, route, departure, true);
+        view.showTrainRunInfo(run);
 
-        return new TrainRun(train, route, departure,true);
+        return new TrainRun(train, route, departure, true);
     }
 
     private List<Carriage> createCarriages() {

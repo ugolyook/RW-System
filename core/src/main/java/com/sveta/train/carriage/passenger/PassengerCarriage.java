@@ -13,8 +13,4 @@ public abstract class PassengerCarriage extends Carriage implements ElectricCarr
 
     public abstract int getNumberOfPlaces();
     public abstract List<Seat> getAllSeats();
-
-    public int getNumberOfEmptyPlaces() {
-        return getNumberOfPlaces() - getAllSeats().size();
-    }
 }

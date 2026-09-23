@@ -13,7 +13,6 @@ public class TicketPriceCalculator {
     public BigDecimal calculatePrice(SearchResult searchResult, Station departure, Station arrival) {
         var trainRun = searchResult.trainRun();
         var carriage = searchResult.carriage();
-        var seat = searchResult.seat();
 
         int distance = calculateDistanceInStops(trainRun.route(), departure, arrival);
         BigDecimal price = BASE_STATION_FEE.multiply(BigDecimal.valueOf(distance));

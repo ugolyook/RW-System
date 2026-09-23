@@ -11,7 +11,7 @@ public class Station {
 
     @Override
     public String toString() {
-        return stationName + " (код: " + code + ")";
+        return stationName + " (code: " + code + ")";
     }
 
     public String getStationName() {
