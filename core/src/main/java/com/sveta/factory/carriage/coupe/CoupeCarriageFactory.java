@@ -18,26 +18,25 @@ public class CoupeCarriageFactory implements com.sveta.factory.carriage.Carriage
         }
 
         var coupeReq = (CoupeCarriageRequirement) req;
-        var coupeRequirements = coupeReq.coupeRequirements();
-        var coupes = buildCoupes(coupeRequirements);
+        var coupes = buildCoupes();
 
         return buildCoupeCarriage(coupes, coupeReq);
     }
 
-    private List<CoupeCarriage.Coupe> buildCoupes(List<CoupeRequirement> coupeRequirements) {
+    private List<CoupeCarriage.Coupe> buildCoupes() {
         List<CoupeCarriage.Coupe> result = new ArrayList<>();
         int currentSeatNumber = 1;
 
-        for (CoupeRequirement req : coupeRequirements) {
-            CoupeCarriage.Coupe coupe = new CoupeCarriage.Coupe();
 
-            for (int i = 0; i < CoupeCarriage.Coupe.SEATS_PER_COUPE; i++) {
-                SeatType type = (i % 2 == 0) ? SeatType.LOWER : SeatType.UPPER;
-                coupe.seats.add(new Seat(currentSeatNumber++, type, false));
-            }
+        CoupeCarriage.Coupe coupe = new CoupeCarriage.Coupe();
 
-            result.add(coupe);
+        for (int i = 0; i < CoupeCarriage.Coupe.SEATS_PER_COUPE; i++) {
+            SeatType type = (i % 2 == 0) ? SeatType.LOWER : SeatType.UPPER;
+            coupe.seats.add(new Seat(currentSeatNumber++, type));
         }
+
+        result.add(coupe);
+
 
         return result;
     }

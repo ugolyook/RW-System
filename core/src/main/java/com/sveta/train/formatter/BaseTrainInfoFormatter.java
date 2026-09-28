@@ -1,10 +1,14 @@
 package com.sveta.train.formatter;
 
+import com.sveta.route.TrainRun;
 import com.sveta.train.carriage.Carriage;
 import com.sveta.train.Train;
 import com.sveta.train.carriage.passenger.*;
+import com.sveta.train.carriage.passenger.models.Food;
 
 import java.util.Iterator;
+import java.util.List;
+import java.util.stream.Collectors;
 
 public class BaseTrainInfoFormatter implements TrainInfoFormatter {
     @Override
@@ -32,36 +36,38 @@ public class BaseTrainInfoFormatter implements TrainInfoFormatter {
 
     private String formatCarriage(Carriage carriage) {
         if (carriage instanceof CoupeCarriage coupeCarriage) {
-            return String.format("Coupe Carriage | Coupes: %d | Free seats: %d/%d",
+            return String.format("Coupe Carriage | Coupes: %d | Total seats: %d",
                     coupeCarriage.getCoupeLimit(),
-                    countAvailableSeats(coupeCarriage),
                     coupeCarriage.getPassengerCapacity());
         }
 
         if (carriage instanceof EconomyCarriage economyCarriage) {
-            return String.format("Economy Carriage (Platskart) | Free seats: %d/%d",
-                    countAvailableSeats(economyCarriage),
+            return String.format("Economy Carriage (Platskart) | Total seats: %d",
                     economyCarriage.getPassengerCapacity());
         }
 
         if (carriage instanceof SeatedCarriage seatedCarriage) {
-            return String.format("Seated Carriage | Free seats: %d/%d",
-                    countAvailableSeats(seatedCarriage),
+            return String.format("Seated Carriage | Total seats: %d",
                     seatedCarriage.getPassengerCapacity());
         }
 
         if (carriage instanceof DiningCarriage diningCarriage) {
+            String foodInfo = formatFood(diningCarriage.getFood());
             return String.format("Dining Carriage | Seats limit: %d | Speciality: %s",
                     diningCarriage.getPassengerCapacity(),
-                    diningCarriage.food != null ? diningCarriage.food : "N/A");
+                    foodInfo);
         }
 
         return carriage.toString();
     }
 
-    private long countAvailableSeats(PassengerCarriage carriage) {
-        return carriage.getAllSeats().stream()
-                .filter(seat -> !seat.isOccupied())
-                .count();
+    private String formatFood(List<Food> foods) {
+        if (foods == null || foods.isEmpty()) {
+            return "No menu available";
+        }
+
+        return foods.stream()
+                .map(Food::toString)
+                .collect(Collectors.joining(", "));
     }
 }

@@ -17,4 +17,8 @@ public class Station {
     public String getStationName() {
         return stationName;
     }
+
+    public int getCode() {
+        return code;
+    }
 }

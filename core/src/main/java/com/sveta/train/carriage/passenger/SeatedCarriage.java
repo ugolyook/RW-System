@@ -6,20 +6,22 @@ import com.sveta.train.carriage.passenger.models.Seat;
 import java.util.ArrayList;
 import java.util.List;
 
+import static com.sveta.train.carriage.passenger.models.SeatType.BICYCLE;
+
 public class SeatedCarriage extends PassengerCarriage implements ElectricCarriage {
     private int seatsLimit;
-    private final boolean bicycleSpots;
-
     public List<Seat> seats = new ArrayList<>(seatsLimit);
 
     public SeatedCarriage(
             int seatsLimit,
-            boolean bicycleSpots,
             int baseCarriageWeightKg
     ) {
         super(baseCarriageWeightKg);
         this.seatsLimit = seatsLimit;
-        this.bicycleSpots = bicycleSpots;
+    }
+
+    public boolean isBicycleSpots() {
+        return seats.stream().anyMatch(seat -> seat.getType() == BICYCLE);
     }
 
     @Override
@@ -42,7 +44,6 @@ public class SeatedCarriage extends PassengerCarriage implements ElectricCarriag
         return "Seated{" +
                 "SEATS_LIMIT=" + seatsLimit +
                 ", seats=" + seats +
-                ", bicycleSpots=" + bicycleSpots +
                 '}';
     }
 }

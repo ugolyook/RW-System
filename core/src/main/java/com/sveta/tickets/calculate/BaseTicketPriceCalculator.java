@@ -1,20 +1,21 @@
-package com.sveta.tickets;
+package com.sveta.tickets.calculate;
 
 import com.sveta.route.Station;
+import com.sveta.tickets.SearchResult;
 import com.sveta.train.carriage.passenger.CoupeCarriage;
 import com.sveta.train.carriage.passenger.EconomyCarriage;
 
 import java.math.BigDecimal;
 import java.math.RoundingMode;
 
-public class TicketPriceCalculator {
+public class BaseTicketPriceCalculator implements TicketPriceCalculator {
     private static final BigDecimal BASE_STATION_FEE = new BigDecimal("12.50");
 
     public BigDecimal calculatePrice(SearchResult searchResult, Station departure, Station arrival) {
         var trainRun = searchResult.trainRun();
         var carriage = searchResult.carriage();
 
-        int distance = calculateDistanceInStops(trainRun.route(), departure, arrival);
+        int distance = calculateDistanceInStops(trainRun.getRoute(), departure, arrival);
         BigDecimal price = BASE_STATION_FEE.multiply(BigDecimal.valueOf(distance));
 
         double carriageMultiplier = switch (carriage) {

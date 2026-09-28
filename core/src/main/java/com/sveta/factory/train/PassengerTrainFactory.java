@@ -21,6 +21,7 @@ public class PassengerTrainFactory {
     private static final double WEIGHT_TO_TRACTION_RATIO = 15.0;
     private static final double SAFETY_FACTOR = 1.0;
 
+    private final int sizeLimit;
     private final LocomotiveFactory locomotiveFactory;
 
     public int nextUnique() {
@@ -32,11 +33,13 @@ public class PassengerTrainFactory {
     }
 
     public PassengerTrainFactory(int sizeLimit, LocomotiveFactory locomotiveFactory) {
+        this.sizeLimit = sizeLimit;
         this.locomotiveFactory = locomotiveFactory;
     }
 
     public Train createTrain(List<Carriage> carriageList) {
         validateAllPassengerCarriage(carriageList);
+        boolean isNeedElectric = validateElectricCarriagesConsistency(carriageList);
 
         int totalCarriagesWeightInKg = calculateTotalWeight(carriageList);
         long diningCount = countDiningCarriages(carriageList);
@@ -46,9 +49,6 @@ public class PassengerTrainFactory {
         int requiredPower = (int) ((totalCarriagesWeightInKg / WEIGHT_TO_POWER_RATIO) * SAFETY_FACTOR);
         int requiredTractionInKg = (int) ((totalCarriagesWeightInKg / WEIGHT_TO_TRACTION_RATIO) * SAFETY_FACTOR);
         int requiredTractionInKn = (requiredTractionInKg / 100);
-
-        boolean isNeedElectric = carriageList.stream()
-                .anyMatch(c -> c instanceof ElectricCarriage);
 
         LocomotiveRequirements requirements = new LocomotiveRequirements(
                 requiredPower, requiredTractionInKn, totalCarriagesWeightInKg, isNeedElectric
@@ -86,15 +86,25 @@ public class PassengerTrainFactory {
         }
     }
 
+    private static boolean validateElectricCarriagesConsistency(List<Carriage> carriageList) {
+        boolean hasElectric = carriageList.stream().anyMatch(ElectricCarriage.class::isInstance);
+        boolean hasNonElectric = carriageList.stream().anyMatch(c -> !(c instanceof ElectricCarriage));
+
+        if (hasElectric && hasNonElectric) {
+            throw new TrainExceptions("Train cannot contain a mix of electric and non-electric carriages!");
+        }
+
+        return hasElectric;
+    }
+
     private void validateCarriageLimits(List<Carriage> carriageList, long diningCount) {
         int maxDiningCar = 1;
         if (diningCount > maxDiningCar) {
             throw new TrainExceptions.ToManyDiningCarriageTrainException(diningCount, maxDiningCar);
         }
 
-        int lengthLimit = 18;
-        if (carriageList.size() > lengthLimit) {
-            throw new TrainExceptions.TrainCapacityException(carriageList.size(), lengthLimit);
+        if (carriageList.size() > this.sizeLimit) {
+            throw new TrainExceptions.TrainCapacityException(carriageList.size(), this.sizeLimit);
         }
     }
 }

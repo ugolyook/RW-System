@@ -4,6 +4,8 @@ import com.sveta.route.TrainRun;
 import com.sveta.tickets.SearchResult;
 import com.sveta.tickets.Ticket;
 import com.sveta.train.Train;
+import com.sveta.train.carriage.Carriage;
+import com.sveta.train.carriage.passenger.PassengerCarriage;
 
 import java.util.List;
 
@@ -21,12 +23,36 @@ public class ConsoleTrainView implements TrainView{
 
     @Override
     public void showTrainRunInfo(TrainRun run) {
-        System.out.println("Route: " + run.route().getDirection());
+        System.out.println("Route: " + run.getRoute().getDirection());
         System.out.println("Train stops:");
-        for (var station : run.route().getStops()) {
+        for (var station : run.getRoute().getStops()) {
             System.out.println(" - " + station);
         }
-        System.out.println("Departure: " + run.departureTime());
+        System.out.println("Departure: " + run.getDepartureTime());
+        System.out.println("\n--- Seats Availability ---");
+        var iterator = run.getTrain().getAllCarriage();
+        int index = 1;
+
+        while (iterator.hasNext()) {
+            Carriage carriage = iterator.next();
+            if (carriage instanceof PassengerCarriage passengerCarriage) {
+                int totalCapacity = passengerCarriage.getPassengerCapacity();
+                long freeSeats = passengerCarriage.getAllSeats().stream()
+                        .filter(seat -> !run.isSeatOccupied(passengerCarriage, seat))
+                        .count();
+                long occupiedSeats = totalCapacity - freeSeats;
+
+                System.out.printf(" [#%d] %s | Free: %d | Occupied: %d | Total: %d%n",
+                        index,
+                        passengerCarriage.getClass().getSimpleName(),
+                        freeSeats,
+                        occupiedSeats,
+                        totalCapacity);
+            } else {
+                System.out.printf(" [#%d] %s%n", index, carriage.getClass().getSimpleName());
+            }
+            index++;
+        }
     }
 
     @Override

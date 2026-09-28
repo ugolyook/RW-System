@@ -10,6 +10,8 @@ import java.time.LocalDate;
 import java.time.LocalDateTime;
 
 public class TicketSearchRequirement {
+    private LocalDateTime departureFrom;
+    private LocalDateTime departureTo;
     private final Station departureStation;
     private final Station arrivalStation;
     private final TrainRun trainRun;
@@ -18,8 +20,18 @@ public class TicketSearchRequirement {
     private final LocalDateTime departureDateTime;
     private final Train train;
     private final Class<? extends Carriage> carriageType;
+    private boolean bicycleRequired;
 
-    public TicketSearchRequirement(Station departureStation, Station arrivalStation, TrainRun trainRun, Route route, LocalDateTime dateTime, LocalDateTime departureDateTime, Train train, Class<? extends Carriage> carriageType) {
+    public TicketSearchRequirement(
+            Station departureStation,
+            Station arrivalStation,
+            TrainRun trainRun,
+            Route route,
+            LocalDateTime dateTime,
+            LocalDateTime departureDateTime,
+            Train train, Class<? extends Carriage> carriageType,
+            boolean bicycleRequired
+    ) {
         this.departureStation = departureStation;
         this.arrivalStation = arrivalStation;
         this.trainRun = trainRun;
@@ -28,6 +40,37 @@ public class TicketSearchRequirement {
         this.departureDateTime = departureDateTime;
         this.train = train;
         this.carriageType = carriageType;
+        this.bicycleRequired = bicycleRequired;
+    }
+
+    public TicketSearchRequirement(
+            Station departureStation,
+            Station arrivalStation,
+            TrainRun trainRun,
+            Route route,
+            LocalDate departureDate,
+            LocalDateTime departureDateTime,
+            Train train,
+            Class<? extends Carriage> carriageType
+    ) {
+        this(departureStation,
+                arrivalStation,
+                trainRun,
+                route,
+                departureDate != null ? departureDate.atStartOfDay() : null,
+                departureDateTime,
+                train,
+                carriageType,
+                false);
+    }
+
+
+    public LocalDateTime getDepartureFrom() {
+        return departureFrom;
+    }
+
+    public LocalDateTime getDepartureTo() {
+        return departureTo;
     }
 
     public Station getDepartureStation() {
@@ -48,6 +91,14 @@ public class TicketSearchRequirement {
 
     public Train getTrain() {
         return train;
+    }
+
+    public boolean isBicycleRequired() {
+        return bicycleRequired;
+    }
+
+    public void setBicycleRequired(boolean bicycleRequired) {
+        this.bicycleRequired = bicycleRequired;
     }
 
     public LocalDate getDepartureDate() {

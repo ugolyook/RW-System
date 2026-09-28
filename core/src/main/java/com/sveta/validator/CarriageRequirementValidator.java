@@ -10,9 +10,14 @@ import com.sveta.factory.carriage.seated.SeatedCarriageRequirement;
 import java.util.List;
 
 public class CarriageRequirementValidator {
-
     private static final int MIN_WEIGHT_KG = 1_000;
     private static final int MAX_WEIGHT_KG = 100_000;
+
+    public static final int MIN_SEATS = 1;
+    public static final int MAX_COUPE_COUNT = 10;
+    public static final int MAX_SEATED_PLACES = 80;
+    public static final int MAX_DINING_SEATS = 50;
+    public static final int MAX_ECONOMY_SEATS = 60;
 
     public void validateAll(List<CarriageRequirement> requirements) {
         if (requirements == null || requirements.isEmpty()) {
@@ -49,20 +54,34 @@ public class CarriageRequirementValidator {
         if (req.coupeRequirements() == null || req.coupeRequirements().isEmpty()) {
             throw new RequirementExceptions.EmptyCoupeListException();
         }
-        if (req.coupeRequirements().size() > 10) {
-            throw new RequirementExceptions.InvalidSeatsCountException("coupe", 1, 10, req.coupeRequirements().size());
+        if (req.coupeRequirements().size() > MAX_COUPE_COUNT) {
+            throw new RequirementExceptions.InvalidSeatsCountException(
+                    "coupe",
+                    MIN_SEATS,
+                    MAX_COUPE_COUNT,
+                    req.coupeRequirements().size()
+            );
         }
     }
 
     private void validateSeated(SeatedCarriageRequirement req) {
-        if (req.placeNumbers() <= 0 || req.placeNumbers() > 80) {
-            throw new RequirementExceptions.InvalidSeatsCountException("seated", 1, 80, req.placeNumbers());
+        if (req.placeNumbers() <= 0 || req.placeNumbers() > MAX_SEATED_PLACES) {
+            throw new RequirementExceptions.InvalidSeatsCountException(
+                    "seated",
+                    MIN_SEATS,
+                    MAX_SEATED_PLACES,
+                    req.placeNumbers()
+            );
         }
     }
 
     private void validateDining(DiningCarriageRequirement req) {
-        if (req.seatsLimit() <= 0 || req.seatsLimit() > 50) {
-            throw new RequirementExceptions.InvalidSeatsCountException("dining", 1, 50, req.seatsLimit());
+        if (req.seatsLimit() <= 0 || req.seatsLimit() > MAX_DINING_SEATS) {
+            throw new RequirementExceptions.InvalidSeatsCountException(
+                    "dining",
+                    MIN_SEATS,
+                    MAX_DINING_SEATS,
+                    req.seatsLimit());
         }
         if (req.food() == null) {
             throw new RequirementExceptions.MissingFoodException();
@@ -70,8 +89,12 @@ public class CarriageRequirementValidator {
     }
 
     private void validateEconomy(EconomyCarriageRequirement req) {
-        if (req.seatsLimit() <= 0 || req.seatsLimit() > 60) {
-            throw new RequirementExceptions.InvalidSeatsCountException("economy", 1, 60, req.seatsLimit());
+        if (req.seatsLimit() <= 0 || req.seatsLimit() > MAX_ECONOMY_SEATS) {
+            throw new RequirementExceptions.InvalidSeatsCountException(
+                    "economy",
+                    MIN_SEATS,
+                    MAX_ECONOMY_SEATS,
+                    req.seatsLimit());
         }
     }
 }

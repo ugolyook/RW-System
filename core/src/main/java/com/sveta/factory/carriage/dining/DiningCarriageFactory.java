@@ -5,6 +5,7 @@ import com.sveta.train.carriage.passenger.DiningCarriage;
 import com.sveta.factory.carriage.CarriageFactory;
 import com.sveta.factory.carriage.CarriageRequirement;
 
+import java.util.Collections;
 import java.util.Objects;
 
 public class DiningCarriageFactory implements CarriageFactory {
@@ -20,16 +21,13 @@ public class DiningCarriageFactory implements CarriageFactory {
     }
 
     private Carriage buildDiningCarriage(DiningCarriageRequirement diningReq) {
-        DiningCarriage diningCarriage = new DiningCarriage(
+        return new DiningCarriage(
                 diningReq.seatsLimit(),
                 diningReq.baseCarriageWeightKg(),
                 diningReq.hasHotKitchen(),
-                diningReq.deliveryToTheRoom()
+                diningReq.deliveryToTheRoom(),
+                diningReq.food()
         );
-
-        diningCarriage.food = diningReq.food();
-
-        return diningCarriage;
     }
 
     @Override

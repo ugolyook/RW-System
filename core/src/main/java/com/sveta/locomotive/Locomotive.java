@@ -1,9 +1,12 @@
 package com.sveta.locomotive;
 
 public class Locomotive {
-    int maxTransportedWeight;
-    int wagonLimit;
-    int maxSpeed;
+    private final int maxTransportedWeight;
+    private final int wagonLimit;
+    private final int maxSpeed;
+    private final int power;
+    private final int tractionForce;
+    private final boolean electric;
 
     public Locomotive(
             int wagonLimit,
@@ -16,9 +19,8 @@ public class Locomotive {
         this.wagonLimit = wagonLimit;
         this.maxSpeed = maxSpeed;
         this.maxTransportedWeight = maxTransportedWeight;
-    }
-
-    public int getMaxTransportedWeight() {
-        return maxTransportedWeight;
+        this.power = power;
+        this.tractionForce = tractionForce;
+        this.electric = isElectric;
     }
 }

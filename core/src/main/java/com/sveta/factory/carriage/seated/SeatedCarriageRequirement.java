@@ -4,7 +4,7 @@ import com.sveta.factory.carriage.CarriageRequirement;
 
 public record SeatedCarriageRequirement(
         int placeNumbers,
-        int numberOfBicyclePlaces,
+        int bicycleSpotsCount,
         int baseCarriageWeightKg
 ) implements CarriageRequirement {
     @Override

@@ -10,25 +10,31 @@ import java.util.Optional;
 
 public class DiningCarriage extends PassengerCarriage implements ElectricCarriage {
     private final int seatsLimit;
-
-    public Food food;
-    boolean hasHotKitchen;
-    boolean deliveryToTheRoom;
+    private final List<Food> food;
+    private final boolean hasHotKitchen;
+    private final boolean deliveryToTheRoom;
 
     public DiningCarriage(
             int seatsLimit,
             int baseCarriageWeightKg,
             boolean hasHotKitchen,
-            boolean deliveryToTheRoom) {
+            boolean deliveryToTheRoom,
+            List<Food> food
+    ) {
         super(baseCarriageWeightKg);
         this.seatsLimit = seatsLimit;
         this.hasHotKitchen = hasHotKitchen;
         this.deliveryToTheRoom = deliveryToTheRoom;
+        this.food = food != null ? List.copyOf(food) : List.of();
     }
 
     @Override
     public int getPassengerCapacity() {
         return seatsLimit;
+    }
+
+    public List<Food> getFood() {
+        return food;
     }
 
     @Override

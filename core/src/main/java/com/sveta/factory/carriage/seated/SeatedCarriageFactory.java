@@ -1,5 +1,6 @@
 package com.sveta.factory.carriage.seated;
 
+import com.sveta.exeptions.RequirementExceptions;
 import com.sveta.train.carriage.Carriage;
 import com.sveta.train.carriage.passenger.SeatedCarriage;
 import com.sveta.factory.carriage.CarriageRequirement;
@@ -26,14 +27,23 @@ public class SeatedCarriageFactory implements CarriageFactory {
     }
 
     private SeatedCarriage createCarriage(SeatedCarriageRequirement seatedReq) {
+        if (seatedReq.placeNumbers() < 0) {
+            throw new RequirementExceptions.NegativeSizeException();
+        }
+
         SeatedCarriage carriage = new SeatedCarriage(
                 seatedReq.placeNumbers(),
-                seatedReq.numberOfBicyclePlaces() > 0,
                 seatedReq.baseCarriageWeightKg()
         );
 
-        for (int i = 1; i <= seatedReq.placeNumbers(); i++) {
-            carriage.seats.add(new Seat(i, SeatType.LOWER,false));
+        int regularSeatsCount = seatedReq.placeNumbers() - seatedReq.bicycleSpotsCount();
+
+        for (int i = 1; i <= regularSeatsCount; i++) {
+            carriage.seats.add(new Seat(i, SeatType.LOWER));
+        }
+
+        for (int i = regularSeatsCount + 1; i <= seatedReq.placeNumbers(); i++) {
+            carriage.seats.add(new Seat(i, SeatType.BICYCLE));
         }
 
         return carriage;

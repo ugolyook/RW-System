@@ -1,30 +1,28 @@
 package com.sveta.train.carriage.passenger.models;
 
 public class Seat {
-    int number;
-    SeatType type;
-    private boolean isOccupied;
+    private final int number;
+    private final SeatType type;
 
     public Seat(
             int number,
-            SeatType type,
-            boolean isOccupied
+            SeatType type
     ) {
         this.number = number;
         this.type = type;
-        this.isOccupied = false;
     }
 
-    public boolean isOccupied() {
-        return isOccupied;
+    public SeatType getType() {
+        return type;
     }
 
-    public void setOccupied(boolean occupied) {
-        this.isOccupied = occupied;
+    public int getNumber() {
+        return number;
     }
+
 
     @Override
     public String toString() {
-        return "Seat #" + number + " (" + type + (isOccupied ? ", occupied" : ", available") + ")";
+        return "Seat #" + number + " (" + type + ")";
     }
 }

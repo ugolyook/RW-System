@@ -20,7 +20,7 @@ public record Ticket(
     public String toString() {
         return String.format("TICKET [%s] | Train: %s (%s -> %s) | Carriage: %s, Seat: %s | Price: %s BYN",
                 passengerName,
-                trainRun.train().getTrainNumber(),
+                trainRun.getTrain().getTrainNumber(),
                 departureStation.getStationName(),
                 arrivalStation.getStationName(),
                 carriage.getClass().getSimpleName(),

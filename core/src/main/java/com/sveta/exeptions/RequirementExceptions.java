@@ -42,5 +42,11 @@ public class RequirementExceptions extends RuntimeException {
             super("Coupe list cannot be empty");
         }
     }
+
+    public static class NegativeSizeException extends RequirementExceptions {
+        public NegativeSizeException() {
+            super("It can't be negative numbers");
+        }
+    }
 }
 

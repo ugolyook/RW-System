@@ -4,7 +4,9 @@ import com.sveta.route.Station;
 import com.sveta.route.TrainRun;
 import com.sveta.train.carriage.Carriage;
 import com.sveta.train.carriage.passenger.PassengerCarriage;
+import com.sveta.train.carriage.passenger.SeatedCarriage;
 import com.sveta.train.carriage.passenger.models.Seat;
+import com.sveta.train.carriage.passenger.models.SeatType;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -22,11 +24,11 @@ public class TicketSearchService {
                 continue;
             }
 
-            if (requirement.getTrain() != null && !requirement.getTrain().equals(run.train())) {
+            if (requirement.getTrain() != null && !requirement.getTrain().equals(run.getTrain())) {
                 continue;
             }
 
-            if (requirement.getRoute() != null && !requirement.getRoute().equals(run.route())) {
+            if (requirement.getRoute() != null && !requirement.getRoute().equals(run.getRoute())) {
                 continue;
             }
 
@@ -38,16 +40,28 @@ public class TicketSearchService {
                 continue;
             }
 
-            for (Carriage carriage : run.train().getCarriages()) {
+            for (Carriage carriage : run.getTrain().getCarriages()) {
                 if (requirement.getCarriageType() != null && !requirement.getCarriageType().isInstance(carriage)) {
                     continue;
                 }
 
+                if (requirement.isBicycleRequired()) {
+                    if (!(carriage instanceof SeatedCarriage seatedCarriage) || !seatedCarriage.isBicycleSpots()) {
+                        continue;
+                    }
+                }
+
                 if (carriage instanceof PassengerCarriage passengerCarriage) {
                     for (Seat seat : passengerCarriage.getAllSeats()) {
-                        if (!seat.isOccupied()) {
-                            results.add(new SearchResult(run, carriage, seat));
+                        if (run.isSeatOccupied(carriage, seat)) {
+                            continue;
                         }
+
+                        if (requirement.isBicycleRequired() && seat.getType() != SeatType.BICYCLE) {
+                            continue;
+                        }
+
+                        results.add(new SearchResult(run, carriage, seat));
                     }
                 }
             }
@@ -61,7 +75,7 @@ public class TicketSearchService {
             return true;
         }
 
-        List<Station> stops = run.route().getStops();
+        List<Station> stops = run.getRoute().getStops();
         int depIndex = stops.indexOf(departure);
         int arrIndex = stops.indexOf(arrival);
 
@@ -69,12 +83,26 @@ public class TicketSearchService {
     }
 
     private boolean matchesDepartureTime(TrainRun run, TicketSearchRequirement requirement) {
+        if (requirement.getDepartureFrom() != null && requirement.getDepartureTo() != null) {
+            var depTime = run.getDepartureTime();
+
+            boolean isAfterOrEqual = !depTime.isBefore(requirement.getDepartureFrom());
+            boolean isBeforeOrEqual = !depTime.isAfter(requirement.getDepartureTo());
+            return isAfterOrEqual && isBeforeOrEqual;
+        }
+
         if (requirement.getDepartureDateTime() != null) {
-            return run.departureTime().equals(requirement.getDepartureDateTime());
+            var runDeparture = run.getDepartureTime();
+            var targetDeparture = requirement.getDepartureDateTime();
+
+            return !runDeparture.isBefore(targetDeparture)
+                    && runDeparture.toLocalDate().equals(targetDeparture.toLocalDate());
         }
+
         if (requirement.getDepartureDate() != null) {
-            return run.departureTime().toLocalDate().equals(requirement.getDepartureDate());
+            return run.getDepartureTime().toLocalDate().equals(requirement.getDepartureDate());
         }
+
         return true;
     }
 }

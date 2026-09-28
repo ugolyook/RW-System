@@ -12,7 +12,7 @@ public record SearchResult(
     @Override
     public String toString() {
         return String.format("Run: %s, Carriage: %s, Seat: %s",
-                trainRun.train().getTrainNumber(),
+                trainRun.getTrain().getTrainNumber(),
                 carriage.getClass().getSimpleName(),
                 seat);
     }

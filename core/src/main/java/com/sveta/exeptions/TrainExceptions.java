@@ -3,6 +3,7 @@ package com.sveta.exeptions;
 public class TrainExceptions extends RuntimeException {
 
     public TrainExceptions(String s) {
+        super(s);
     }
 
     public static class TrainCapacityException extends TrainExceptions {
@@ -30,12 +31,6 @@ public class TrainExceptions extends RuntimeException {
                     totalWeightInKg,
                     maxWeightInKg
             ));
-        }
-    }
-
-    public static class CantBuildCarriageException extends TrainExceptions {
-        public CantBuildCarriageException() {
-            super("We can't build carriage...");
         }
     }
 }

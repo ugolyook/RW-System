@@ -24,6 +24,6 @@ public enum Food {
 
     @Override
     public String toString() {
-        return name() + " (" + price + " руб.)";
+        return name() + " (" + price + " byn.)";
     }
 }
