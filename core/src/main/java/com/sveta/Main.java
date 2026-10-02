@@ -11,7 +11,6 @@ import com.sveta.train.carriage.Carriage;
 import com.sveta.train.carriage.passenger.CoupeCarriage;
 import com.sveta.train.formatter.BaseTrainInfoFormatter;
 import com.sveta.train.formatter.ConsoleTrainView;
-import com.sveta.train.formatter.TestDataFactory;
 import com.sveta.train.formatter.TrainView;
 
 import java.util.List;

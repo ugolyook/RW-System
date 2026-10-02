@@ -1,4 +1,4 @@
-package com.sveta.train.formatter;
+package com.sveta;
 
 import com.sveta.factory.carriage.BaseCarriageFactory;
 import com.sveta.factory.carriage.CarriageRequirement;

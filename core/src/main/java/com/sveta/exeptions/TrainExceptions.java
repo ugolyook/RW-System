@@ -23,14 +23,4 @@ public class TrainExceptions extends RuntimeException {
             super("This carriage is not passenger!");
         }
     }
-
-    public static class TrainWeightExceedsLocomotiveCapacityException extends TrainExceptions {
-        public TrainWeightExceedsLocomotiveCapacityException(int totalWeightInKg, int maxWeightInKg) {
-            super(String.format(
-                    "Total train weight (%d kg) exceeds locomotive max capacity (%d kg)",
-                    totalWeightInKg,
-                    maxWeightInKg
-            ));
-        }
-    }
 }

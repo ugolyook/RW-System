@@ -22,10 +22,6 @@ public abstract class Train {
         return trainNumber;
     }
 
-    public boolean checkLocomotiveExists() {
-        return locomotive != null;
-    }
-
     public void addCarriage(Carriage carriage) {
         carriages.add(carriage);
     }
@@ -48,11 +44,6 @@ public abstract class Train {
 
     public int getCarriageCount() {
         return carriages.size();
-    }
-
-    public String printTrainInfo(Train train) {
-        BaseTrainInfoFormatter printer = new BaseTrainInfoFormatter();
-        return printer.format(train);
     }
 
     public List<Carriage> getCarriages() {

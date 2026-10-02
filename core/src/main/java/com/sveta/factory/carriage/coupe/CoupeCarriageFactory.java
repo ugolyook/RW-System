@@ -27,7 +27,6 @@ public class CoupeCarriageFactory implements com.sveta.factory.carriage.Carriage
         List<CoupeCarriage.Coupe> result = new ArrayList<>();
         int currentSeatNumber = 1;
 
-
         CoupeCarriage.Coupe coupe = new CoupeCarriage.Coupe();
 
         for (int i = 0; i < CoupeCarriage.Coupe.SEATS_PER_COUPE; i++) {
@@ -36,7 +35,6 @@ public class CoupeCarriageFactory implements com.sveta.factory.carriage.Carriage
         }
 
         result.add(coupe);
-
 
         return result;
     }

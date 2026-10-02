@@ -5,7 +5,6 @@ import com.sveta.train.carriage.passenger.DiningCarriage;
 import com.sveta.factory.carriage.CarriageFactory;
 import com.sveta.factory.carriage.CarriageRequirement;
 
-import java.util.Collections;
 import java.util.Objects;
 
 public class DiningCarriageFactory implements CarriageFactory {
