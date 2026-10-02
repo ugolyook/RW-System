@@ -1,5 +1,6 @@
 package com.sveta.tickets;
 
+import com.sveta.exeptions.CashierExceptions;
 import com.sveta.route.Station;
 import com.sveta.route.TrainRun;
 import com.sveta.tickets.calculate.TicketPriceCalculator;
@@ -23,7 +24,7 @@ public class Cashier {
         TrainRun trainRun = searchResult.trainRun();
 
         if (searchResult.seat() != null && trainRun.isSeatOccupied(searchResult.carriage(), searchResult.seat())) {
-            throw new IllegalStateException("Place was booked...");
+            throw new CashierExceptions.OccupiedSeatException();
         }
         BigDecimal price = priceCalculator.calculatePrice(searchResult, departure, arrival);
 

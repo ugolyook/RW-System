@@ -15,7 +15,7 @@ import java.util.List;
 import java.util.concurrent.atomic.AtomicLong;
 
 public class PassengerTrainFactory {
-    final AtomicLong trainNumber = new AtomicLong((int) System.currentTimeMillis());
+    final AtomicLong trainNumber = new AtomicLong(100);
 
     private static final double WEIGHT_TO_POWER_RATIO = 60.0;
     private static final double WEIGHT_TO_TRACTION_RATIO = 15.0;

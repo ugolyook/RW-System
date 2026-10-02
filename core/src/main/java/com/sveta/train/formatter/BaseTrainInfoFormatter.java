@@ -38,7 +38,7 @@ public class BaseTrainInfoFormatter implements TrainInfoFormatter {
         if (carriage instanceof CoupeCarriage coupeCarriage) {
             return String.format("Coupe Carriage | Coupes: %d | Total seats: %d",
                     coupeCarriage.getCoupeLimit(),
-                    coupeCarriage.getPassengerCapacity());
+                    coupeCarriage.getNumberOfPlaces());
         }
 
         if (carriage instanceof EconomyCarriage economyCarriage) {
