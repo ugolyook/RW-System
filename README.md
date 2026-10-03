@@ -1,7 +1,6 @@
 # RW-System
 
-Транспорт. Определить иерархию подвижного состава железнодорожного
-транспорта. Создать пассажирский поезд. Посчитать общую численность
-пассажиров и багажа. Провести сортировку вагонов поезда на основе одного из
-параметров. Найти вагоны в поезде, соответствующие заданному диапазону
-параметров.
+Transport. Define the hierarchy of railway rolling stock.
+Create a passenger train. Calculate the total number of passengers and the total amount
+of luggage. Sort the train's carriages based on a specific parameter.
+Identify carriages within the train that fall within a specified parameter range.
