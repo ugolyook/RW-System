@@ -43,14 +43,22 @@ public class CoupeCarriage extends PassengerCarriage implements ElectricCarriage
     }
 
     public static class Coupe {
-        public static final int SEATS_PER_COUPE = 4;
-        public List<Seat> seats;
+        private static final int SEATS_PER_COUPE = 4;
+        private final List<Seat> seats;
 
         public Coupe() {
             this.seats = new ArrayList<>(SEATS_PER_COUPE);
         }
 
         public List<Seat> getAllSeats() {
+            return seats;
+        }
+
+        public static int getSeatsPerCoupe() {
+            return SEATS_PER_COUPE;
+        }
+
+        public List<Seat> getSeats() {
             return seats;
         }
 

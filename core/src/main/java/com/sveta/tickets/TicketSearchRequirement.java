@@ -97,10 +97,6 @@ public class TicketSearchRequirement {
         return bicycleRequired;
     }
 
-    public void setBicycleRequired(boolean bicycleRequired) {
-        this.bicycleRequired = bicycleRequired;
-    }
-
     public LocalDate getDepartureDate() {
         if (departureDateTime != null) {
             return departureDateTime.toLocalDate();

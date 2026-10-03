@@ -1,6 +1,5 @@
 package com.sveta.train.formatter;
 
-import com.sveta.route.TrainRun;
 import com.sveta.train.carriage.Carriage;
 import com.sveta.train.Train;
 import com.sveta.train.carriage.passenger.*;

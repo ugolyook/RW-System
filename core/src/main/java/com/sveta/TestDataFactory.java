@@ -50,9 +50,16 @@ public class TestDataFactory {
                 50000
         );
 
-        CarriageRequirement seatedReq = new SeatedCarriageRequirement(48, 4, 10000);
-        CarriageRequirement diningReq = new DiningCarriageRequirement(32, 45000, List.of(Food.BORSCH, Food.PASTA), true, false);
-        CarriageRequirement economyReq = new EconomyCarriageRequirement(54, 48000, true);
+        CarriageRequirement seatedReq = new SeatedCarriageRequirement(
+                48, 4, 10000
+        );
+        CarriageRequirement diningReq = new DiningCarriageRequirement(
+                32, 45000, List.of(Food.BORSCH, Food.PASTA),
+                true, false
+        );
+        CarriageRequirement economyReq = new EconomyCarriageRequirement(
+                54, 48000, true
+        );
 
         return factory.createAll(List.of(coupeCarriageReq1, seatedReq, diningReq, economyReq));
     }

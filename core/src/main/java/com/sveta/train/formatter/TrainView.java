@@ -17,6 +17,4 @@ public interface TrainView {
     void showIssuedTicket(Ticket ticket);
 
     void showRemainingSeats(int count);
-
-    void showError(String message);
 }

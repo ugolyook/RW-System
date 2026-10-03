@@ -1,12 +1,10 @@
 package com.sveta.train.carriage.passenger;
 
-import com.sveta.train.carriage.Carriage;
 import com.sveta.train.carriage.ElectricCarriage;
 import com.sveta.train.carriage.passenger.models.Food;
 import com.sveta.train.carriage.passenger.models.Seat;
 
 import java.util.List;
-import java.util.Optional;
 
 public class DiningCarriage extends PassengerCarriage implements ElectricCarriage {
     private final int seatsLimit;
@@ -45,19 +43,6 @@ public class DiningCarriage extends PassengerCarriage implements ElectricCarriag
                 ", hasHotKitchen=" + hasHotKitchen +
                 ", deliveryToTheRoom=" + deliveryToTheRoom +
                 '}';
-    }
-
-    public Optional<DiningCarriage> findRestaurant(List<Carriage> carriages) {
-        return carriages.stream()
-                .filter(c -> c instanceof DiningCarriage)
-                .map(DiningCarriage.class::cast)
-                .findFirst();
-    }
-
-    public double orderInRestaurant(Food item, int quantity, List<Carriage> carriages) {
-        return findRestaurant(carriages)
-                .map(r -> r.order(item, quantity))
-                .orElseThrow(() -> new IllegalStateException("There are no dining carriage"));
     }
 
     public double order(Food food, int quantity) {

@@ -15,11 +15,9 @@ public class Seat {
     public SeatType getType() {
         return type;
     }
-
     public int getNumber() {
         return number;
     }
-
 
     @Override
     public String toString() {

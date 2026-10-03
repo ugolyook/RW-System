@@ -75,9 +75,4 @@ public class ConsoleTrainView implements TrainView{
     public void showRemainingSeats(int count) {
         System.out.println("\n=== Free seats after booking: " + count + " ===");
     }
-
-    @Override
-    public void showError(String message) {
-        System.err.println("[ERROR] " + message);
-    }
 }
