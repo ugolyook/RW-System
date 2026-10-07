@@ -1,5 +1,7 @@
 package com.sveta.train.carriage.freight;
 
+import lombok.RequiredArgsConstructor;
+
 //для штучных грузов.
 public class Boxcar extends FreightCarriage {
     private final int maxCargoWeightTons;

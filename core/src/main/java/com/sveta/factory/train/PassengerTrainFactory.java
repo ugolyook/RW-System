@@ -10,10 +10,12 @@ import com.sveta.train.PassengerTrain;
 import com.sveta.train.Train;
 import com.sveta.train.carriage.passenger.DiningCarriage;
 import com.sveta.train.carriage.passenger.PassengerCarriage;
+import lombok.RequiredArgsConstructor;
 
 import java.util.List;
 import java.util.concurrent.atomic.AtomicLong;
 
+@RequiredArgsConstructor
 public class PassengerTrainFactory {
     final AtomicLong trainNumber = new AtomicLong(100);
 
@@ -32,11 +34,6 @@ public class PassengerTrainFactory {
         return nextUnique();
     }
 
-    public PassengerTrainFactory(int sizeLimit, LocomotiveFactory locomotiveFactory) {
-        this.sizeLimit = sizeLimit;
-        this.locomotiveFactory = locomotiveFactory;
-    }
-
     public Train createTrain(List<Carriage> carriageList) {
         validateAllPassengerCarriage(carriageList);
         boolean isNeedElectric = validateElectricCarriagesConsistency(carriageList);
@@ -50,9 +47,12 @@ public class PassengerTrainFactory {
         int requiredTractionInKg = (int) ((totalCarriagesWeightInKg / WEIGHT_TO_TRACTION_RATIO) * SAFETY_FACTOR);
         int requiredTractionInKn = (requiredTractionInKg / 100);
 
-        LocomotiveRequirements requirements = new LocomotiveRequirements(
-                requiredPower, requiredTractionInKn, totalCarriagesWeightInKg, isNeedElectric
-        );
+        LocomotiveRequirements requirements = LocomotiveRequirements.builder()
+                .requiredPower(requiredPower)
+                .requiredTractionKn(requiredTractionInKn)
+                .totalWeightKg(totalCarriagesWeightInKg)
+                .isElectric(isNeedElectric)
+                .build();
 
         Locomotive locomotive = findSuitableLocomotive(requirements);
 

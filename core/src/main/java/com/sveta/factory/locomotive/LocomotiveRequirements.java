@@ -1,9 +1,13 @@
 package com.sveta.factory.locomotive;
 
-public record LocomotiveRequirements(
-        int requiredPowerInKw,
-        int requiredTraction,
-        int totalWeightInKg,
-        boolean isElectric
-) {
+import lombok.Builder;
+import lombok.Getter;
+
+@Getter
+@Builder
+public class LocomotiveRequirements {
+    private final int requiredPower;
+    private final int requiredTractionKn;
+    private final int totalWeightKg;
+    private final boolean isElectric;
 }

@@ -1,5 +1,10 @@
 package com.sveta.train.carriage.passenger.models;
 
+import lombok.Getter;
+import lombok.RequiredArgsConstructor;
+
+@Getter
+@RequiredArgsConstructor
 public enum SeatType {
     LOWER(1.0),
     UPPER(0.8),
@@ -11,12 +16,4 @@ public enum SeatType {
     PET(1.0);
 
     private final double priceCoefficient;
-
-    SeatType(double coefficient) {
-        this.priceCoefficient = coefficient;
-    }
-
-    public double getPriceCoefficient() {
-        return priceCoefficient;
-    }
 }

@@ -1,9 +1,11 @@
 package com.sveta.factory.locomotive;
 
 import com.sveta.locomotive.Locomotive;
+import lombok.RequiredArgsConstructor;
 
 import java.util.Objects;
 
+@RequiredArgsConstructor
 public class LocomotiveFactory {
     private static final int VL80C_WAGON_LIMIT = 80;
     private static final int VL80C_MAX_SPEED = 110;

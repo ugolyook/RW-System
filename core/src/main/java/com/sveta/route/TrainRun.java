@@ -4,12 +4,14 @@ import com.sveta.tickets.Ticket;
 import com.sveta.train.Train;
 import com.sveta.train.carriage.Carriage;
 import com.sveta.train.carriage.passenger.models.Seat;
+import lombok.Getter;
 
 import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
 
+@Getter
 public class TrainRun {
     private final Train train;
     private final Route route;
@@ -22,22 +24,6 @@ public class TrainRun {
         this.route = route;
         this.departureTime = departureTime;
         this.isExpress = isExpress;
-    }
-
-    public Train getTrain() {
-        return train;
-    }
-
-    public Route getRoute() {
-        return route;
-    }
-
-    public LocalDateTime getDepartureTime() {
-        return departureTime;
-    }
-
-    public boolean isExpress() {
-        return isExpress;
     }
 
     public List<Ticket> getTickets() {

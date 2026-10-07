@@ -5,11 +5,13 @@ import com.sveta.train.carriage.passenger.models.Food;
 import com.sveta.train.carriage.passenger.models.Seat;
 import lombok.Getter;
 import lombok.Setter;
+import lombok.ToString;
 
 import java.util.List;
 
 @Getter
 @Setter
+@ToString(callSuper = true)
 public class DiningCarriage extends PassengerCarriage implements ElectricCarriage {
     private final int seatsLimit;
     private final List<Food> food;
@@ -33,16 +35,6 @@ public class DiningCarriage extends PassengerCarriage implements ElectricCarriag
     @Override
     public int getPassengerCapacity() {
         return seatsLimit;
-    }
-
-    @Override
-    public String toString() {
-        return "DiningCarriage{" +
-                "SEATS_LIMIT=" + seatsLimit +
-                ", food=" + food +
-                ", hasHotKitchen=" + hasHotKitchen +
-                ", deliveryToTheRoom=" + deliveryToTheRoom +
-                '}';
     }
 
     public double order(Food food, int quantity) {
