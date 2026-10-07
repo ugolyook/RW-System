@@ -48,9 +48,9 @@ public class PassengerTrainFactory {
         int requiredTractionInKn = (requiredTractionInKg / 100);
 
         LocomotiveRequirements requirements = LocomotiveRequirements.builder()
-                .requiredPower(requiredPower)
-                .requiredTractionKn(requiredTractionInKn)
-                .totalWeightKg(totalCarriagesWeightInKg)
+                .requiredPowerInKw(requiredPower)
+                .requiredTraction(requiredTractionInKn)
+                .totalWeightInKg(totalCarriagesWeightInKg)
                 .isElectric(isNeedElectric)
                 .build();
 
