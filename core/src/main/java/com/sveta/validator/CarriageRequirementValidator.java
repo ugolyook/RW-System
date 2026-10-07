@@ -6,6 +6,7 @@ import com.sveta.factory.carriage.coupe.CoupeCarriageRequirement;
 import com.sveta.factory.carriage.dining.DiningCarriageRequirement;
 import com.sveta.factory.carriage.economy.EconomyCarriageRequirement;
 import com.sveta.factory.carriage.seated.SeatedCarriageRequirement;
+import com.sveta.train.carriage.passenger.models.Carriages;
 
 import java.util.List;
 
@@ -56,7 +57,7 @@ public class CarriageRequirementValidator {
         }
         if (req.coupeRequirements().size() > MAX_COUPE_COUNT) {
             throw new RequirementExceptions.InvalidSeatsCountException(
-                    "coupe",
+                    Carriages.COUPE,
                     MIN_SEATS,
                     MAX_COUPE_COUNT,
                     req.coupeRequirements().size()
@@ -67,7 +68,7 @@ public class CarriageRequirementValidator {
     private void validateSeated(SeatedCarriageRequirement req) {
         if (req.placeNumbers() <= 0 || req.placeNumbers() > MAX_SEATED_PLACES) {
             throw new RequirementExceptions.InvalidSeatsCountException(
-                    "seated",
+                    Carriages.SEATED,
                     MIN_SEATS,
                     MAX_SEATED_PLACES,
                     req.placeNumbers()
@@ -78,7 +79,7 @@ public class CarriageRequirementValidator {
     private void validateDining(DiningCarriageRequirement req) {
         if (req.seatsLimit() <= 0 || req.seatsLimit() > MAX_DINING_SEATS) {
             throw new RequirementExceptions.InvalidSeatsCountException(
-                    "dining",
+                    Carriages.DINING,
                     MIN_SEATS,
                     MAX_DINING_SEATS,
                     req.seatsLimit());
@@ -91,7 +92,7 @@ public class CarriageRequirementValidator {
     private void validateEconomy(EconomyCarriageRequirement req) {
         if (req.seatsLimit() <= 0 || req.seatsLimit() > MAX_ECONOMY_SEATS) {
             throw new RequirementExceptions.InvalidSeatsCountException(
-                    "economy",
+                    Carriages.ECONOMY,
                     MIN_SEATS,
                     MAX_ECONOMY_SEATS,
                     req.seatsLimit());

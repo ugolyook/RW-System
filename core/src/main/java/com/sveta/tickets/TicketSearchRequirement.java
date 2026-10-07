@@ -5,13 +5,15 @@ import com.sveta.route.Station;
 import com.sveta.route.TrainRun;
 import com.sveta.train.Train;
 import com.sveta.train.carriage.Carriage;
+import lombok.Getter;
+import lombok.Setter;
 
 import java.time.LocalDate;
 import java.time.LocalDateTime;
 
+@Setter
+@Getter
 public class TicketSearchRequirement {
-    private LocalDateTime departureFrom;
-    private LocalDateTime departureTo;
     private final Station departureStation;
     private final Station arrivalStation;
     private final TrainRun trainRun;
@@ -20,7 +22,7 @@ public class TicketSearchRequirement {
     private final LocalDateTime departureDateTime;
     private final Train train;
     private final Class<? extends Carriage> carriageType;
-    private boolean bicycleRequired;
+    private final boolean bicycleRequired;
 
     public TicketSearchRequirement(
             Station departureStation,
@@ -64,51 +66,10 @@ public class TicketSearchRequirement {
                 false);
     }
 
-
-    public LocalDateTime getDepartureFrom() {
-        return departureFrom;
-    }
-
-    public LocalDateTime getDepartureTo() {
-        return departureTo;
-    }
-
-    public Station getDepartureStation() {
-        return departureStation;
-    }
-
-    public Station getArrivalStation() {
-        return arrivalStation;
-    }
-
-    public TrainRun getTrainRun() {
-        return trainRun;
-    }
-
-    public Route getRoute() {
-        return route;
-    }
-
-    public Train getTrain() {
-        return train;
-    }
-
-    public boolean isBicycleRequired() {
-        return bicycleRequired;
-    }
-
     public LocalDate getDepartureDate() {
         if (departureDateTime != null) {
             return departureDateTime.toLocalDate();
         }
         return dateTime != null ? dateTime.toLocalDate() : null;
-    }
-
-    public Class<? extends Carriage> getCarriageType() {
-        return carriageType;
-    }
-
-    public LocalDateTime getDepartureDateTime() {
-        return departureDateTime;
     }
 }

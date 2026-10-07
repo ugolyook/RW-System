@@ -2,14 +2,18 @@ package com.sveta.train.carriage.passenger;
 
 import com.sveta.train.carriage.ElectricCarriage;
 import com.sveta.train.carriage.passenger.models.Seat;
+import lombok.Getter;
+import lombok.Setter;
 
 import java.util.ArrayList;
 import java.util.List;
 
+@Getter
+@Setter
 public class EconomyCarriage extends PassengerCarriage implements ElectricCarriage {
     private final int seatsLimit;
 
-    public List<Seat> seats;
+    private final List<Seat> seats;
     boolean hasBioToilets;
 
     public EconomyCarriage(

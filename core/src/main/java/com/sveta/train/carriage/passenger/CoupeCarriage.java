@@ -2,10 +2,14 @@ package com.sveta.train.carriage.passenger;
 
 import com.sveta.train.carriage.ElectricCarriage;
 import com.sveta.train.carriage.passenger.models.Seat;
+import lombok.Getter;
+import lombok.Setter;
 
 import java.util.ArrayList;
 import java.util.List;
 
+@Getter
+@Setter
 public class CoupeCarriage extends PassengerCarriage implements ElectricCarriage {
     private final int coupeLimit;
     private final List<Coupe> coupes;
@@ -17,10 +21,6 @@ public class CoupeCarriage extends PassengerCarriage implements ElectricCarriage
         super(baseCarriageWeightKg);
         this.coupeLimit = coupes.size();
         this.coupes = new ArrayList<>(coupes);
-    }
-
-    public int getCoupeLimit() {
-        return coupeLimit;
     }
 
     @Override
@@ -37,29 +37,18 @@ public class CoupeCarriage extends PassengerCarriage implements ElectricCarriage
     public List<Seat> getAllSeats() {
         List<Seat> all = new ArrayList<>();
         for (Coupe coupe : coupes) {
-            all.addAll(coupe.getAllSeats());
+            all.addAll(coupe.getSeats());
         }
         return all;
     }
 
+    @Getter
+    @Setter
     public static class Coupe {
-        private static final int SEATS_PER_COUPE = 4;
+        public final static int SEATS_PER_COUPE = 4;
         private final List<Seat> seats;
-
         public Coupe() {
             this.seats = new ArrayList<>(SEATS_PER_COUPE);
-        }
-
-        public List<Seat> getAllSeats() {
-            return seats;
-        }
-
-        public static int getSeatsPerCoupe() {
-            return SEATS_PER_COUPE;
-        }
-
-        public List<Seat> getSeats() {
-            return seats;
         }
 
         @Override

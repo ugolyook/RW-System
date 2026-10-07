@@ -1,5 +1,7 @@
 package com.sveta.exeptions;
 
+import com.sveta.train.carriage.passenger.models.Carriages;
+
 public class RequirementExceptions extends RuntimeException {
     public RequirementExceptions(String message) {
         super(message);
@@ -25,7 +27,7 @@ public class RequirementExceptions extends RuntimeException {
     }
 
     public static class InvalidSeatsCountException extends RequirementExceptions {
-        public InvalidSeatsCountException(String carriageType, int minSeats, int maxSeats, int actualSeats) {
+        public InvalidSeatsCountException(Carriages carriageType, int minSeats, int maxSeats, int actualSeats) {
             super("Seats count in " + carriageType + " carriage must be from " +
                     minSeats + " to " + maxSeats + ". Received: " + actualSeats);
         }

@@ -29,7 +29,7 @@ public class EconomyCarriageFactory implements CarriageFactory {
 
         for (int i = 1; i <= ecoReq.seatsLimit(); i++) {
             SeatType type = (i % 2 == 0) ? SeatType.UPPER : SeatType.LOWER;
-            carriage.seats.add(new Seat(i, type));
+            carriage.getSeats().add(new Seat(i, type));
         }
 
         return carriage;

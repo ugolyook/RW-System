@@ -3,9 +3,13 @@ package com.sveta.train.carriage.passenger;
 import com.sveta.train.carriage.ElectricCarriage;
 import com.sveta.train.carriage.passenger.models.Food;
 import com.sveta.train.carriage.passenger.models.Seat;
+import lombok.Getter;
+import lombok.Setter;
 
 import java.util.List;
 
+@Getter
+@Setter
 public class DiningCarriage extends PassengerCarriage implements ElectricCarriage {
     private final int seatsLimit;
     private final List<Food> food;
@@ -29,10 +33,6 @@ public class DiningCarriage extends PassengerCarriage implements ElectricCarriag
     @Override
     public int getPassengerCapacity() {
         return seatsLimit;
-    }
-
-    public List<Food> getFood() {
-        return food;
     }
 
     @Override

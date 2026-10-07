@@ -39,11 +39,11 @@ public class SeatedCarriageFactory implements CarriageFactory {
         int regularSeatsCount = seatedReq.placeNumbers() - seatedReq.bicycleSpotsCount();
 
         for (int i = 1; i <= regularSeatsCount; i++) {
-            carriage.seats.add(new Seat(i, SeatType.LOWER));
+            carriage.getSeats().add(new Seat(i, SeatType.LOWER));
         }
 
         for (int i = regularSeatsCount + 1; i <= seatedReq.placeNumbers(); i++) {
-            carriage.seats.add(new Seat(i, SeatType.BICYCLE));
+            carriage.getSeats().add(new Seat(i, SeatType.BICYCLE));
         }
 
         return carriage;

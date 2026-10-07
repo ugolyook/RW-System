@@ -1,5 +1,6 @@
 package com.sveta.factory.carriage.coupe;
 
+import com.sveta.factory.carriage.CarriageFactory;
 import com.sveta.train.carriage.Carriage;
 import com.sveta.train.carriage.passenger.CoupeCarriage;
 import com.sveta.factory.carriage.CarriageRequirement;
@@ -10,7 +11,7 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Objects;
 
-public class CoupeCarriageFactory implements com.sveta.factory.carriage.CarriageFactory {
+public class CoupeCarriageFactory implements CarriageFactory {
     @Override
     public Carriage build(CarriageRequirement req) {
         if (Objects.isNull(req) || !canBuild(req)) {
@@ -29,7 +30,7 @@ public class CoupeCarriageFactory implements com.sveta.factory.carriage.Carriage
 
         CoupeCarriage.Coupe coupe = new CoupeCarriage.Coupe();
 
-        for (int i = 0; i < CoupeCarriage.Coupe.getSeatsPerCoupe(); i++) {
+        for (int i = 0; i < CoupeCarriage.Coupe.SEATS_PER_COUPE; i++) {
             SeatType type = (i % 2 == 0) ? SeatType.LOWER : SeatType.UPPER;
             coupe.getSeats().add(new Seat(currentSeatNumber++, type));
         }
