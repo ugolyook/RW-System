@@ -6,15 +6,14 @@ import com.sveta.tickets.Ticket;
 import com.sveta.train.Train;
 import com.sveta.train.carriage.Carriage;
 import com.sveta.train.carriage.passenger.PassengerCarriage;
+import lombok.RequiredArgsConstructor;
 
 import java.util.List;
 
+@RequiredArgsConstructor
 public class ConsoleTrainView implements TrainView{
     private final TrainInfoFormatter trainInfoFormatter;
 
-    public ConsoleTrainView(TrainInfoFormatter trainInfoFormatter) {
-        this.trainInfoFormatter = trainInfoFormatter;
-    }
     @Override
     public void showTrainCreated(Train train) {
         System.out.println("We build a first train!");

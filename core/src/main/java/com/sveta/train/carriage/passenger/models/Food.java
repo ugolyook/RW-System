@@ -1,5 +1,12 @@
 package com.sveta.train.carriage.passenger.models;
 
+import lombok.Getter;
+import lombok.RequiredArgsConstructor;
+import lombok.ToString;
+
+@ToString
+@Getter
+@RequiredArgsConstructor
 public enum Food {
     BORSCH(8.50),
     STEAK(22.00),
@@ -13,17 +20,4 @@ public enum Food {
     JUICE(4.00);
 
     private final double price;
-
-    Food(double price) {
-        this.price = price;
-    }
-
-    public double getPrice() {
-        return price;
-    }
-
-    @Override
-    public String toString() {
-        return name() + " (" + price + " byn.)";
-    }
 }

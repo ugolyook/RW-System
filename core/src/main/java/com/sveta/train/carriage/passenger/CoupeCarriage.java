@@ -4,12 +4,14 @@ import com.sveta.train.carriage.ElectricCarriage;
 import com.sveta.train.carriage.passenger.models.Seat;
 import lombok.Getter;
 import lombok.Setter;
+import lombok.ToString;
 
 import java.util.ArrayList;
 import java.util.List;
 
 @Getter
 @Setter
+@ToString(callSuper = true)
 public class CoupeCarriage extends PassengerCarriage implements ElectricCarriage {
     private final int coupeLimit;
     private final List<Coupe> coupes;
@@ -55,13 +57,5 @@ public class CoupeCarriage extends PassengerCarriage implements ElectricCarriage
         public String toString() {
             return "Coupe{seats=" + seats.size() + "/" + SEATS_PER_COUPE + "}";
         }
-    }
-
-    @Override
-    public String toString() {
-        return "CoupeCarriage{" +
-                "coupeLimit=" + coupeLimit +
-                ", coupes=" + coupes +
-                '}';
     }
 }

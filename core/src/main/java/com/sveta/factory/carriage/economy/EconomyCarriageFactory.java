@@ -21,11 +21,10 @@ public class EconomyCarriageFactory implements CarriageFactory {
     }
 
     private Carriage buildEconomyCarriage(EconomyCarriageRequirement ecoReq) {
-        EconomyCarriage carriage = new EconomyCarriage(
-                ecoReq.seatsLimit(),
-                ecoReq.baseCarriageWeightKg(),
-                ecoReq.hasBioToilets()
-        );
+        EconomyCarriage carriage = EconomyCarriage.builder()
+                .seatsLimit(ecoReq.seatsLimit())
+                .hasBioToilets(ecoReq.hasBioToilets())
+                .build();
 
         for (int i = 1; i <= ecoReq.seatsLimit(); i++) {
             SeatType type = (i % 2 == 0) ? SeatType.UPPER : SeatType.LOWER;

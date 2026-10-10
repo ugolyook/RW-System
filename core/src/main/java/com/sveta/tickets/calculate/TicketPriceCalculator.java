@@ -6,5 +6,9 @@ import com.sveta.tickets.SearchResult;
 import java.math.BigDecimal;
 
 public interface TicketPriceCalculator {
-    BigDecimal calculatePrice(SearchResult searchResult, Station departure, Station arrival);
+    BigDecimal calculatePrice(
+            SearchResult searchResult,
+            Station departure,
+            Station arrival
+    );
 }

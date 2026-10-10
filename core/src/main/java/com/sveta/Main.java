@@ -51,16 +51,16 @@ public class Main {
         Station departureStation = findStationByCode(run, 2200001);
         Station arrivalStation = findStationByCode(run, 2200030);
 
-        TicketSearchRequirement requirement = new TicketSearchRequirement(
-                departureStation,
-                arrivalStation,
-                run,
-                run.getRoute(),
-                null,
-                run.getDepartureTime(),
-                run.getTrain(),
-                CoupeCarriage.class
-        );
+        TicketSearchRequirement requirement = TicketSearchRequirement.builder()
+                .departureStation(departureStation)
+                .arrivalStation(arrivalStation)
+                .trainRun(run)
+                .route(run.getRoute())
+                .dateTime(null)
+                .departureDateTime(run.getDepartureTime())
+                .train(run.getTrain())
+                .carriageType(CoupeCarriage.class)
+                .build();
 
         List<SearchResult> searchResults = ticketSearchService.searchSeats(List.of(run), requirement);
         view.showSearchResults(searchResults);
@@ -69,7 +69,7 @@ public class Main {
             return;
         }
 
-        SearchResult selectedSeat = searchResults.get(0);
+        SearchResult selectedSeat = searchResults.getFirst();
         Ticket ticket = cashier.issueTicket("Sveta", selectedSeat, departureStation, arrivalStation);
 
         view.showIssuedTicket(ticket);
@@ -80,7 +80,7 @@ public class Main {
 
     private Station findStationByCode(TrainRun run, int code) {
         return run.getRoute().getStops().stream()
-                .filter(s -> s.getCode() == code)
+                .filter(s -> s.code() == code)
                 .findFirst()
                 .orElseThrow(() ->
                         new IllegalArgumentException("Station with code " + code + " not found in route!"));

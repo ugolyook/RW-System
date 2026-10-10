@@ -4,16 +4,13 @@ import com.sveta.exeptions.CashierExceptions;
 import com.sveta.route.Station;
 import com.sveta.route.TrainRun;
 import com.sveta.tickets.calculate.TicketPriceCalculator;
+import lombok.RequiredArgsConstructor;
 
 import java.math.BigDecimal;
 
+@RequiredArgsConstructor
 public class Cashier {
-
     private final TicketPriceCalculator priceCalculator;
-
-    public Cashier(TicketPriceCalculator priceCalculator) {
-        this.priceCalculator = priceCalculator;
-    }
 
     public Ticket issueTicket(
             String passengerName,
