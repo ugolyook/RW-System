@@ -3,14 +3,13 @@ package com.sveta.train.carriage.passenger;
 import com.sveta.train.carriage.ElectricCarriage;
 import com.sveta.train.carriage.passenger.models.Food;
 import com.sveta.train.carriage.passenger.models.Seat;
+import lombok.Builder;
 import lombok.Getter;
-import lombok.Setter;
 import lombok.ToString;
 
 import java.util.List;
 
 @Getter
-@Setter
 @ToString(callSuper = true)
 public class DiningCarriage extends PassengerCarriage implements ElectricCarriage {
     private final int seatsLimit;
@@ -18,6 +17,7 @@ public class DiningCarriage extends PassengerCarriage implements ElectricCarriag
     private final boolean hasHotKitchen;
     private final boolean deliveryToTheRoom;
 
+    @Builder
     public DiningCarriage(
             int seatsLimit,
             int baseCarriageWeightKg,

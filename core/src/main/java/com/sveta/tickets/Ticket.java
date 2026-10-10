@@ -21,8 +21,8 @@ public record Ticket(
         return String.format("TICKET [%s] | Train: %s (%s -> %s) | Carriage: %s, Seat: %s | Price: %s BYN",
                 passengerName,
                 trainRun.getTrain().getTrainNumber(),
-                departureStation.getStationName(),
-                arrivalStation.getStationName(),
+                departureStation.stationName(),
+                arrivalStation.stationName(),
                 carriage.getClass().getSimpleName(),
                 seat,
                 price);

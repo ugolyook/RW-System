@@ -3,7 +3,7 @@ package com.sveta.train.carriage;
 public abstract class Carriage {
     private final int baseCarriageWeightInKg;
 
-    public Carriage(int baseCarriageWeightInKg) {
+    protected Carriage(int baseCarriageWeightInKg) {
         this.baseCarriageWeightInKg = baseCarriageWeightInKg;
     }
 

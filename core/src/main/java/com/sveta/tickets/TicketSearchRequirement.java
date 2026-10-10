@@ -5,45 +5,23 @@ import com.sveta.route.Station;
 import com.sveta.route.TrainRun;
 import com.sveta.train.Train;
 import com.sveta.train.carriage.Carriage;
-import lombok.Getter;
-import lombok.Setter;
+import lombok.Builder;
 
 import java.time.LocalDate;
 import java.time.LocalDateTime;
 
-@Setter
-@Getter
-public class TicketSearchRequirement {
-    private final Station departureStation;
-    private final Station arrivalStation;
-    private final TrainRun trainRun;
-    private final Route route;
-    private final LocalDateTime dateTime;
-    private final LocalDateTime departureDateTime;
-    private final Train train;
-    private final Class<? extends Carriage> carriageType;
-    private final boolean bicycleRequired;
-
-    public TicketSearchRequirement(
-            Station departureStation,
-            Station arrivalStation,
-            TrainRun trainRun,
-            Route route,
-            LocalDateTime dateTime,
-            LocalDateTime departureDateTime,
-            Train train, Class<? extends Carriage> carriageType,
-            boolean bicycleRequired
-    ) {
-        this.departureStation = departureStation;
-        this.arrivalStation = arrivalStation;
-        this.trainRun = trainRun;
-        this.route = route;
-        this.dateTime = dateTime;
-        this.departureDateTime = departureDateTime;
-        this.train = train;
-        this.carriageType = carriageType;
-        this.bicycleRequired = bicycleRequired;
-    }
+@Builder
+public record TicketSearchRequirement(
+        Station departureStation,
+        Station arrivalStation,
+        TrainRun trainRun,
+        Route route,
+        LocalDateTime dateTime,
+        LocalDateTime departureDateTime,
+        Train train,
+        Class<? extends Carriage> carriageType,
+        boolean bicycleRequired
+) {
 
     public TicketSearchRequirement(
             Station departureStation,

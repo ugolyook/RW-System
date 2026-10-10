@@ -4,6 +4,7 @@ import com.sveta.tickets.Ticket;
 import com.sveta.train.Train;
 import com.sveta.train.carriage.Carriage;
 import com.sveta.train.carriage.passenger.models.Seat;
+import lombok.Builder;
 import lombok.Getter;
 
 import java.time.LocalDateTime;
@@ -11,6 +12,7 @@ import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
 
+@Builder
 @Getter
 public class TrainRun {
     private final Train train;

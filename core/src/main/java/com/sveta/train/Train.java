@@ -4,24 +4,20 @@ import com.sveta.locomotive.Locomotive;
 import com.sveta.train.carriage.Carriage;
 import com.sveta.train.carriage.passenger.DiningCarriage;
 import com.sveta.train.carriage.passenger.models.Food;
-import com.sveta.train.formatter.BaseTrainInfoFormatter;
 import lombok.Getter;
+import lombok.RequiredArgsConstructor;
 
 import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.List;
 import java.util.Optional;
 
+@RequiredArgsConstructor
 @Getter
 public abstract class Train {
     private final List<Carriage> carriages = new ArrayList<>();
     private final int trainNumber;
     private final Locomotive locomotive;
-
-    public Train(int trainNumber, Locomotive locomotive) {
-        this.trainNumber = trainNumber;
-        this.locomotive = locomotive;
-    }
 
     public void addCarriage(Carriage carriage) {
         carriages.add(carriage);

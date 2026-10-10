@@ -42,8 +42,19 @@ public class TestDataFactory {
     }
 
     public static List<Carriage> createCarriages(BaseCarriageFactory factory) {
-        var coupeReq1 = new CoupeRequirement(1, 4, false, false);
-        var coupeReq2 = new CoupeRequirement(2, 4, true, false);
+        var coupeReq1 = CoupeRequirement.builder()
+                .weightInKg(1)
+                .seatNumbers(4)
+                .hasElectricity(false)
+                .hasWifi(false)
+                .build();
+
+        var coupeReq2 = CoupeRequirement.builder()
+                .weightInKg(2)
+                .seatNumbers(4)
+                .hasElectricity(true)
+                .hasWifi(false)
+                .build();
 
         CarriageRequirement coupeCarriageReq1 = new CoupeCarriageRequirement(
                 List.of(coupeReq1, coupeReq1, coupeReq1, coupeReq1, coupeReq2, coupeReq2),
@@ -73,6 +84,11 @@ public class TestDataFactory {
         Route route = new Route(List.of(minsk, minskPass, mogilev, mogilevCentral), Directions.FORWARD);
         LocalDateTime departure = LocalDateTime.of(2026, 9, 20, 14, 30);
 
-        return new TrainRun(train, route, departure, true);
+        return TrainRun.builder()
+                .train(train)
+                .route(route)
+                .departureTime(departure)
+                .isExpress(true)
+                .build();
     }
 }

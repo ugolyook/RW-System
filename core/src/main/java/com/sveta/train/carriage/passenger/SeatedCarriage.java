@@ -11,7 +11,6 @@ import java.util.List;
 
 import static com.sveta.train.carriage.passenger.models.SeatType.BICYCLE;
 
-@Setter
 @Getter
 @ToString(callSuper = true)
 public class SeatedCarriage extends PassengerCarriage implements ElectricCarriage {

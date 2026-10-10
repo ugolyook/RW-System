@@ -28,10 +28,10 @@ public class TicketSearchService {
     }
 
     private boolean matchesRun(TrainRun run, TicketSearchRequirement requirement) {
-        return matches(requirement.getTrainRun(), run)
-                && matches(requirement.getTrain(), run.getTrain())
-                && matches(requirement.getRoute(), run.getRoute())
-                && matchesStations(run, requirement.getDepartureStation(), requirement.getArrivalStation())
+        return matches(requirement.trainRun(), run)
+                && matches(requirement.train(), run.getTrain())
+                && matches(requirement.route(), run.getRoute())
+                && matchesStations(run, requirement.departureStation(), requirement.arrivalStation())
                 && matchesDepartureTime(run, requirement);
     }
 
@@ -61,11 +61,11 @@ public class TicketSearchService {
     }
 
     private boolean matchesCarriage(Carriage carriage, TicketSearchRequirement requirement) {
-        if (requirement.getCarriageType() != null
-                && !requirement.getCarriageType().isInstance(carriage)) {
+        if (requirement.carriageType() != null
+                && !requirement.carriageType().isInstance(carriage)) {
             return false;
         }
-        if (!requirement.isBicycleRequired()) {
+        if (!requirement.bicycleRequired()) {
             return true;
         }
         return carriage instanceof SeatedCarriage sc && sc.isBicycleSpots();
@@ -85,13 +85,13 @@ public class TicketSearchService {
     }
 
     private boolean matchesBicycle(Seat seat, TicketSearchRequirement requirement) {
-        return !requirement.isBicycleRequired() || seat.getType() == SeatType.BICYCLE;
+        return !requirement.bicycleRequired() || seat.getType() == SeatType.BICYCLE;
     }
 
     private boolean matchesDepartureTime(TrainRun run, TicketSearchRequirement requirement) {
         LocalDateTime depTime = run.getDepartureTime();
-        LocalDateTime from = requirement.getDateTime();
-        LocalDateTime to = requirement.getDepartureDateTime();
+        LocalDateTime from = requirement.dateTime();
+        LocalDateTime to = requirement.departureDateTime();
 
         if (from != null && depTime.isBefore(from)) {
             return false;

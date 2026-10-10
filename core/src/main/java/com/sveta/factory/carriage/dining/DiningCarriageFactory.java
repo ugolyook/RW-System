@@ -20,13 +20,12 @@ public class DiningCarriageFactory implements CarriageFactory {
     }
 
     private Carriage buildDiningCarriage(DiningCarriageRequirement diningReq) {
-        return new DiningCarriage(
-                diningReq.seatsLimit(),
-                diningReq.baseCarriageWeightKg(),
-                diningReq.hasHotKitchen(),
-                diningReq.deliveryToTheRoom(),
-                diningReq.food()
-        );
+        return DiningCarriage.builder()
+                .seatsLimit(diningReq.seatsLimit())
+                .hasHotKitchen(diningReq.hasHotKitchen())
+                .deliveryToTheRoom(diningReq.deliveryToTheRoom())
+                .food(diningReq.food())
+                .build();
     }
 
     @Override
