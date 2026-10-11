@@ -79,7 +79,7 @@ public class Main {
     }
 
     private Station findStationByCode(TrainRun run, int code) {
-        return run.getRoute().getStops().stream()
+        return run.getRoute().stops().stream()
                 .filter(s -> s.code() == code)
                 .findFirst()
                 .orElseThrow(() ->

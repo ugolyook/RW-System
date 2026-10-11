@@ -7,16 +7,26 @@ import com.sveta.train.carriage.passenger.PassengerCarriage;
 import com.sveta.train.carriage.passenger.SeatedCarriage;
 import com.sveta.train.carriage.passenger.models.Seat;
 import com.sveta.train.carriage.passenger.models.SeatType;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
 
 public class TicketSearchService {
+    private static final Logger log = LoggerFactory.getLogger(TicketSearchService.class);
+
     public List<SearchResult> searchSeats(List<TrainRun> trainRuns, TicketSearchRequirement requirement) {
         if (trainRuns == null || requirement == null) {
+            log.warn("Ticket search aborted: trainRuns or requirement is null.");
             return List.of();
         }
+
+        log.info("Starting ticket search across {} train runs with criteria: carriageType={}, bicycleRequired={}",
+                trainRuns.size(),
+                requirement.carriageType() != null ? requirement.carriageType().getSimpleName() : "ANY",
+                requirement.bicycleRequired());
 
         List<SearchResult> results = new ArrayList<>();
         for (TrainRun run : trainRuns) {
@@ -24,15 +34,20 @@ public class TicketSearchService {
                 collectSeats(run, requirement, results);
             }
         }
+        log.info("Ticket search completed. Total available seats found: {}", results.size());
         return results;
     }
 
     private boolean matchesRun(TrainRun run, TicketSearchRequirement requirement) {
-        return matches(requirement.trainRun(), run)
+        boolean matches =  matches(requirement.trainRun(), run)
                 && matches(requirement.train(), run.getTrain())
                 && matches(requirement.route(), run.getRoute())
                 && matchesStations(run, requirement.departureStation(), requirement.arrivalStation())
                 && matchesDepartureTime(run, requirement);
+        if (matches) {
+            log.debug("TrainRun successfully matched search filters.");
+        }
+        return matches;
     }
 
     private static <T> boolean matches(T required, T actual) {
@@ -44,7 +59,7 @@ public class TicketSearchService {
             return true;
         }
 
-        List<Station> stops = run.getRoute().getStops();
+        List<Station> stops = run.getRoute().stops();
         int depIndex = stops.indexOf(departure);
         int arrIndex = stops.indexOf(arrival);
 

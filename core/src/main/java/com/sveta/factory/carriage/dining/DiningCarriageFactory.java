@@ -4,10 +4,13 @@ import com.sveta.train.carriage.Carriage;
 import com.sveta.train.carriage.passenger.DiningCarriage;
 import com.sveta.factory.carriage.CarriageFactory;
 import com.sveta.factory.carriage.CarriageRequirement;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import java.util.Objects;
 
 public class DiningCarriageFactory implements CarriageFactory {
+    private static final Logger log = LoggerFactory.getLogger(DiningCarriageFactory.class);
     @Override
     public Carriage build(CarriageRequirement req) {
         if (Objects.isNull(req) || !canBuild(req)) {
@@ -15,7 +18,7 @@ public class DiningCarriageFactory implements CarriageFactory {
         }
 
         var diningReq = (DiningCarriageRequirement) req;
-
+        log.info("Start to build dining carriage");
         return buildDiningCarriage(diningReq);
     }
 

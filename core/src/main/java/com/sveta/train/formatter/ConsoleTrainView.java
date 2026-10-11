@@ -22,9 +22,9 @@ public class ConsoleTrainView implements TrainView{
 
     @Override
     public void showTrainRunInfo(TrainRun run) {
-        System.out.println("Route: " + run.getRoute().getDirection());
+        System.out.println("Route: " + run.getRoute().direction());
         System.out.println("Train stops:");
-        for (var station : run.getRoute().getStops()) {
+        for (var station : run.getRoute().stops()) {
             System.out.println(" - " + station);
         }
         System.out.println("Departure: " + run.getDepartureTime());
