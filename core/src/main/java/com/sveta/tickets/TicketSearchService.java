@@ -85,7 +85,7 @@ public class TicketSearchService {
     }
 
     private boolean matchesBicycle(Seat seat, TicketSearchRequirement requirement) {
-        return !requirement.bicycleRequired() || seat.getType() == SeatType.BICYCLE;
+        return !requirement.bicycleRequired() || seat.type() == SeatType.BICYCLE;
     }
 
     private boolean matchesDepartureTime(TrainRun run, TicketSearchRequirement requirement) {

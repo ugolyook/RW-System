@@ -3,7 +3,6 @@ package com.sveta.train.carriage.passenger;
 import com.sveta.train.carriage.ElectricCarriage;
 import com.sveta.train.carriage.passenger.models.Seat;
 import lombok.Getter;
-import lombok.Setter;
 import lombok.ToString;
 
 import java.util.ArrayList;
@@ -26,7 +25,7 @@ public class SeatedCarriage extends PassengerCarriage implements ElectricCarriag
     }
 
     public boolean isBicycleSpots() {
-        return seats.stream().anyMatch(seat -> seat.getType() == BICYCLE);
+        return seats.stream().anyMatch(seat -> seat.type() == BICYCLE);
     }
 
     @Override

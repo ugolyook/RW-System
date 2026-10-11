@@ -34,7 +34,7 @@ public class TrainRun {
 
     public void addTicket(Ticket ticket) {
         if (isSeatOccupied(ticket.carriage(), ticket.seat())) {
-            throw new IllegalStateException("Place" + ticket.seat().getNumber() + " was booked");
+            throw new IllegalStateException("Place" + ticket.seat().number() + " was booked");
         }
         this.tickets.add(ticket);
     }
