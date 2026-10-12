@@ -1,4 +1,4 @@
-package com.sveta.train.formatter;
+package com.sveta.rwcl.formatter;
 
 import com.sveta.train.carriage.Carriage;
 import com.sveta.train.Train;
