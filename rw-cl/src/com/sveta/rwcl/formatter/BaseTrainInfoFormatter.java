@@ -1,5 +1,6 @@
 package com.sveta.rwcl.formatter;
 
+import com.sveta.rwcl.view.TrainInfoFormatter;
 import com.sveta.train.carriage.Carriage;
 import com.sveta.train.Train;
 import com.sveta.train.carriage.passenger.*;

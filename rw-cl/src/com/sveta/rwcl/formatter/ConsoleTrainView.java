@@ -1,6 +1,8 @@
 package com.sveta.rwcl.formatter;
 
 import com.sveta.route.TrainRun;
+import com.sveta.rwcl.view.TrainInfoFormatter;
+import com.sveta.rwcl.view.TrainView;
 import com.sveta.tickets.SearchResult;
 import com.sveta.tickets.Ticket;
 import com.sveta.train.Train;
@@ -11,7 +13,7 @@ import lombok.RequiredArgsConstructor;
 import java.util.List;
 
 @RequiredArgsConstructor
-public class ConsoleTrainView implements TrainView{
+public class ConsoleTrainView implements TrainView {
     private final TrainInfoFormatter trainInfoFormatter;
 
     @Override
