@@ -10,7 +10,7 @@ import com.sveta.tickets.calculate.BaseTicketPriceCalculator;
 import com.sveta.train.Train;
 import com.sveta.train.carriage.Carriage;
 import com.sveta.train.carriage.passenger.CoupeCarriage;
-import com.sveta.rwcl.view.TrainView;
+import com.sveta.view.TrainView;
 
 import java.util.List;
 

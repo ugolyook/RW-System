@@ -1,8 +1,8 @@
-package com.sveta.rwcl.formatter;
+package com.sveta.rwcl.viewer;
 
 import com.sveta.route.TrainRun;
-import com.sveta.rwcl.view.TrainInfoFormatter;
-import com.sveta.rwcl.view.TrainView;
+import com.sveta.view.TrainInfoFormatter;
+import com.sveta.view.TrainView;
 import com.sveta.tickets.SearchResult;
 import com.sveta.tickets.Ticket;
 import com.sveta.train.Train;

@@ -1,4 +1,4 @@
-package com.sveta.rwcl.view;
+package com.sveta.view;
 
 import com.sveta.train.Train;
 
