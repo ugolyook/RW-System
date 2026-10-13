@@ -17,5 +17,7 @@
         <SOURCES />
       </library>
     </orderEntry>
+    <orderEntry type="module" module-name="rw-serialization" />
+    <orderEntry type="module" module-name="rw-serialization" />
   </component>
 </module>
