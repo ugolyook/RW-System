@@ -36,7 +36,7 @@ public class BaseTicketPriceCalculator implements TicketPriceCalculator {
         if (departure == null || arrival == null || route == null) {
             return 1;
         }
-        var stops = route.getStops();
+        var stops = route.stops();
         int depIndex = stops.indexOf(departure);
         int arrIndex = stops.indexOf(arrival);
 
