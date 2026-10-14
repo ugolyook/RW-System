@@ -5,6 +5,7 @@ import com.sveta.factory.carriage.BaseCarriageFactory;
 import com.sveta.factory.train.PassengerTrainFactory;
 import com.sveta.route.Station;
 import com.sveta.route.TrainRun;
+import com.sveta.serialization.ObjectSerializer;
 import com.sveta.tickets.*;
 import com.sveta.tickets.calculate.BaseTicketPriceCalculator;
 import com.sveta.train.Train;
@@ -18,9 +19,11 @@ public class TrainController {
     private final TicketSearchService ticketSearchService;
     private final Cashier cashier;
     private final TrainView view;
+    private final ObjectSerializer serializer;
 
-    public TrainController(TrainView view) {
+    public TrainController(TrainView view, ObjectSerializer serializer) {
         this.view = view;
+        this.serializer = serializer;
         this.ticketSearchService = new TicketSearchService();
         this.cashier = new Cashier(new BaseTicketPriceCalculator());
     }
@@ -33,10 +36,22 @@ public class TrainController {
         Train train = trainFactory.createTrain(carriages);
         view.showTrainCreated(train);
 
+        saveTrainState(train, "train_state.dat");
+
         TrainRun run = TestDataFactory.createTrainRun(train);
         view.showTrainRunInfo(run);
 
         processBooking(run);
+    }
+
+    private void saveTrainState(Train train, String filename) {
+        try {
+            serializer.save(train, filename);
+            System.out.println("\n[Serializer] Train state successfully saved using: "
+                    + serializer.getClass().getSimpleName());
+        } catch (Exception e) {
+            System.err.println("Error saving state: " + e.getMessage());
+        }
     }
 
     private void processBooking(TrainRun run) {

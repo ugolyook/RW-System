@@ -1,3 +1,5 @@
+package com.sveta.serialization.impl;
+
 import com.sveta.serialization.ObjectSerializer;
 
 import java.io.FileInputStream;
