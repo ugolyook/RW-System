@@ -1,4 +1,4 @@
-package com.sveta.serialization.impl;
+package com.sveta.serialization.impl.serializer;
 
 import com.esotericsoftware.kryo.Kryo;
 import com.esotericsoftware.kryo.io.Input;
@@ -9,10 +9,12 @@ import java.io.FileInputStream;
 import java.io.FileOutputStream;
 
 public class KryoSerializer implements ObjectSerializer {
-    private final Kryo kryo = new Kryo();
+    private final Kryo kryo;
 
     public KryoSerializer() {
-        kryo.setRegistrationRequired(false);
+        this.kryo = new Kryo();
+        this.kryo.setRegistrationRequired(false);
+        this.kryo.setClassLoader(Thread.currentThread().getContextClassLoader());
     }
 
     @Override

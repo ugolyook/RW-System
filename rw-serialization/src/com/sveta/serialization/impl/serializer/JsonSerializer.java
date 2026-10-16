@@ -1,4 +1,4 @@
-package com.sveta.serialization.impl;
+package com.sveta.serialization.impl.serializer;
 
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;

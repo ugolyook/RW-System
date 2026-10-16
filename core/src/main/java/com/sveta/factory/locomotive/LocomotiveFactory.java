@@ -141,7 +141,8 @@ public class LocomotiveFactory {
                 VL80C_MAX_TRANSPORTED_WEIGHT,
                 VL80C_POWER,
                 VL80C_TRACTION_FORCE,
-                VL80C_IS_ELECTRIC
+                VL80C_IS_ELECTRIC,
+                "VL80C"
         );
     }
 
@@ -152,7 +153,8 @@ public class LocomotiveFactory {
                 ES4K_MAX_TRANSPORTED_WEIGHT,
                 ES4K_POWER,
                 ES4K_TRACTION_FORCE,
-                ES4K_IS_ELECTRIC
+                ES4K_IS_ELECTRIC,
+                "ES4K"
         );
     }
 
@@ -163,7 +165,8 @@ public class LocomotiveFactory {
                 VL85_MAX_TRANSPORTED_WEIGHT,
                 VL85_POWER,
                 VL85_TRACTION_FORCE,
-                VL85_IS_ELECTRIC
+                VL85_IS_ELECTRIC,
+                "VL85"
         );
     }
 
@@ -174,7 +177,8 @@ public class LocomotiveFactory {
                 EP20_MAX_TRANSPORTED_WEIGHT,
                 EP20_POWER,
                 EP20_TRACTION_FORCE,
-                EP20_IS_ELECTRIC
+                EP20_IS_ELECTRIC,
+                "EP20"
         );
     }
 
@@ -234,7 +238,8 @@ public class LocomotiveFactory {
                 PERESVET_MAX_TRANSPORTED_WEIGHT,
                 PERESVET_POWER,
                 PERESVET_TRACTION_FORCE,
-                PERESVET_IS_ELECTRIC
+                PERESVET_IS_ELECTRIC,
+                "Peresvet"
         );
     }
 
@@ -245,7 +250,8 @@ public class LocomotiveFactory {
                 TEP116_MAX_TRANSPORTED_WEIGHT,
                 TEP116_POWER,
                 TEP116_TRACTION_FORCE,
-                TEP116_IS_ELECTRIC
+                TEP116_IS_ELECTRIC,
+                "TEP116"
         );
     }
 
@@ -256,7 +262,8 @@ public class LocomotiveFactory {
                 TEP70_MAX_TRANSPORTED_WEIGHT,
                 TEP70_POWER,
                 TEP70_TRACTION_FORCE,
-                TEP70_IS_ELECTRIC
+                TEP70_IS_ELECTRIC,
+                "TEP70"
         );
     }
 
@@ -267,7 +274,8 @@ public class LocomotiveFactory {
                 TEM18_MAX_TRANSPORTED_WEIGHT,
                 TEM18_POWER,
                 TEM18_TRACTION_FORCE,
-                TEM18_IS_ELECTRIC
+                TEM18_IS_ELECTRIC,
+                "TEM18"
         );
     }
 }
