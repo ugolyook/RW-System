@@ -6,6 +6,7 @@ public record Locomotive(
         int maxTransportedWeight,
         int power,
         int tractionForce,
-        boolean electric
+        boolean electric,
+        String model
 ) {
 }

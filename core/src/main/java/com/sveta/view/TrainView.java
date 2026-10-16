@@ -1,4 +1,4 @@
-package com.sveta.train.formatter;
+package com.sveta.view;
 
 import com.sveta.route.TrainRun;
 import com.sveta.tickets.SearchResult;

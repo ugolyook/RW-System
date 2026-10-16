@@ -20,15 +20,19 @@ import com.sveta.route.TrainRun;
 import com.sveta.train.Train;
 import com.sveta.train.carriage.Carriage;
 import com.sveta.train.carriage.passenger.models.Food;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import java.time.LocalDateTime;
 import java.util.List;
 
 public class TestDataFactory {
+    private static final Logger log = LoggerFactory.getLogger(TestDataFactory.class);
 
     private static final int DEFAULT_CARRIAGE_LIMIT = 18;
 
     public static BaseCarriageFactory createBaseCarriageFactory() {
+        log.debug("Initializing BaseCarriageFactory with available carriage factories.");
         return new BaseCarriageFactory(List.of(
                 new CoupeCarriageFactory(),
                 new SeatedCarriageFactory(),
@@ -38,10 +42,13 @@ public class TestDataFactory {
     }
 
     public static PassengerTrainFactory createTrainFactory() {
+        log.debug("Initializing PassengerTrainFactory with size limit: {} and LocomotiveFactory.", DEFAULT_CARRIAGE_LIMIT);
         return new PassengerTrainFactory(DEFAULT_CARRIAGE_LIMIT, new LocomotiveFactory());
     }
 
     public static List<Carriage> createCarriages(BaseCarriageFactory factory) {
+        log.info("Preparing test carriage requirements (Coupe, Seated, Dining, Economy)...");
+
         var coupeReq1 = CoupeRequirement.builder()
                 .weightInKg(1)
                 .seatNumbers(4)
@@ -72,10 +79,15 @@ public class TestDataFactory {
                 54, 48000, true
         );
 
-        return factory.createAll(List.of(coupeCarriageReq1, seatedReq, diningReq, economyReq));
+        List<Carriage> carriages = factory.createAll(List.of(coupeCarriageReq1, seatedReq, diningReq, economyReq));
+        log.info("Successfully created {} test carriages via BaseCarriageFactory.", carriages.size());
+
+        return carriages;
     }
 
     public static TrainRun createTrainRun(Train train) {
+        log.info("Creating test train run for train №{} along route Minsk -> Mogilev...", train.getTrainNumber());
+
         Station minsk = new Station("Minsk", 2200001);
         Station minskPass = new Station("Minsk-Passenger", 2200020);
         Station mogilev = new Station("Mogilev", 2200030);
