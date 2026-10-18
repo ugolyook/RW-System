@@ -9,17 +9,23 @@ import lombok.Setter;
 @Getter
 @NoArgsConstructor
 public class LocomotiveSerializationDto {
-    private String model;
-    private double power;
-    private double traction;
+    private int wagonLimit;
+    private int maxSpeed;
+    private int maxTransportedWeight;
+    private int power;
+    private int traction;
     private double weight;
     private boolean isElectric;
+    private String model;
 
-    public LocomotiveSerializationDto(Locomotive locomotive){
-        this.model = locomotive.model();
+    public LocomotiveSerializationDto(Locomotive locomotive) {
+        this.wagonLimit = locomotive.wagonLimit();
+        this.maxSpeed = locomotive.maxSpeed();
+        this.maxTransportedWeight = locomotive.maxTransportedWeight();
         this.power = locomotive.power();
         this.traction = locomotive.tractionForce();
         this.weight = locomotive.maxTransportedWeight();
         this.isElectric = locomotive.electric();
+        this.model = locomotive.model();
     }
 }

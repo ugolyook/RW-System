@@ -13,10 +13,12 @@ import java.util.List;
 @NoArgsConstructor
 public class SeatedCarriageDto extends CarriageSerializationDto {
     private List<Seat> seats;
+    private int baseCarriageWeightKg;
 
     public SeatedCarriageDto(SeatedCarriage carriage) {
         setSeatsLimit(carriage.getSeatsLimit());
         setWeight(carriage.getKgWeight());
         this.seats = carriage.getSeats();
+        this.baseCarriageWeightKg = carriage.getKgWeight();
     }
 }

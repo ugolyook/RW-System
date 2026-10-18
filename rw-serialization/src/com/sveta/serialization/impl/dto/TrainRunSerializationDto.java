@@ -16,11 +16,13 @@ public class TrainRunSerializationDto {
     private RouteDto route;
     private LocalDateTime departureTime;
     private List<TicketDto> tickets;
+    private boolean isExpress;
 
     public TrainRunSerializationDto(TrainRun trainRun) {
         this.train = trainRun.getTrain() != null ? new TrainSerializationDto(trainRun.getTrain()) : null;
         this.route = new RouteDto(trainRun.getRoute());
         this.departureTime = trainRun.getDepartureTime();
+        this.isExpress = trainRun.isExpress();
         this.tickets = trainRun.getTickets().stream()
                 .map(TicketDto::new)
                 .toList();

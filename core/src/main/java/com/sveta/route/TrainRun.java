@@ -6,6 +6,7 @@ import com.sveta.train.carriage.Carriage;
 import com.sveta.train.carriage.passenger.models.Seat;
 import lombok.Builder;
 import lombok.Getter;
+import lombok.Setter;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -16,6 +17,7 @@ import java.util.List;
 
 @Builder
 @Getter
+@Setter
 public class TrainRun {
     private static final Logger log = LoggerFactory.getLogger(TrainRun.class);
 

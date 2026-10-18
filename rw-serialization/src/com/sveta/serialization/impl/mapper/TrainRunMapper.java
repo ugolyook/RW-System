@@ -1,8 +1,6 @@
 package com.sveta.serialization.impl.mapper;
 
 import com.sveta.route.TrainRun;
-import com.sveta.serialization.impl.dto.RouteDto;
-import com.sveta.serialization.impl.dto.TicketDto;
 import com.sveta.serialization.impl.dto.TrainRunSerializationDto;
 import com.sveta.train.PassengerTrain;
 
@@ -18,14 +16,14 @@ public class TrainRunMapper {
             dto.setTrain(TrainMapper.toDto(passengerTrain));
         }
 
-        dto.setRoute(trainRun.getRoute() != null ? new RouteDto(trainRun.getRoute()) : null);
-
+        dto.setRoute(RouteMapper.toDto(trainRun.getRoute()));
         dto.setDepartureTime(trainRun.getDepartureTime());
+        dto.setExpress(trainRun.isExpress());
 
         if (trainRun.getTickets() != null) {
             dto.setTickets(
                     trainRun.getTickets().stream()
-                            .map(TicketDto::new)
+                            .map(TicketMapper::toDto)
                             .toList()
             );
         }
@@ -38,13 +36,19 @@ public class TrainRunMapper {
             return null;
         }
 
-        return new TrainRun(
+        TrainRun trainRun = new TrainRun(
                 TrainMapper.toDomain(dto.getTrain()),
-                dto.getRoute() != null ? dto.getRoute().toDomain() : null,
+                RouteMapper.toDomain(dto.getRoute()),
                 dto.getDepartureTime(),
-                dto.getTickets() != null
-                        ? dto.getTickets().stream().map(TicketDto::toDomain).toList()
-                        : null
+                dto.isExpress()
         );
+
+        if (dto.getTickets() != null) {
+            dto.getTickets().stream()
+                    .map(TicketMapper::toDomain)
+                    .forEach(trainRun::addTicket);
+        }
+
+        return trainRun;
     }
 }

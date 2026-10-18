@@ -12,15 +12,17 @@ import java.util.List;
 @Setter
 @NoArgsConstructor
 public class DiningCarriageDto extends CarriageSerializationDto {
-    private List<Food> food;
+    private int baseCarriageWeightKg;
     private boolean hasHotKitchen;
     private boolean deliveryToTheRoom;
+    private List<Food> food;
 
     public DiningCarriageDto(DiningCarriage carriage) {
         setSeatsLimit(carriage.getSeatsLimit());
         setWeight(carriage.getKgWeight());
-        this.food = carriage.getFood();
+        this.baseCarriageWeightKg = carriage.getKgWeight();
         this.hasHotKitchen = carriage.isHasHotKitchen();
         this.deliveryToTheRoom = carriage.isDeliveryToTheRoom();
+        this.food = carriage.getFood();
     }
 }

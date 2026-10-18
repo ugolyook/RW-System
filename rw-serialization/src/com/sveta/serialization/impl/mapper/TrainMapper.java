@@ -6,10 +6,7 @@ import com.sveta.serialization.impl.dto.TrainSerializationDto;
 import com.sveta.serialization.impl.dto.carriagesDto.*;
 import com.sveta.train.PassengerTrain;
 import com.sveta.train.carriage.Carriage;
-import com.sveta.train.carriage.passenger.CoupeCarriage;
-import com.sveta.train.carriage.passenger.DiningCarriage;
-import com.sveta.train.carriage.passenger.EconomyCarriage;
-import com.sveta.train.carriage.passenger.SeatedCarriage;
+import com.sveta.train.carriage.passenger.*;
 
 import java.util.List;
 
@@ -33,22 +30,32 @@ public class TrainMapper {
     }
 
     public static PassengerTrain toDomain(TrainSerializationDto dto) {
-        if (dto == null) {
-            return null;
+        if (dto == null) return null;
+
+        Locomotive locomotive = LocomotiveMapper.toDomain(dto.getLocomotive());
+
+        PassengerTrain train = new PassengerTrain(dto.getTrainNumber(), locomotive);
+
+        if (dto.getCarriages() != null) {
+            dto.getCarriages().forEach(carriageDto -> {
+                Carriage carriage = switch (carriageDto) {
+                    case CoupeCarriageDto c -> new CoupeCarriage(c.getCoupes(), c.getCoupeLimit());
+                    case DiningCarriageDto d -> new DiningCarriage(
+                            d.getSeatsLimit(), d.getBaseCarriageWeightKg(),
+                            d.isHasHotKitchen(), d.isDeliveryToTheRoom(), d.getFood()
+                    );
+                    case SeatedCarriageDto s -> new SeatedCarriage(s.getSeatsLimit(), s.getBaseCarriageWeightKg());
+                    case EconomyCarriageDto e -> new EconomyCarriage(
+                            e.getSeatsLimit(), e.getBaseCarriageWeightKg(),
+                            e.isHasBioToilets()
+                    );
+                    default ->
+                            throw new IllegalArgumentException("Unsupported carriage DTO: " + carriageDto.getClass().getName());
+                };
+                train.addCarriage(carriage);
+            });
         }
 
-        Locomotive locomotive = dto.getLocomotive() != null
-                ? dto.getLocomotive().toDomain()
-                : null;
-
-        List<Carriage> carriages = dto.getCarriages().stream().map(carriageDto -> switch (carriageDto) {
-            case CoupeCarriageDto coupeDto -> coupeDto.toDomain();
-            case DiningCarriageDto diningDto -> diningDto.toDomain();
-            case SeatedCarriageDto seatedDto -> seatedDto.toDomain();
-            case EconomyCarriageDto economyDto -> economyDto.toDomain();
-            default -> throw new IllegalArgumentException("Unsupported carriage DTO type: " + carriageDto.getClass().getName());
-        }).toList();
-
-        return new PassengerTrain(dto.getTrainNumber(), locomotive, carriages);
+        return train;
     }
 }

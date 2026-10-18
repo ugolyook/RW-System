@@ -12,13 +12,15 @@ import java.util.List;
 @Setter
 @NoArgsConstructor
 public class EconomyCarriageDto extends CarriageSerializationDto {
-    private List<Seat> seats;
-    boolean hasBioToilets;
+    private int seatsLimit;
+    private boolean hasBioToilets;
+    private int baseCarriageWeightKg;
 
     public EconomyCarriageDto(EconomyCarriage carriage) {
         setSeatsLimit(carriage.getSeatsLimit());
         setWeight(carriage.getKgWeight());
-        this.seats = carriage.getSeats();
+        this.seatsLimit = carriage.getSeatsLimit();
         this.hasBioToilets = carriage.isHasBioToilets();
+        this.baseCarriageWeightKg = carriage.getKgWeight();
     }
 }
