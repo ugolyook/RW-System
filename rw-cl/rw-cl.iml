@@ -19,5 +19,6 @@
     </orderEntry>
     <orderEntry type="module" module-name="rw-serialization" exported="" />
     <orderEntry type="module" module-name="rw-serialization" />
+    <orderEntry type="library" name="Maven: org.slf4j:slf4j-api:2.0.9" level="project" />
   </component>
 </module>
