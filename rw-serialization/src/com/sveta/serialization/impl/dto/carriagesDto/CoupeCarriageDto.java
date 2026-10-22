@@ -12,12 +12,11 @@ import java.util.List;
 @NoArgsConstructor
 public class CoupeCarriageDto extends CarriageSerializationDto {
     private int coupeLimit;
-    private List<CoupeCarriage.Coupe> coupes;
+    private List<CoupeDto> coupes;
 
     public CoupeCarriageDto(CoupeCarriage carriage) {
         setSeatsLimit(carriage.getCoupeLimit());
         setWeight(carriage.getKgWeight());
         this.coupeLimit = carriage.getCoupeLimit();
-        this.coupes = carriage.getCoupes();
     }
 }

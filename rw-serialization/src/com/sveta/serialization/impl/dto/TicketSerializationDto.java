@@ -14,7 +14,7 @@ import java.math.BigDecimal;
 @Setter
 @Getter
 @NoArgsConstructor
-public class TicketDto {
+public class TicketSerializationDto {
     private String passengerName;
     private TrainRun trainRun;
     private Station departureStation;
@@ -23,7 +23,7 @@ public class TicketDto {
     private Seat seat;
     private BigDecimal price;
 
-    public TicketDto(Ticket ticket) {
+    public TicketSerializationDto(Ticket ticket) {
         this.passengerName = ticket.passengerName();
         this.trainRun = ticket.trainRun();
         this.departureStation = ticket.departureStation();

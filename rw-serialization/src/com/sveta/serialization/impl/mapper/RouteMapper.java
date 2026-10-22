@@ -1,21 +1,21 @@
 package com.sveta.serialization.impl.mapper;
 
 import com.sveta.route.Route;
-import com.sveta.serialization.impl.dto.RouteDto;
+import com.sveta.serialization.impl.dto.RouteSerializationDto;
 
 public class RouteMapper {
-    public static RouteDto toDto(Route route) {
+    public static RouteSerializationDto toDto(Route route) {
         if (route == null) {
             return null;
         }
 
-        RouteDto dto = new RouteDto();
+        RouteSerializationDto dto = new RouteSerializationDto();
          dto.setDirection(route.direction());
          dto.setStops(route.stops());
         return dto;
     }
 
-    public static Route toDomain(RouteDto dto) {
+    public static Route toDomain(RouteSerializationDto dto) {
         if (dto == null) {
             return null;
         }

@@ -12,11 +12,11 @@ import java.util.List;
 @Setter
 @Getter
 @NoArgsConstructor
-public class RouteDto {
+public class RouteSerializationDto {
     private List<Station> stops;
     private Directions direction;
 
-    public RouteDto(Route route) {
+    public RouteSerializationDto(Route route) {
         this.stops = route.stops();
         this.direction = route.direction();
     }

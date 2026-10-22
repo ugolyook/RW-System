@@ -23,8 +23,7 @@ public class TicketSearchService {
             return List.of();
         }
 
-        log.info("Starting ticket search across {} train runs with criteria: carriageType={}, bicycleRequired={}",
-                trainRuns.size(),
+        log.info("Starting ticket search across train runs with criteria: carriageType={}, bicycleRequired={}",
                 requirement.carriageType() != null ? requirement.carriageType().getSimpleName() : "ANY",
                 requirement.bicycleRequired());
 

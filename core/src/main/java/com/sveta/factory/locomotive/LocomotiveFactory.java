@@ -68,7 +68,6 @@ public class LocomotiveFactory {
 
     public Locomotive createLocomotive(LocomotiveRequirements requirements) {
         if (Objects.isNull(requirements)) {
-            log.error("Locomotive creation failed: Requirements cannot be null.");
             throw new IllegalArgumentException("Requirements cant be null...");
         }
 
@@ -86,28 +85,26 @@ public class LocomotiveFactory {
     }
 
     private Locomotive createElectricLocomotive(LocomotiveRequirements requirements) {
-        if (canCreateVL80C(requirements)) {
-            log.info("Selected electric locomotive: VL80C");
-            return createVL80C();
-        }
-
-        if (canCreateES4K(requirements)) {
-            log.info("Selected electric locomotive: ES4K (Lastochka/Sinara)");
-            return createES4K();
-        }
-
-        if (canCreateVL85(requirements)) {
-            log.info("Selected electric locomotive: VL85");
-            return createVL85();
-        }
-
-        if (canCreateEP20(requirements)) {
-            log.info("Selected electric locomotive: EP20");
-            return createEP20();
-        }
-
-        log.error("No suitable electric locomotive found for requirements: {}", requirements);
-        throw new RuntimeException("No suitable electric locomotive found for requirements: " + requirements);
+        return switch (true) {
+            case boolean _ when canCreateVL80C(requirements) -> {
+                log.info("Selected electric locomotive: VL80C");
+                yield createVL80C();
+            }
+            case boolean _ when canCreateES4K(requirements) -> {
+                log.info("Selected electric locomotive: ES4K (Lastochka/Sinara)");
+                yield createES4K();
+            }
+            case boolean _ when canCreateVL85(requirements) -> {
+                log.info("Selected electric locomotive: VL85");
+                yield createVL85();
+            }
+            case boolean _ when canCreateEP20(requirements) -> {
+                log.info("Selected electric locomotive: EP20");
+                yield createEP20();
+            }
+            default ->
+                    throw new RuntimeException("No suitable electric locomotive found for requirements: " + requirements);
+        };
     }
 
     private boolean canCreateVL80C(LocomotiveRequirements requirements) {
@@ -183,28 +180,25 @@ public class LocomotiveFactory {
     }
 
     private Locomotive createDieselLocomotive(LocomotiveRequirements requirements) {
-        if (canCreatePeresvet(requirements)) {
-            log.info("Selected diesel locomotive: Peresvet");
-            return createPeresvet();
-        }
-
-        if (canCreateTEP116(requirements)) {
-            log.info("Selected diesel locomotive: TEP116");
-            return createTEP116();
-        }
-
-        if (canCreateTEP70(requirements)) {
-            log.info("Selected diesel locomotive: TEP70");
-            return createTEP70();
-        }
-
-        if (canCreateTEM18(requirements)) {
-            log.info("Selected diesel locomotive: TEM18");
-            return createTEM18();
-        }
-
-        log.error("No suitable diesel locomotive found for requirements: {}", requirements);
-        throw new RuntimeException("No suitable diesel locomotive found for requirements: " + requirements);
+        return switch (true) {
+            case boolean _ when canCreatePeresvet(requirements) -> {
+                log.info("Selected diesel locomotive: Peresvet");
+                yield createPeresvet();
+            }
+            case boolean _ when canCreateTEP116(requirements) -> {
+                log.info("Selected diesel locomotive: TEP116");
+                yield createTEP116();
+            }
+            case boolean _ when canCreateTEP70(requirements) -> {
+                log.info("Selected diesel locomotive: TEP70");
+                yield createTEP70();
+            }
+            case boolean _ when canCreateTEM18(requirements) -> {
+                log.info("Selected diesel locomotive: TEM18");
+                yield createTEM18();
+            }
+            default -> throw new RuntimeException("No suitable diesel locomotive found for requirements: " + requirements);
+        };
     }
 
     private boolean canCreatePeresvet(LocomotiveRequirements requirements) {

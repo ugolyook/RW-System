@@ -40,10 +40,6 @@ public class TrainRun {
 
     public void addTicket(Ticket ticket) {
         if (isSeatOccupied(ticket.carriage(), ticket.seat())) {
-            log.error("Failed to add ticket for passenger '{}': Seat №{} in carriage {} is already booked!",
-                    ticket.passengerName(),
-                    ticket.seat().number(),
-                    ticket.carriage().getClass().getSimpleName());
             throw new IllegalStateException("Place" + ticket.seat().number() + " was booked");
         }
         this.tickets.add(ticket);

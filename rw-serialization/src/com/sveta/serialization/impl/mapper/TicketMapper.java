@@ -1,15 +1,15 @@
 package com.sveta.serialization.impl.mapper;
 
-import com.sveta.serialization.impl.dto.TicketDto;
+import com.sveta.serialization.impl.dto.TicketSerializationDto;
 import com.sveta.tickets.Ticket;
 
 public class TicketMapper {
-    public static TicketDto toDto(Ticket ticket) {
+    public static TicketSerializationDto toDto(Ticket ticket) {
         if (ticket == null) {
             return null;
         }
 
-        TicketDto dto = new TicketDto();
+        TicketSerializationDto dto = new TicketSerializationDto();
         dto.setArrivalStation(ticket.arrivalStation());
         dto.setCarriage(ticket.carriage());
         dto.setSeat(ticket.seat());
@@ -20,7 +20,7 @@ public class TicketMapper {
         return dto;
     }
 
-    public static Ticket toDomain(TicketDto dto) {
+    public static Ticket toDomain(TicketSerializationDto dto) {
         if (dto == null) {
             return null;
         }

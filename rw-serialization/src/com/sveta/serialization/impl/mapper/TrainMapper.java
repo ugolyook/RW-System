@@ -16,7 +16,14 @@ public class TrainMapper {
         dto.setTrainNumber(train.getTrainNumber());
         dto.setLocomotive(new LocomotiveSerializationDto(train.getLocomotive()));
 
-        List<CarriageSerializationDto> carriageDtos = train.getCarriages().stream().map(carriage -> switch (carriage) {
+        List<CarriageSerializationDto> carriageDtos = getCarriageSerializationDtos(train);
+
+        dto.setCarriages(carriageDtos);
+        return dto;
+    }
+
+    private static List<CarriageSerializationDto> getCarriageSerializationDtos(PassengerTrain train) {
+        return train.getCarriages().stream().map(carriage -> switch (carriage) {
             case CoupeCarriage coupe -> new CoupeCarriageDto(coupe);
             case DiningCarriage dining -> new DiningCarriageDto(dining);
             case SeatedCarriage seated -> new SeatedCarriageDto(seated);
@@ -24,9 +31,6 @@ public class TrainMapper {
             default ->
                     throw new IllegalArgumentException("Unsupported carriage type: " + carriage.getClass().getName());
         }).toList();
-
-        dto.setCarriages(carriageDtos);
-        return dto;
     }
 
     public static PassengerTrain toDomain(TrainSerializationDto dto) {
@@ -36,10 +40,18 @@ public class TrainMapper {
 
         PassengerTrain train = new PassengerTrain(dto.getTrainNumber(), locomotive);
 
+        getCarriagesDomainDto(dto, train);
+
+        return train;
+    }
+
+    private static void getCarriagesDomainDto(TrainSerializationDto dto, PassengerTrain train) {
         if (dto.getCarriages() != null) {
             dto.getCarriages().forEach(carriageDto -> {
                 Carriage carriage = switch (carriageDto) {
-                    case CoupeCarriageDto c -> new CoupeCarriage(c.getCoupes(), c.getCoupeLimit());
+                    case CoupeCarriageDto c -> new CoupeCarriage(
+                            c.getCoupes() != null ? c.getCoupes().size() : 0,
+                            c.getCoupeLimit());
                     case DiningCarriageDto d -> new DiningCarriage(
                             d.getSeatsLimit(), d.getBaseCarriageWeightKg(),
                             d.isHasHotKitchen(), d.isDeliveryToTheRoom(), d.getFood()
@@ -55,7 +67,5 @@ public class TrainMapper {
                 train.addCarriage(carriage);
             });
         }
-
-        return train;
     }
 }

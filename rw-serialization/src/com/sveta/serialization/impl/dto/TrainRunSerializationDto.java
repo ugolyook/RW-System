@@ -13,18 +13,18 @@ import java.util.List;
 @NoArgsConstructor
 public class TrainRunSerializationDto {
     private TrainSerializationDto train;
-    private RouteDto route;
+    private RouteSerializationDto route;
     private LocalDateTime departureTime;
-    private List<TicketDto> tickets;
+    private List<TicketSerializationDto> tickets;
     private boolean isExpress;
 
     public TrainRunSerializationDto(TrainRun trainRun) {
         this.train = trainRun.getTrain() != null ? new TrainSerializationDto(trainRun.getTrain()) : null;
-        this.route = new RouteDto(trainRun.getRoute());
+        this.route = new RouteSerializationDto(trainRun.getRoute());
         this.departureTime = trainRun.getDepartureTime();
         this.isExpress = trainRun.isExpress();
         this.tickets = trainRun.getTickets().stream()
-                .map(TicketDto::new)
+                .map(TicketSerializationDto::new)
                 .toList();
     }
 }
