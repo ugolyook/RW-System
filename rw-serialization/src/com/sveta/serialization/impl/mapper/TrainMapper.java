@@ -12,6 +12,8 @@ import java.util.List;
 
 public class TrainMapper {
     public static TrainSerializationDto toDto(PassengerTrain train) {
+        if (train == null) return null;
+
         TrainSerializationDto dto = new TrainSerializationDto();
         dto.setTrainNumber(train.getTrainNumber());
         dto.setLocomotive(new LocomotiveSerializationDto(train.getLocomotive()));
@@ -48,24 +50,28 @@ public class TrainMapper {
     private static void getCarriagesDomainDto(TrainSerializationDto dto, PassengerTrain train) {
         if (dto.getCarriages() != null) {
             dto.getCarriages().forEach(carriageDto -> {
-                Carriage carriage = switch (carriageDto) {
-                    case CoupeCarriageDto c -> new CoupeCarriage(
-                            c.getCoupes() != null ? c.getCoupes().size() : 0,
-                            c.getCoupeLimit());
-                    case DiningCarriageDto d -> new DiningCarriage(
-                            d.getSeatsLimit(), d.getBaseCarriageWeightKg(),
-                            d.isHasHotKitchen(), d.isDeliveryToTheRoom(), d.getFood()
-                    );
-                    case SeatedCarriageDto s -> new SeatedCarriage(s.getSeatsLimit(), s.getBaseCarriageWeightKg());
-                    case EconomyCarriageDto e -> new EconomyCarriage(
-                            e.getSeatsLimit(), e.getBaseCarriageWeightKg(),
-                            e.isHasBioToilets()
-                    );
-                    default ->
-                            throw new IllegalArgumentException("Unsupported carriage DTO: " + carriageDto.getClass().getName());
-                };
-                train.addCarriage(carriage);
+                buildCarriage(train, carriageDto);
             });
         }
+    }
+
+    private static void buildCarriage(PassengerTrain train, CarriageSerializationDto carriageDto) {
+        Carriage carriage = switch (carriageDto) {
+            case CoupeCarriageDto c -> new CoupeCarriage(
+                    c.getCoupes() != null ? c.getCoupes().size() : 0,
+                    c.getCoupeLimit());
+            case DiningCarriageDto d -> new DiningCarriage(
+                    d.getSeatsLimit(), d.getBaseCarriageWeightKg(),
+                    d.isHasHotKitchen(), d.isDeliveryToTheRoom(), d.getFood()
+            );
+            case SeatedCarriageDto s -> new SeatedCarriage(s.getSeatsLimit(), s.getBaseCarriageWeightKg());
+            case EconomyCarriageDto e -> new EconomyCarriage(
+                    e.getSeatsLimit(), e.getBaseCarriageWeightKg(),
+                    e.isHasBioToilets()
+            );
+            default ->
+                    throw new IllegalArgumentException("Unsupported carriage DTO: " + carriageDto.getClass().getName());
+        };
+        train.addCarriage(carriage);
     }
 }

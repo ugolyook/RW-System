@@ -4,6 +4,7 @@ import com.esotericsoftware.kryo.Kryo;
 import com.esotericsoftware.kryo.io.Input;
 import com.esotericsoftware.kryo.io.Output;
 import com.sveta.serialization.ObjectSerializer;
+import com.sveta.serialization.SuperSerializationDto;
 
 import java.io.FileInputStream;
 import java.io.FileOutputStream;
@@ -18,7 +19,7 @@ public class KryoSerializer implements ObjectSerializer {
     }
 
     @Override
-    public void save(Object object, String filePath) throws Exception {
+    public <T extends SuperSerializationDto> void save(T object, String filePath) throws Exception {
         try (Output output = new Output(new FileOutputStream(filePath))) {
             kryo.writeClassAndObject(output, object);
         }
@@ -26,7 +27,7 @@ public class KryoSerializer implements ObjectSerializer {
 
     @Override
     @SuppressWarnings("unchecked")
-    public <T> T load(String filePath, Class<T> clazz) throws Exception {
+    public <T extends SuperSerializationDto> T load(String filePath, Class<T> clazz) throws Exception {
         try (Input input = new Input(new FileInputStream(filePath))) {
             return (T) kryo.readClassAndObject(input);
         }

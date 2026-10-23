@@ -25,6 +25,8 @@ import java.util.List;
 
 public class TrainController {
     private static final Logger log = LoggerFactory.getLogger(TrainController.class);
+    private static final String STATE_FILE_PATH = System.getProperty("user.home") + "/.rw-system/train_run_state.dat";
+
     private final TicketSearchService ticketSearchService;
     private final Cashier cashier;
     private final TrainView view;
@@ -48,10 +50,10 @@ public class TrainController {
         TrainRun run = TestDataFactory.createTrainRun(train);
         view.showTrainRunInfo(run);
 
-        String filePath = StorageConfigManager.resolveFilePath("train_run_state.dat");
+        String filePath = StorageConfigManager.resolveFilePath(STATE_FILE_PATH);
         saveTrainRunState(run, filePath);
 
-        TrainRun loadedRun = loadTrainRunState("train_run_state.dat");
+        TrainRun loadedRun = loadTrainRunState(STATE_FILE_PATH);
         if (loadedRun != null) {
             log.info("TrainRun successfully loaded and mapped back to Domain model!");
         }
@@ -65,7 +67,7 @@ public class TrainController {
             if (train instanceof PassengerTrain passengerTrain) {
                 TrainSerializationDto dto = TrainMapper.toDto(passengerTrain);
                 serializer.save(dto, filename);
-                log.info("Train state successfully saved via DTO to '{}' using serializer: {}",
+                 log.info("Train state successfully saved via DTO to '{}' using serializer: {}",
                         filename, serializer.getClass().getSimpleName());
             }
         } catch (Exception e) {

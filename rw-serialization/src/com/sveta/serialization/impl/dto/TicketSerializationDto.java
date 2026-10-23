@@ -2,6 +2,7 @@ package com.sveta.serialization.impl.dto;
 
 import com.sveta.route.Station;
 import com.sveta.route.TrainRun;
+import com.sveta.serialization.SuperSerializationDto;
 import com.sveta.tickets.Ticket;
 import com.sveta.train.carriage.Carriage;
 import com.sveta.train.carriage.passenger.models.Seat;
@@ -14,7 +15,7 @@ import java.math.BigDecimal;
 @Setter
 @Getter
 @NoArgsConstructor
-public class TicketSerializationDto {
+public class TicketSerializationDto implements SuperSerializationDto {
     private String passengerName;
     private TrainRun trainRun;
     private Station departureStation;

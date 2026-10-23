@@ -4,6 +4,7 @@ import com.google.gson.*;
 import com.google.gson.stream.JsonReader;
 import com.google.gson.stream.JsonWriter;
 import com.sveta.serialization.ObjectSerializer;
+import com.sveta.serialization.SuperSerializationDto;
 import com.sveta.serialization.impl.dto.carriagesDto.*;
 
 import java.io.*;
@@ -51,14 +52,14 @@ public class JsonSerializer implements ObjectSerializer {
             .create();
 
     @Override
-    public void save(Object object, String filePath) throws Exception {
+    public <T extends SuperSerializationDto> void save(T object, String filePath) throws Exception {
         try (Writer writer = new FileWriter(filePath)) {
             gson.toJson(object, writer);
         }
     }
 
     @Override
-    public <T> T load(String filePath, Class<T> clazz) throws Exception {
+    public <T extends SuperSerializationDto> T load(String filePath, Class<T> clazz) throws Exception {
         try (Reader reader = new FileReader(filePath)) {
             return gson.fromJson(reader, clazz);
         }
