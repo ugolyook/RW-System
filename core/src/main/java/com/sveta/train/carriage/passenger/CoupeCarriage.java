@@ -25,6 +25,15 @@ public class CoupeCarriage extends PassengerCarriage implements ElectricCarriage
         this.coupes = new ArrayList<>(coupes);
     }
 
+    public CoupeCarriage(
+            int coupes,
+            int baseCarriageWeightKg
+    ) {
+        super(baseCarriageWeightKg);
+        this.coupeLimit = coupes;
+        this.coupes = new ArrayList<>(coupes);
+    }
+
     @Override
     public int getPassengerCapacity() {
         return coupeLimit * Coupe.SEATS_PER_COUPE;
@@ -49,6 +58,7 @@ public class CoupeCarriage extends PassengerCarriage implements ElectricCarriage
     public static class Coupe {
         public final static int SEATS_PER_COUPE = 4;
         private final List<Seat> seats;
+
         public Coupe() {
             this.seats = new ArrayList<>(SEATS_PER_COUPE);
         }

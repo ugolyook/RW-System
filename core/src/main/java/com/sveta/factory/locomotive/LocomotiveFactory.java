@@ -2,11 +2,14 @@ package com.sveta.factory.locomotive;
 
 import com.sveta.locomotive.Locomotive;
 import lombok.NoArgsConstructor;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import java.util.Objects;
 
 @NoArgsConstructor
 public class LocomotiveFactory {
+    private static final Logger log = LoggerFactory.getLogger(LocomotiveFactory.class);
     private static final int VL80C_WAGON_LIMIT = 80;
     private static final int VL80C_MAX_SPEED = 110;
     private static final int VL80C_MAX_TRANSPORTED_WEIGHT = 6000;
@@ -67,6 +70,13 @@ public class LocomotiveFactory {
         if (Objects.isNull(requirements)) {
             throw new IllegalArgumentException("Requirements cant be null...");
         }
+
+        log.info("Searching for a suitable locomotive. Required power: {} kW, traction: {} kN, weight: {} kg, electric: {}",
+                requirements.requiredPowerInKw(),
+                requirements.requiredTraction(),
+                requirements.totalWeightInKg(),
+                requirements.isElectric());
+
         if (requirements.isElectric()) {
             return createElectricLocomotive(requirements);
         } else {
@@ -75,23 +85,26 @@ public class LocomotiveFactory {
     }
 
     private Locomotive createElectricLocomotive(LocomotiveRequirements requirements) {
-        if (canCreateVL80C(requirements)) {
-            return createVL80C();
-        }
-
-        if (canCreateES4K(requirements)) {
-            return createES4K();
-        }
-
-        if (canCreateVL85(requirements)) {
-            return createVL85();
-        }
-
-        if (canCreateEP20(requirements)) {
-            return createEP20();
-        }
-
-        throw new RuntimeException("No suitable electric locomotive found for requirements: " + requirements);
+        return switch (true) {
+            case boolean _ when canCreateVL80C(requirements) -> {
+                log.info("Selected electric locomotive: VL80C");
+                yield createVL80C();
+            }
+            case boolean _ when canCreateES4K(requirements) -> {
+                log.info("Selected electric locomotive: ES4K (Lastochka/Sinara)");
+                yield createES4K();
+            }
+            case boolean _ when canCreateVL85(requirements) -> {
+                log.info("Selected electric locomotive: VL85");
+                yield createVL85();
+            }
+            case boolean _ when canCreateEP20(requirements) -> {
+                log.info("Selected electric locomotive: EP20");
+                yield createEP20();
+            }
+            default ->
+                    throw new RuntimeException("No suitable electric locomotive found for requirements: " + requirements);
+        };
     }
 
     private boolean canCreateVL80C(LocomotiveRequirements requirements) {
@@ -125,7 +138,8 @@ public class LocomotiveFactory {
                 VL80C_MAX_TRANSPORTED_WEIGHT,
                 VL80C_POWER,
                 VL80C_TRACTION_FORCE,
-                VL80C_IS_ELECTRIC
+                VL80C_IS_ELECTRIC,
+                "VL80C"
         );
     }
 
@@ -136,7 +150,8 @@ public class LocomotiveFactory {
                 ES4K_MAX_TRANSPORTED_WEIGHT,
                 ES4K_POWER,
                 ES4K_TRACTION_FORCE,
-                ES4K_IS_ELECTRIC
+                ES4K_IS_ELECTRIC,
+                "ES4K"
         );
     }
 
@@ -147,7 +162,8 @@ public class LocomotiveFactory {
                 VL85_MAX_TRANSPORTED_WEIGHT,
                 VL85_POWER,
                 VL85_TRACTION_FORCE,
-                VL85_IS_ELECTRIC
+                VL85_IS_ELECTRIC,
+                "VL85"
         );
     }
 
@@ -158,28 +174,31 @@ public class LocomotiveFactory {
                 EP20_MAX_TRANSPORTED_WEIGHT,
                 EP20_POWER,
                 EP20_TRACTION_FORCE,
-                EP20_IS_ELECTRIC
+                EP20_IS_ELECTRIC,
+                "EP20"
         );
     }
 
     private Locomotive createDieselLocomotive(LocomotiveRequirements requirements) {
-        if (canCreatePeresvet(requirements)) {
-            return createPeresvet();
-        }
-
-        if (canCreateTEP116(requirements)) {
-            return createTEP116();
-        }
-
-        if (canCreateTEP70(requirements)) {
-            return createTEP70();
-        }
-
-        if (canCreateTEM18(requirements)) {
-            return createTEM18();
-        }
-
-        throw new RuntimeException("No suitable diesel locomotive found for requirements: " + requirements);
+        return switch (true) {
+            case boolean _ when canCreatePeresvet(requirements) -> {
+                log.info("Selected diesel locomotive: Peresvet");
+                yield createPeresvet();
+            }
+            case boolean _ when canCreateTEP116(requirements) -> {
+                log.info("Selected diesel locomotive: TEP116");
+                yield createTEP116();
+            }
+            case boolean _ when canCreateTEP70(requirements) -> {
+                log.info("Selected diesel locomotive: TEP70");
+                yield createTEP70();
+            }
+            case boolean _ when canCreateTEM18(requirements) -> {
+                log.info("Selected diesel locomotive: TEM18");
+                yield createTEM18();
+            }
+            default -> throw new RuntimeException("No suitable diesel locomotive found for requirements: " + requirements);
+        };
     }
 
     private boolean canCreatePeresvet(LocomotiveRequirements requirements) {
@@ -213,7 +232,8 @@ public class LocomotiveFactory {
                 PERESVET_MAX_TRANSPORTED_WEIGHT,
                 PERESVET_POWER,
                 PERESVET_TRACTION_FORCE,
-                PERESVET_IS_ELECTRIC
+                PERESVET_IS_ELECTRIC,
+                "Peresvet"
         );
     }
 
@@ -224,7 +244,8 @@ public class LocomotiveFactory {
                 TEP116_MAX_TRANSPORTED_WEIGHT,
                 TEP116_POWER,
                 TEP116_TRACTION_FORCE,
-                TEP116_IS_ELECTRIC
+                TEP116_IS_ELECTRIC,
+                "TEP116"
         );
     }
 
@@ -235,7 +256,8 @@ public class LocomotiveFactory {
                 TEP70_MAX_TRANSPORTED_WEIGHT,
                 TEP70_POWER,
                 TEP70_TRACTION_FORCE,
-                TEP70_IS_ELECTRIC
+                TEP70_IS_ELECTRIC,
+                "TEP70"
         );
     }
 
@@ -246,7 +268,8 @@ public class LocomotiveFactory {
                 TEM18_MAX_TRANSPORTED_WEIGHT,
                 TEM18_POWER,
                 TEM18_TRACTION_FORCE,
-                TEM18_IS_ELECTRIC
+                TEM18_IS_ELECTRIC,
+                "TEM18"
         );
     }
 }

@@ -11,12 +11,15 @@ import com.sveta.train.Train;
 import com.sveta.train.carriage.passenger.DiningCarriage;
 import com.sveta.train.carriage.passenger.PassengerCarriage;
 import lombok.RequiredArgsConstructor;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import java.util.List;
 import java.util.concurrent.atomic.AtomicLong;
 
 @RequiredArgsConstructor
 public class PassengerTrainFactory {
+    private static final Logger log = LoggerFactory.getLogger(PassengerTrainFactory.class);
     final AtomicLong trainNumber = new AtomicLong(100);
 
     private static final double WEIGHT_TO_POWER_RATIO = 60.0;
@@ -35,6 +38,7 @@ public class PassengerTrainFactory {
     }
 
     public Train createTrain(List<Carriage> carriageList) {
+        log.info("Initiating train creation. Total carriages requested: {}", carriageList.size());
         validateAllPassengerCarriage(carriageList);
         boolean isNeedElectric = validateElectricCarriagesConsistency(carriageList);
 
@@ -46,6 +50,9 @@ public class PassengerTrainFactory {
         int requiredPower = (int) ((totalCarriagesWeightInKg / WEIGHT_TO_POWER_RATIO) * SAFETY_FACTOR);
         int requiredTractionInKg = (int) ((totalCarriagesWeightInKg / WEIGHT_TO_TRACTION_RATIO) * SAFETY_FACTOR);
         int requiredTractionInKn = (requiredTractionInKg / 100);
+
+        log.info("Train metrics computed: Weight = {} kg, Power = {} kW, Traction = {} kN, Electric = {}",
+                totalCarriagesWeightInKg, requiredPower, requiredTractionInKn, isNeedElectric);
 
         LocomotiveRequirements requirements = LocomotiveRequirements.builder()
                 .requiredPowerInKw(requiredPower)
@@ -59,10 +66,12 @@ public class PassengerTrainFactory {
         Train train = new PassengerTrain(generateTrainNumber(), locomotive);
 
         carriageList.forEach(train::addCarriage);
+        log.info("Train successfully built with assigned locomotive.(Train № {})", train.getTrainNumber());
         return train;
     }
 
     private Locomotive findSuitableLocomotive(LocomotiveRequirements requirements) {
+        log.debug("Requesting matching locomotive from LocomotiveFactory...");
         return locomotiveFactory.createLocomotive(requirements);
     }
 

@@ -6,12 +6,15 @@ import com.sveta.train.carriage.passenger.CoupeCarriage;
 import com.sveta.factory.carriage.CarriageRequirement;
 import com.sveta.train.carriage.passenger.models.Seat;
 import com.sveta.train.carriage.passenger.models.SeatType;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Objects;
 
 public class CoupeCarriageFactory implements CarriageFactory {
+    private static final Logger log = LoggerFactory.getLogger(CoupeCarriageFactory.class);
     @Override
     public Carriage build(CarriageRequirement req) {
         if (Objects.isNull(req) || !canBuild(req)) {
@@ -19,6 +22,7 @@ public class CoupeCarriageFactory implements CarriageFactory {
         }
 
         var coupeReq = (CoupeCarriageRequirement) req;
+        log.info("Start to build coupe");
         var coupes = buildCoupes();
 
         return buildCoupeCarriage(coupes, coupeReq);

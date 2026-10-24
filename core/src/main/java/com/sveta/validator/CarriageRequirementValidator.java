@@ -7,10 +7,13 @@ import com.sveta.factory.carriage.dining.DiningCarriageRequirement;
 import com.sveta.factory.carriage.economy.EconomyCarriageRequirement;
 import com.sveta.factory.carriage.seated.SeatedCarriageRequirement;
 import com.sveta.train.carriage.passenger.models.Carriages;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import java.util.List;
 
 public class CarriageRequirementValidator {
+    private static final Logger log = LoggerFactory.getLogger(CarriageRequirementValidator.class);
     private static final int MIN_WEIGHT_KG = 1_000;
     private static final int MAX_WEIGHT_KG = 100_000;
 
@@ -24,15 +27,20 @@ public class CarriageRequirementValidator {
         if (requirements == null || requirements.isEmpty()) {
             throw new RequirementExceptions.EmptyList();
         }
+        log.info("Starting validation for a batch of carriage requirements {}.", requirements.size());
         for (CarriageRequirement req : requirements) {
             validate(req);
         }
+        log.info("All carriage requirements successfully validated.");
     }
 
     public void validate(CarriageRequirement requirement) {
         if (requirement == null) {
             throw new IllegalArgumentException("Requirement object cannot be null");
         }
+
+        log.debug("Validating carriage requirement of type: {}, weight: {} kg",
+                requirement.getClass().getSimpleName(), requirement.getWeightInKg());
 
         validateCommonWeight(requirement.getWeightInKg());
 
@@ -41,7 +49,9 @@ public class CarriageRequirementValidator {
             case SeatedCarriageRequirement seatedReq -> validateSeated(seatedReq);
             case DiningCarriageRequirement diningReq -> validateDining(diningReq);
             case EconomyCarriageRequirement economyReq -> validateEconomy(economyReq);
-            default -> throw new RequirementExceptions.UnknownType(requirement.getClass().getName());
+            default ->{
+                throw new RequirementExceptions.UnknownType(requirement.getClass().getName());
+            }
         }
     }
 

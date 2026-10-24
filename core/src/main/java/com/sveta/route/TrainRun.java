@@ -6,6 +6,9 @@ import com.sveta.train.carriage.Carriage;
 import com.sveta.train.carriage.passenger.models.Seat;
 import lombok.Builder;
 import lombok.Getter;
+import lombok.Setter;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import java.time.LocalDateTime;
 import java.util.ArrayList;
@@ -14,7 +17,10 @@ import java.util.List;
 
 @Builder
 @Getter
+@Setter
 public class TrainRun {
+    private static final Logger log = LoggerFactory.getLogger(TrainRun.class);
+
     private final Train train;
     private final Route route;
     private final LocalDateTime departureTime;
@@ -37,6 +43,11 @@ public class TrainRun {
             throw new IllegalStateException("Place" + ticket.seat().number() + " was booked");
         }
         this.tickets.add(ticket);
+        log.info("Ticket successfully added to TrainRun. Passenger: '{}', Carriage: {}, Seat: №{}, Total tickets on run: {}",
+                ticket.passengerName(),
+                ticket.carriage().getClass().getSimpleName(),
+                ticket.seat() != null ? ticket.seat().number() : "N/A",
+                tickets.size());
     }
 
     public boolean isSeatOccupied(Carriage carriage, Seat seat) {
