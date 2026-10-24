@@ -10,13 +10,14 @@ public class TicketMapper {
         }
 
         TicketSerializationDto dto = new TicketSerializationDto();
-        dto.setArrivalStation(ticket.arrivalStation());
-        dto.setCarriage(ticket.carriage());
-        dto.setSeat(ticket.seat());
+
+        dto.setDepartureStation(StationMapper.toDto(ticket.departureStation()));
+        dto.setArrivalStation(StationMapper.toDto(ticket.arrivalStation()));
+        dto.setCarriage(TrainMapper.carriageToDto(ticket.carriage()));
+        dto.setSeat(SeatMapper.toDto(ticket.seat()));
+        dto.setTrainRun(ticket.trainRun() != null ? TrainRunMapper.toDto(ticket.trainRun()) : null);
         dto.setPrice(ticket.price());
         dto.setPassengerName(ticket.passengerName());
-        dto.setTrainRun(ticket.trainRun());
-        dto.setDepartureStation(ticket.departureStation());
         return dto;
     }
 
@@ -27,11 +28,11 @@ public class TicketMapper {
 
         return new Ticket(
                 dto.getPassengerName(),
-                dto.getTrainRun(),
-                dto.getDepartureStation(),
-                dto.getArrivalStation(),
-                dto.getCarriage(),
-                dto.getSeat(),
+                dto.getTrainRun() != null ? TrainRunMapper.toDomain(dto.getTrainRun()) : null,
+                StationMapper.toDomain(dto.getDepartureStation()),
+                StationMapper.toDomain(dto.getArrivalStation()),
+                TrainMapper.carriageToDomain(dto.getCarriage()),
+                SeatMapper.toDomain(dto.getSeat()),
                 dto.getPrice()
         );
     }

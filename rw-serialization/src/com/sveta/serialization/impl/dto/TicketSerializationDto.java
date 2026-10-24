@@ -1,11 +1,9 @@
 package com.sveta.serialization.impl.dto;
 
-import com.sveta.route.Station;
-import com.sveta.route.TrainRun;
 import com.sveta.serialization.SuperSerializationDto;
-import com.sveta.tickets.Ticket;
-import com.sveta.train.carriage.Carriage;
-import com.sveta.train.carriage.passenger.models.Seat;
+import com.sveta.serialization.impl.dto.carriagesDto.CarriageSerializationDto;
+import com.sveta.serialization.impl.dto.carriagesDto.SeatDto;
+import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
@@ -15,22 +13,13 @@ import java.math.BigDecimal;
 @Setter
 @Getter
 @NoArgsConstructor
+@AllArgsConstructor
 public class TicketSerializationDto implements SuperSerializationDto {
     private String passengerName;
-    private TrainRun trainRun;
-    private Station departureStation;
-    private Station arrivalStation;
-    private Carriage carriage;
-    private Seat seat;
+    private TrainRunSerializationDto trainRun;
+    private StationSerializationDto departureStation;
+    private StationSerializationDto arrivalStation;
+    private CarriageSerializationDto carriage;
+    private SeatDto seat;
     private BigDecimal price;
-
-    public TicketSerializationDto(Ticket ticket) {
-        this.passengerName = ticket.passengerName();
-        this.trainRun = ticket.trainRun();
-        this.departureStation = ticket.departureStation();
-        this.arrivalStation = ticket.arrivalStation();
-        this.carriage = ticket.carriage();
-        this.seat = ticket.seat();
-        this.price = ticket.price();
-    }
 }

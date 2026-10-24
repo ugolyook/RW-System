@@ -1,7 +1,7 @@
 package com.sveta.serialization.impl.dto;
 
-import com.sveta.locomotive.Locomotive;
 import com.sveta.serialization.SuperSerializationDto;
+import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
@@ -9,6 +9,7 @@ import lombok.Setter;
 @Setter
 @Getter
 @NoArgsConstructor
+@AllArgsConstructor
 public class LocomotiveSerializationDto implements SuperSerializationDto {
     private int wagonLimit;
     private int maxSpeed;
@@ -18,15 +19,4 @@ public class LocomotiveSerializationDto implements SuperSerializationDto {
     private double weight;
     private boolean isElectric;
     private String model;
-
-    public LocomotiveSerializationDto(Locomotive locomotive) {
-        this.wagonLimit = locomotive.wagonLimit();
-        this.maxSpeed = locomotive.maxSpeed();
-        this.maxTransportedWeight = locomotive.maxTransportedWeight();
-        this.power = locomotive.power();
-        this.traction = locomotive.tractionForce();
-        this.weight = locomotive.maxTransportedWeight();
-        this.isElectric = locomotive.electric();
-        this.model = locomotive.model();
-    }
 }
