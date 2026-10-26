@@ -2,10 +2,12 @@ package com.sveta.serialization.impl.mapper;
 
 import com.sveta.locomotive.Locomotive;
 import com.sveta.serialization.impl.dto.LocomotiveSerializationDto;
+import lombok.Builder;
+import lombok.NonNull;
 
+@Builder
 public class LocomotiveMapper {
-    public static LocomotiveSerializationDto toDto(Locomotive locomotive) {
-        if (locomotive == null) return null;
+    public static LocomotiveSerializationDto toDto(@NonNull Locomotive locomotive) {
         LocomotiveSerializationDto dto = new LocomotiveSerializationDto();
         dto.setWagonLimit(locomotive.wagonLimit());
         dto.setMaxSpeed(locomotive.maxSpeed());
@@ -18,8 +20,7 @@ public class LocomotiveMapper {
         return dto;
     }
 
-    public static Locomotive toDomain(LocomotiveSerializationDto dto) {
-        if (dto == null) return null;
+    public static @NonNull Locomotive toDomain(@NonNull LocomotiveSerializationDto dto) {
         return new Locomotive(
                 dto.getWagonLimit(),
                 dto.getMaxSpeed(),

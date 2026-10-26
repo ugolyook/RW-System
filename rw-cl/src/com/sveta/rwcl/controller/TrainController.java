@@ -5,7 +5,7 @@ import com.sveta.factory.carriage.BaseCarriageFactory;
 import com.sveta.factory.train.PassengerTrainFactory;
 import com.sveta.route.Station;
 import com.sveta.route.TrainRun;
-import com.sveta.serialization.TrainRunStorageService;
+import com.sveta.serialization.impl.config.TrainRunStorageService;
 import com.sveta.serialization.impl.config.StorageConfigManager;
 import com.sveta.tickets.*;
 import com.sveta.tickets.calculate.BaseTicketPriceCalculator;

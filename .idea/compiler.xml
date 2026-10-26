@@ -13,5 +13,8 @@
         <module name="rw-system" />
       </profile>
     </annotationProcessing>
+    <bytecodeTargetLevel>
+      <module name="rw-system" target="21" />
+    </bytecodeTargetLevel>
   </component>
 </project>

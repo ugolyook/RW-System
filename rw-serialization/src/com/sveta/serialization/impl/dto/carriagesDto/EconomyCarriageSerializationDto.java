@@ -5,13 +5,11 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 
-import java.util.List;
-
 @Getter
 @Setter
 @NoArgsConstructor
 @AllArgsConstructor
-public class SeatedCarriageDto extends CarriageSerializationDto {
-    private List<SeatDto> seats;
+public class EconomyCarriageSerializationDto extends CarriageSerializationDto {
+    private boolean hasBioToilets;
     private int baseCarriageWeightKg;
 }

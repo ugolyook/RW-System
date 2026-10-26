@@ -2,7 +2,7 @@ package storage;
 
 import com.sveta.route.TrainRun;
 import com.sveta.serialization.ObjectSerializer;
-import com.sveta.serialization.TrainRunStorageService;
+import com.sveta.serialization.impl.config.TrainRunStorageService;
 import com.sveta.serialization.impl.dto.TrainRunSerializationDto;
 import com.sveta.serialization.impl.mapper.TrainRunMapper;
 

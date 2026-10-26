@@ -5,6 +5,8 @@
       <module fileurl="file://$PROJECT_DIR$/core/core.iml" filepath="$PROJECT_DIR$/core/core.iml" />
       <module fileurl="file://$PROJECT_DIR$/rw-cl/rw-cl.iml" filepath="$PROJECT_DIR$/rw-cl/rw-cl.iml" />
       <module fileurl="file://$PROJECT_DIR$/rw-serialization/rw-serialization.iml" filepath="$PROJECT_DIR$/rw-serialization/rw-serialization.iml" />
+      <module fileurl="file://$PROJECT_DIR$/rw-system.iml" filepath="$PROJECT_DIR$/rw-system.iml" />
+      <module fileurl="file://$PROJECT_DIR$/rw-utils/rw-utils.iml" filepath="$PROJECT_DIR$/rw-utils/rw-utils.iml" />
     </modules>
   </component>
 </project>

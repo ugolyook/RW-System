@@ -2,7 +2,7 @@ package com.sveta.serialization.impl.dto;
 
 import com.sveta.serialization.SuperSerializationDto;
 import com.sveta.serialization.impl.dto.carriagesDto.CarriageSerializationDto;
-import com.sveta.serialization.impl.dto.carriagesDto.SeatDto;
+import com.sveta.serialization.impl.dto.carriagesDto.SeatSerializationDto;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -20,6 +20,6 @@ public class TicketSerializationDto implements SuperSerializationDto {
     private StationSerializationDto departureStation;
     private StationSerializationDto arrivalStation;
     private CarriageSerializationDto carriage;
-    private SeatDto seat;
+    private SeatSerializationDto seat;
     private BigDecimal price;
 }

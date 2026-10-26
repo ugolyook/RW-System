@@ -12,7 +12,7 @@ import java.util.List;
 @Setter
 @NoArgsConstructor
 @AllArgsConstructor
-public class DiningCarriageDto extends CarriageSerializationDto {
+public class DiningCarriageSerializationDto extends CarriageSerializationDto {
     private int baseCarriageWeightKg;
     private boolean hasHotKitchen;
     private boolean deliveryToTheRoom;

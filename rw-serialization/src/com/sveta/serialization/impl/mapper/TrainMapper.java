@@ -6,42 +6,44 @@ import com.sveta.serialization.impl.dto.carriagesDto.*;
 import com.sveta.train.PassengerTrain;
 import com.sveta.train.carriage.Carriage;
 import com.sveta.train.carriage.passenger.*;
+import lombok.Builder;
+import lombok.NonNull;
 
 import java.util.List;
 
-public class TrainMapper {
-    public static TrainSerializationDto toDto(PassengerTrain train) {
-        if (train == null) return null;
+import static main.java.com.sveta.utils.ObjectUtils.applyIfNotNull;
 
+@Builder
+public class TrainMapper {
+    public static TrainSerializationDto toDto(@NonNull PassengerTrain train) {
         TrainSerializationDto dto = new TrainSerializationDto();
         dto.setTrainNumber(train.getTrainNumber());
 
-        dto.setLocomotive(LocomotiveMapper.toDto(train.getLocomotive()));
-        List<CarriageSerializationDto> carriageDtos = train.getCarriages().stream()
-                .map(TrainMapper::carriageToDto)
-                .toList();
+        dto.setLocomotive(applyIfNotNull(train.getLocomotive(), LocomotiveMapper::toDto));
+        dto.setCarriages(applyIfNotNull(train.getCarriages(), carriages ->
+                carriages.stream()
+                        .map(TrainMapper::carriageToDto)
+                        .toList()
+        ));
 
-        dto.setCarriages(carriageDtos);
         return dto;
     }
 
-    public static CarriageSerializationDto carriageToDto(Carriage carriage) {
-        if (carriage == null) return null;
-
+    public static CarriageSerializationDto carriageToDto(@NonNull Carriage carriage) {
         return getCarriageSerializationDto(carriage);
     }
 
     private static CarriageSerializationDto getCarriageSerializationDto(Carriage carriage) {
         return switch (carriage) {
             case CoupeCarriage coupe -> {
-                CoupeCarriageDto dto = new CoupeCarriageDto();
+                CoupeCarriageSerializationDto dto = new CoupeCarriageSerializationDto();
                 dto.setSeatsLimit(coupe.getCoupeLimit());
                 dto.setWeight(coupe.getKgWeight());
                 dto.setCoupeLimit(coupe.getCoupeLimit());
                 yield dto;
             }
             case DiningCarriage dining -> {
-                DiningCarriageDto dto = new DiningCarriageDto();
+                DiningCarriageSerializationDto dto = new DiningCarriageSerializationDto();
                 dto.setSeatsLimit(dining.getSeatsLimit());
                 dto.setWeight(dining.getKgWeight());
                 dto.setBaseCarriageWeightKg(dining.getKgWeight());
@@ -51,14 +53,14 @@ public class TrainMapper {
                 yield dto;
             }
             case SeatedCarriage seated -> {
-                SeatedCarriageDto dto = new SeatedCarriageDto();
+                SeatedCarriageSerializationDto dto = new SeatedCarriageSerializationDto();
                 dto.setSeatsLimit(seated.getSeatsLimit());
                 dto.setWeight(seated.getKgWeight());
                 dto.setBaseCarriageWeightKg(seated.getKgWeight());
                 yield dto;
             }
             case EconomyCarriage economy -> {
-                EconomyCarriageDto dto = new EconomyCarriageDto();
+                EconomyCarriageSerializationDto dto = new EconomyCarriageSerializationDto();
                 dto.setSeatsLimit(economy.getSeatsLimit());
                 dto.setWeight(economy.getKgWeight());
                 dto.setHasBioToilets(economy.isHasBioToilets());
@@ -70,9 +72,7 @@ public class TrainMapper {
         };
     }
 
-    public static PassengerTrain toDomain(TrainSerializationDto dto) {
-        if (dto == null) return null;
-
+    public static @NonNull PassengerTrain toDomain(@NonNull TrainSerializationDto dto) {
         Locomotive locomotive = LocomotiveMapper.toDomain(dto.getLocomotive());
         PassengerTrain train = new PassengerTrain(dto.getTrainNumber(), locomotive);
 
@@ -84,22 +84,23 @@ public class TrainMapper {
         return train;
     }
 
-    public static Carriage carriageToDomain(CarriageSerializationDto carriageDto) {
+    public static @NonNull Carriage carriageToDomain(@NonNull CarriageSerializationDto carriageDto) {
         return switch (carriageDto) {
-            case CoupeCarriageDto c -> new CoupeCarriage(
+            case CoupeCarriageSerializationDto c -> new CoupeCarriage(
                     c.getCoupes() != null ? c.getCoupes().size() : 0,
                     c.getCoupeLimit()
             );
-            case DiningCarriageDto d -> new DiningCarriage(
+            case DiningCarriageSerializationDto d -> new DiningCarriage(
                     d.getSeatsLimit(), d.getBaseCarriageWeightKg(),
                     d.isHasHotKitchen(), d.isDeliveryToTheRoom(), d.getFood()
             );
-            case SeatedCarriageDto s -> new SeatedCarriage(s.getSeatsLimit(), s.getBaseCarriageWeightKg());
-            case EconomyCarriageDto e -> new EconomyCarriage(
+            case SeatedCarriageSerializationDto s -> new SeatedCarriage(s.getSeatsLimit(), s.getBaseCarriageWeightKg());
+            case EconomyCarriageSerializationDto e -> new EconomyCarriage(
                     e.getSeatsLimit(), e.getBaseCarriageWeightKg(),
                     e.isHasBioToilets()
             );
-            default -> throw new IllegalArgumentException("Unsupported carriage DTO: " + carriageDto.getClass().getName());
+            default ->
+                    throw new IllegalArgumentException("Unsupported carriage DTO: " + carriageDto.getClass().getName());
         };
     }
 }

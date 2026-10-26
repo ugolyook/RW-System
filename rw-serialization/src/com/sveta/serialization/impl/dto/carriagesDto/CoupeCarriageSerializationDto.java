@@ -7,10 +7,12 @@ import lombok.Setter;
 
 import java.util.List;
 
-@AllArgsConstructor
-@Setter
 @Getter
+@Setter
 @NoArgsConstructor
-public class CoupeDto extends CarriageSerializationDto {
-    private List<SeatDto> seats;
+@AllArgsConstructor
+public class CoupeCarriageSerializationDto extends CarriageSerializationDto {
+    private int coupeLimit;
+    private List<CoupeSerializationDto> coupes;
+
 }
