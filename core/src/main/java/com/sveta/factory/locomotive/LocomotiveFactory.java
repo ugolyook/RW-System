@@ -2,11 +2,14 @@ package com.sveta.factory.locomotive;
 
 import com.sveta.locomotive.Locomotive;
 import lombok.NoArgsConstructor;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import java.util.Objects;
 
 @NoArgsConstructor
 public class LocomotiveFactory {
+    private static final Logger log = LoggerFactory.getLogger(LocomotiveFactory.class);
     private static final int VL80C_WAGON_LIMIT = 80;
     private static final int VL80C_MAX_SPEED = 110;
     private static final int VL80C_MAX_TRANSPORTED_WEIGHT = 6000;
@@ -65,8 +68,16 @@ public class LocomotiveFactory {
 
     public Locomotive createLocomotive(LocomotiveRequirements requirements) {
         if (Objects.isNull(requirements)) {
+            log.error("Locomotive creation failed: Requirements cannot be null.");
             throw new IllegalArgumentException("Requirements cant be null...");
         }
+
+        log.info("Searching for a suitable locomotive. Required power: {} kW, traction: {} kN, weight: {} kg, electric: {}",
+                requirements.requiredPowerInKw(),
+                requirements.requiredTraction(),
+                requirements.totalWeightInKg(),
+                requirements.isElectric());
+
         if (requirements.isElectric()) {
             return createElectricLocomotive(requirements);
         } else {
@@ -76,21 +87,26 @@ public class LocomotiveFactory {
 
     private Locomotive createElectricLocomotive(LocomotiveRequirements requirements) {
         if (canCreateVL80C(requirements)) {
+            log.info("Selected electric locomotive: VL80C");
             return createVL80C();
         }
 
         if (canCreateES4K(requirements)) {
+            log.info("Selected electric locomotive: ES4K (Lastochka/Sinara)");
             return createES4K();
         }
 
         if (canCreateVL85(requirements)) {
+            log.info("Selected electric locomotive: VL85");
             return createVL85();
         }
 
         if (canCreateEP20(requirements)) {
+            log.info("Selected electric locomotive: EP20");
             return createEP20();
         }
 
+        log.error("No suitable electric locomotive found for requirements: {}", requirements);
         throw new RuntimeException("No suitable electric locomotive found for requirements: " + requirements);
     }
 
@@ -164,21 +180,26 @@ public class LocomotiveFactory {
 
     private Locomotive createDieselLocomotive(LocomotiveRequirements requirements) {
         if (canCreatePeresvet(requirements)) {
+            log.info("Selected diesel locomotive: Peresvet");
             return createPeresvet();
         }
 
         if (canCreateTEP116(requirements)) {
+            log.info("Selected diesel locomotive: TEP116");
             return createTEP116();
         }
 
         if (canCreateTEP70(requirements)) {
+            log.info("Selected diesel locomotive: TEP70");
             return createTEP70();
         }
 
         if (canCreateTEM18(requirements)) {
+            log.info("Selected diesel locomotive: TEM18");
             return createTEM18();
         }
 
+        log.error("No suitable diesel locomotive found for requirements: {}", requirements);
         throw new RuntimeException("No suitable diesel locomotive found for requirements: " + requirements);
     }
 

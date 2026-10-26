@@ -1,5 +1,6 @@
-package com.sveta;
+package com.sveta.rwcl.controller;
 
+import com.sveta.TestDataFactory;
 import com.sveta.factory.carriage.BaseCarriageFactory;
 import com.sveta.factory.train.PassengerTrainFactory;
 import com.sveta.route.Station;
@@ -9,25 +10,16 @@ import com.sveta.tickets.calculate.BaseTicketPriceCalculator;
 import com.sveta.train.Train;
 import com.sveta.train.carriage.Carriage;
 import com.sveta.train.carriage.passenger.CoupeCarriage;
-import com.sveta.train.formatter.BaseTrainInfoFormatter;
-import com.sveta.train.formatter.ConsoleTrainView;
-import com.sveta.train.formatter.TrainView;
+import com.sveta.view.TrainView;
 
 import java.util.List;
 
-public class Main {
-
+public class TrainController {
     private final TicketSearchService ticketSearchService;
     private final Cashier cashier;
     private final TrainView view;
 
-     static void main(String[] args) {
-        TrainView view = new ConsoleTrainView(new BaseTrainInfoFormatter());
-        Main app = new Main(view);
-        app.run();
-    }
-
-    public Main(TrainView view) {
+    public TrainController(TrainView view) {
         this.view = view;
         this.ticketSearchService = new TicketSearchService();
         this.cashier = new Cashier(new BaseTicketPriceCalculator());
@@ -79,7 +71,7 @@ public class Main {
     }
 
     private Station findStationByCode(TrainRun run, int code) {
-        return run.getRoute().getStops().stream()
+        return run.getRoute().stops().stream()
                 .filter(s -> s.code() == code)
                 .findFirst()
                 .orElseThrow(() ->

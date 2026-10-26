@@ -7,17 +7,20 @@ import com.sveta.factory.carriage.CarriageRequirement;
 import com.sveta.factory.carriage.CarriageFactory;
 import com.sveta.train.carriage.passenger.models.Seat;
 import com.sveta.train.carriage.passenger.models.SeatType;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import java.util.Objects;
 
 public class SeatedCarriageFactory implements CarriageFactory {
+    private static final Logger log = LoggerFactory.getLogger(SeatedCarriageFactory.class);
     @Override
     public Carriage build(CarriageRequirement req) {
         if (Objects.isNull(req) || !canBuild(req)) {
             return null;
         }
         var seatedReq = (SeatedCarriageRequirement) req;
-
+        log.info("Start to build seated carriage");
         return createCarriage(seatedReq);
     }
 

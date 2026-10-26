@@ -7,10 +7,13 @@ import com.sveta.factory.carriage.dining.DiningCarriageRequirement;
 import com.sveta.factory.carriage.economy.EconomyCarriageRequirement;
 import com.sveta.factory.carriage.seated.SeatedCarriageRequirement;
 import com.sveta.train.carriage.passenger.models.Carriages;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import java.util.List;
 
 public class CarriageRequirementValidator {
+    private static final Logger log = LoggerFactory.getLogger(CarriageRequirementValidator.class);
     private static final int MIN_WEIGHT_KG = 1_000;
     private static final int MAX_WEIGHT_KG = 100_000;
 
@@ -22,17 +25,24 @@ public class CarriageRequirementValidator {
 
     public void validateAll(List<CarriageRequirement> requirements) {
         if (requirements == null || requirements.isEmpty()) {
+            log.error("Validation failed: Requirements list is null or empty.");
             throw new RequirementExceptions.EmptyList();
         }
+        log.info("Starting validation for a batch of {} carriage requirements.", requirements.size());
         for (CarriageRequirement req : requirements) {
             validate(req);
         }
+        log.info("All carriage requirements successfully validated.");
     }
 
     public void validate(CarriageRequirement requirement) {
         if (requirement == null) {
+            log.error("Validation failed: Requirement object cannot be null.");
             throw new IllegalArgumentException("Requirement object cannot be null");
         }
+
+        log.debug("Validating carriage requirement of type: {}, weight: {} kg",
+                requirement.getClass().getSimpleName(), requirement.getWeightInKg());
 
         validateCommonWeight(requirement.getWeightInKg());
 
@@ -41,21 +51,29 @@ public class CarriageRequirementValidator {
             case SeatedCarriageRequirement seatedReq -> validateSeated(seatedReq);
             case DiningCarriageRequirement diningReq -> validateDining(diningReq);
             case EconomyCarriageRequirement economyReq -> validateEconomy(economyReq);
-            default -> throw new RequirementExceptions.UnknownType(requirement.getClass().getName());
+            default ->{
+                log.error("Validation failed: Unknown carriage requirement type: {}", requirement.getClass().getName());
+                throw new RequirementExceptions.UnknownType(requirement.getClass().getName());
+            }
         }
     }
 
     private void validateCommonWeight(int weightInKg) {
         if (weightInKg < MIN_WEIGHT_KG || weightInKg > MAX_WEIGHT_KG) {
+            log.error("Validation failed: Weight {} kg is out of allowed bounds [{}, {}]",
+                    weightInKg, MIN_WEIGHT_KG, MAX_WEIGHT_KG);
             throw new RequirementExceptions.OutOfTheWeightException(MIN_WEIGHT_KG, MAX_WEIGHT_KG, weightInKg);
         }
     }
 
     private void validateCoupe(CoupeCarriageRequirement req) {
         if (req.coupeRequirements() == null || req.coupeRequirements().isEmpty()) {
+            log.error("Validation failed: Coupe requirements list is null or empty.");
             throw new RequirementExceptions.EmptyCoupeListException();
         }
         if (req.coupeRequirements().size() > MAX_COUPE_COUNT) {
+            log.error("Validation failed: Coupe count {} exceeds maximum allowed limit of {}",
+                    req.coupeRequirements().size(), MAX_COUPE_COUNT);
             throw new RequirementExceptions.InvalidSeatsCountException(
                     Carriages.COUPE,
                     MIN_SEATS,
@@ -67,6 +85,8 @@ public class CarriageRequirementValidator {
 
     private void validateSeated(SeatedCarriageRequirement req) {
         if (req.placeNumbers() <= 0 || req.placeNumbers() > MAX_SEATED_PLACES) {
+            log.error("Validation failed: Seated carriage place count {} is out of range [{}, {}]",
+                    req.placeNumbers(), MIN_SEATS, MAX_SEATED_PLACES);
             throw new RequirementExceptions.InvalidSeatsCountException(
                     Carriages.SEATED,
                     MIN_SEATS,
@@ -78,6 +98,8 @@ public class CarriageRequirementValidator {
 
     private void validateDining(DiningCarriageRequirement req) {
         if (req.seatsLimit() <= 0 || req.seatsLimit() > MAX_DINING_SEATS) {
+            log.error("Validation failed: Dining carriage seats limit {} is out of range [{}, {}]",
+                    req.seatsLimit(), MIN_SEATS, MAX_DINING_SEATS);
             throw new RequirementExceptions.InvalidSeatsCountException(
                     Carriages.DINING,
                     MIN_SEATS,
@@ -85,12 +107,15 @@ public class CarriageRequirementValidator {
                     req.seatsLimit());
         }
         if (req.food() == null) {
+            log.error("Validation failed: Dining carriage is missing food items.");
             throw new RequirementExceptions.MissingFoodException();
         }
     }
 
     private void validateEconomy(EconomyCarriageRequirement req) {
         if (req.seatsLimit() <= 0 || req.seatsLimit() > MAX_ECONOMY_SEATS) {
+            log.error("Validation failed: Economy carriage seats limit {} is out of range [{}, {}]",
+                    req.seatsLimit(), MIN_SEATS, MAX_ECONOMY_SEATS);
             throw new RequirementExceptions.InvalidSeatsCountException(
                     Carriages.ECONOMY,
                     MIN_SEATS,
