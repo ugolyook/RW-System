@@ -5,15 +5,10 @@ import com.sveta.factory.carriage.BaseCarriageFactory;
 import com.sveta.factory.train.PassengerTrainFactory;
 import com.sveta.route.Station;
 import com.sveta.route.TrainRun;
-import com.sveta.serialization.ObjectSerializer;
+import com.sveta.serialization.TrainRunStorageService;
 import com.sveta.serialization.impl.config.StorageConfigManager;
-import com.sveta.serialization.impl.dto.TrainRunSerializationDto;
-import com.sveta.serialization.impl.dto.TrainSerializationDto;
-import com.sveta.serialization.impl.mapper.TrainMapper;
-import com.sveta.serialization.impl.mapper.TrainRunMapper;
 import com.sveta.tickets.*;
 import com.sveta.tickets.calculate.BaseTicketPriceCalculator;
-import com.sveta.train.PassengerTrain;
 import com.sveta.train.Train;
 import com.sveta.train.carriage.Carriage;
 import com.sveta.train.carriage.passenger.CoupeCarriage;
@@ -30,11 +25,11 @@ public class TrainController {
     private final TicketSearchService ticketSearchService;
     private final Cashier cashier;
     private final TrainView view;
-    private final ObjectSerializer serializer;
+    private final TrainRunStorageService storageService;
 
-    public TrainController(TrainView view, ObjectSerializer serializer) {
+    public TrainController(TrainView view, TrainRunStorageService storageService) {
         this.view = view;
-        this.serializer = serializer;
+        this.storageService = storageService;
         this.ticketSearchService = new TicketSearchService();
         this.cashier = new Cashier(new BaseTicketPriceCalculator());
     }
@@ -62,25 +57,10 @@ public class TrainController {
         log.info("TrainController workflow finished successfully.");
     }
 
-    private void saveTrainState(Train train, String filename) {
-        try {
-            if (train instanceof PassengerTrain passengerTrain) {
-                TrainSerializationDto dto = TrainMapper.toDto(passengerTrain);
-                serializer.save(dto, filename);
-                 log.info("Train state successfully saved via DTO to '{}' using serializer: {}",
-                        filename, serializer.getClass().getSimpleName());
-            }
-        } catch (Exception e) {
-            log.error("Error saving train state to '{}': {}", filename, e.getMessage(), e);
-        }
-    }
-
     private void saveTrainRunState(TrainRun run, String filename) {
         try {
-            TrainRunSerializationDto dto = TrainRunMapper.toDto(run);
-            serializer.save(dto, filename);
-            log.info("TrainRun state successfully saved via DTO to '{}' using serializer: {}",
-                    filename, serializer.getClass().getSimpleName());
+            storageService.save(run, filename);
+            log.info("TrainRun state successfully saved to '{}'", filename);
         } catch (Exception e) {
             log.error("Error saving train run state to '{}': {}", filename, e.getMessage(), e);
         }
@@ -88,9 +68,8 @@ public class TrainController {
 
     private TrainRun loadTrainRunState(String filename) {
         try {
-            TrainRunSerializationDto dto = serializer.load(filename, TrainRunSerializationDto.class);
-            log.info("TrainRun DTO successfully loaded from '{}', mapping to domain model...", filename);
-            return TrainRunMapper.toDomain(dto);
+            log.info("Loading TrainRun from '{}'...", filename);
+            return storageService.load(filename);
         } catch (Exception e) {
             log.error("Error loading train run state from '{}': {}", filename, e.getMessage(), e);
             return null;
