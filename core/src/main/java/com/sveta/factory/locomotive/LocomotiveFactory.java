@@ -5,7 +5,10 @@ import lombok.NoArgsConstructor;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import java.util.List;
 import java.util.Objects;
+import java.util.function.Predicate;
+import java.util.function.Supplier;
 
 @NoArgsConstructor
 public class LocomotiveFactory {
@@ -66,9 +69,15 @@ public class LocomotiveFactory {
     private static final int TEM18_TRACTION_FORCE = 120;
     private static final boolean TEM18_IS_ELECTRIC = false;
 
+    private record LocomotiveRule(
+            Predicate<LocomotiveRequirements> validator,
+            String name,
+            Supplier<Locomotive> creator
+    ) {
+    }
+
     public Locomotive createLocomotive(LocomotiveRequirements requirements) {
         if (Objects.isNull(requirements)) {
-            log.error("Locomotive creation failed: Requirements cannot be null.");
             throw new IllegalArgumentException("Requirements cant be null...");
         }
 
@@ -86,28 +95,14 @@ public class LocomotiveFactory {
     }
 
     private Locomotive createElectricLocomotive(LocomotiveRequirements requirements) {
-        if (canCreateVL80C(requirements)) {
-            log.info("Selected electric locomotive: VL80C");
-            return createVL80C();
-        }
+        List<LocomotiveRule> rules = List.of(
+                new LocomotiveRule(this::canCreateVL80C, "VL80C", this::createVL80C),
+                new LocomotiveRule(this::canCreateES4K, "ES4K (Lastochka/Sinara)", this::createES4K),
+                new LocomotiveRule(this::canCreateVL85, "VL85", this::createVL85),
+                new LocomotiveRule(this::canCreateEP20, "EP20", this::createEP20)
+        );
 
-        if (canCreateES4K(requirements)) {
-            log.info("Selected electric locomotive: ES4K (Lastochka/Sinara)");
-            return createES4K();
-        }
-
-        if (canCreateVL85(requirements)) {
-            log.info("Selected electric locomotive: VL85");
-            return createVL85();
-        }
-
-        if (canCreateEP20(requirements)) {
-            log.info("Selected electric locomotive: EP20");
-            return createEP20();
-        }
-
-        log.error("No suitable electric locomotive found for requirements: {}", requirements);
-        throw new RuntimeException("No suitable electric locomotive found for requirements: " + requirements);
+        return evaluateRules(rules, requirements, "electric");
     }
 
     private boolean canCreateVL80C(LocomotiveRequirements requirements) {
@@ -141,7 +136,8 @@ public class LocomotiveFactory {
                 VL80C_MAX_TRANSPORTED_WEIGHT,
                 VL80C_POWER,
                 VL80C_TRACTION_FORCE,
-                VL80C_IS_ELECTRIC
+                VL80C_IS_ELECTRIC,
+                "VL80C"
         );
     }
 
@@ -152,7 +148,8 @@ public class LocomotiveFactory {
                 ES4K_MAX_TRANSPORTED_WEIGHT,
                 ES4K_POWER,
                 ES4K_TRACTION_FORCE,
-                ES4K_IS_ELECTRIC
+                ES4K_IS_ELECTRIC,
+                "ES4K"
         );
     }
 
@@ -163,7 +160,8 @@ public class LocomotiveFactory {
                 VL85_MAX_TRANSPORTED_WEIGHT,
                 VL85_POWER,
                 VL85_TRACTION_FORCE,
-                VL85_IS_ELECTRIC
+                VL85_IS_ELECTRIC,
+                "VL85"
         );
     }
 
@@ -174,33 +172,29 @@ public class LocomotiveFactory {
                 EP20_MAX_TRANSPORTED_WEIGHT,
                 EP20_POWER,
                 EP20_TRACTION_FORCE,
-                EP20_IS_ELECTRIC
+                EP20_IS_ELECTRIC,
+                "EP20"
         );
     }
 
     private Locomotive createDieselLocomotive(LocomotiveRequirements requirements) {
-        if (canCreatePeresvet(requirements)) {
-            log.info("Selected diesel locomotive: Peresvet");
-            return createPeresvet();
-        }
+        List<LocomotiveRule> rules = List.of(
+                new LocomotiveRule(this::canCreatePeresvet, "Peresvet", this::createPeresvet),
+                new LocomotiveRule(this::canCreateTEP116, "TEP116", this::createTEP116),
+                new LocomotiveRule(this::canCreateTEP70, "TEP70", this::createTEP70),
+                new LocomotiveRule(this::canCreateTEM18, "TEM18", this::createTEM18)
+        );
 
-        if (canCreateTEP116(requirements)) {
-            log.info("Selected diesel locomotive: TEP116");
-            return createTEP116();
-        }
+        return evaluateRules(rules, requirements, "diesel");
+    }
 
-        if (canCreateTEP70(requirements)) {
-            log.info("Selected diesel locomotive: TEP70");
-            return createTEP70();
-        }
-
-        if (canCreateTEM18(requirements)) {
-            log.info("Selected diesel locomotive: TEM18");
-            return createTEM18();
-        }
-
-        log.error("No suitable diesel locomotive found for requirements: {}", requirements);
-        throw new RuntimeException("No suitable diesel locomotive found for requirements: " + requirements);
+    private Locomotive evaluateRules(List<LocomotiveRule> rules, LocomotiveRequirements requirements, String type) {
+        return rules.stream()
+                .filter(rule -> rule.validator().test(requirements))
+                .peek(rule -> log.info("Selected {} locomotive: {}", type, rule.name()))
+                .map(rule -> rule.creator().get())
+                .findFirst()
+                .orElseThrow(() -> new RuntimeException("No suitable " + type + " locomotive found for requirements: " + requirements));
     }
 
     private boolean canCreatePeresvet(LocomotiveRequirements requirements) {
@@ -234,7 +228,8 @@ public class LocomotiveFactory {
                 PERESVET_MAX_TRANSPORTED_WEIGHT,
                 PERESVET_POWER,
                 PERESVET_TRACTION_FORCE,
-                PERESVET_IS_ELECTRIC
+                PERESVET_IS_ELECTRIC,
+                "Peresvet"
         );
     }
 
@@ -245,7 +240,8 @@ public class LocomotiveFactory {
                 TEP116_MAX_TRANSPORTED_WEIGHT,
                 TEP116_POWER,
                 TEP116_TRACTION_FORCE,
-                TEP116_IS_ELECTRIC
+                TEP116_IS_ELECTRIC,
+                "TEP116"
         );
     }
 
@@ -256,7 +252,8 @@ public class LocomotiveFactory {
                 TEP70_MAX_TRANSPORTED_WEIGHT,
                 TEP70_POWER,
                 TEP70_TRACTION_FORCE,
-                TEP70_IS_ELECTRIC
+                TEP70_IS_ELECTRIC,
+                "TEP70"
         );
     }
 
@@ -267,7 +264,8 @@ public class LocomotiveFactory {
                 TEM18_MAX_TRANSPORTED_WEIGHT,
                 TEM18_POWER,
                 TEM18_TRACTION_FORCE,
-                TEM18_IS_ELECTRIC
+                TEM18_IS_ELECTRIC,
+                "TEM18"
         );
     }
 }

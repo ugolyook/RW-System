@@ -80,13 +80,13 @@ public class TestDataFactory {
         );
 
         List<Carriage> carriages = factory.createAll(List.of(coupeCarriageReq1, seatedReq, diningReq, economyReq));
-        log.info("Successfully created {} test carriages via BaseCarriageFactory.", carriages.size());
+        log.info("Successfully created size test carriages via BaseCarriageFactory: {}", carriages.size());
 
         return carriages;
     }
 
     public static TrainRun createTrainRun(Train train) {
-        log.info("Creating test train run for train №{} along route Minsk -> Mogilev...", train.getTrainNumber());
+        log.info("Creating test train run for train along route Minsk -> Mogilev...(train № {})", train.getTrainNumber());
 
         Station minsk = new Station("Minsk", 2200001);
         Station minskPass = new Station("Minsk-Passenger", 2200020);

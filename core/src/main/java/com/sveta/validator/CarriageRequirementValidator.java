@@ -25,10 +25,9 @@ public class CarriageRequirementValidator {
 
     public void validateAll(List<CarriageRequirement> requirements) {
         if (requirements == null || requirements.isEmpty()) {
-            log.error("Validation failed: Requirements list is null or empty.");
             throw new RequirementExceptions.EmptyList();
         }
-        log.info("Starting validation for a batch of {} carriage requirements.", requirements.size());
+        log.info("Starting validation for a batch of carriage requirements {}.", requirements.size());
         for (CarriageRequirement req : requirements) {
             validate(req);
         }
@@ -37,7 +36,6 @@ public class CarriageRequirementValidator {
 
     public void validate(CarriageRequirement requirement) {
         if (requirement == null) {
-            log.error("Validation failed: Requirement object cannot be null.");
             throw new IllegalArgumentException("Requirement object cannot be null");
         }
 
@@ -52,7 +50,6 @@ public class CarriageRequirementValidator {
             case DiningCarriageRequirement diningReq -> validateDining(diningReq);
             case EconomyCarriageRequirement economyReq -> validateEconomy(economyReq);
             default ->{
-                log.error("Validation failed: Unknown carriage requirement type: {}", requirement.getClass().getName());
                 throw new RequirementExceptions.UnknownType(requirement.getClass().getName());
             }
         }
@@ -60,20 +57,15 @@ public class CarriageRequirementValidator {
 
     private void validateCommonWeight(int weightInKg) {
         if (weightInKg < MIN_WEIGHT_KG || weightInKg > MAX_WEIGHT_KG) {
-            log.error("Validation failed: Weight {} kg is out of allowed bounds [{}, {}]",
-                    weightInKg, MIN_WEIGHT_KG, MAX_WEIGHT_KG);
             throw new RequirementExceptions.OutOfTheWeightException(MIN_WEIGHT_KG, MAX_WEIGHT_KG, weightInKg);
         }
     }
 
     private void validateCoupe(CoupeCarriageRequirement req) {
         if (req.coupeRequirements() == null || req.coupeRequirements().isEmpty()) {
-            log.error("Validation failed: Coupe requirements list is null or empty.");
             throw new RequirementExceptions.EmptyCoupeListException();
         }
         if (req.coupeRequirements().size() > MAX_COUPE_COUNT) {
-            log.error("Validation failed: Coupe count {} exceeds maximum allowed limit of {}",
-                    req.coupeRequirements().size(), MAX_COUPE_COUNT);
             throw new RequirementExceptions.InvalidSeatsCountException(
                     Carriages.COUPE,
                     MIN_SEATS,
@@ -85,8 +77,6 @@ public class CarriageRequirementValidator {
 
     private void validateSeated(SeatedCarriageRequirement req) {
         if (req.placeNumbers() <= 0 || req.placeNumbers() > MAX_SEATED_PLACES) {
-            log.error("Validation failed: Seated carriage place count {} is out of range [{}, {}]",
-                    req.placeNumbers(), MIN_SEATS, MAX_SEATED_PLACES);
             throw new RequirementExceptions.InvalidSeatsCountException(
                     Carriages.SEATED,
                     MIN_SEATS,
@@ -98,8 +88,6 @@ public class CarriageRequirementValidator {
 
     private void validateDining(DiningCarriageRequirement req) {
         if (req.seatsLimit() <= 0 || req.seatsLimit() > MAX_DINING_SEATS) {
-            log.error("Validation failed: Dining carriage seats limit {} is out of range [{}, {}]",
-                    req.seatsLimit(), MIN_SEATS, MAX_DINING_SEATS);
             throw new RequirementExceptions.InvalidSeatsCountException(
                     Carriages.DINING,
                     MIN_SEATS,
@@ -107,15 +95,12 @@ public class CarriageRequirementValidator {
                     req.seatsLimit());
         }
         if (req.food() == null) {
-            log.error("Validation failed: Dining carriage is missing food items.");
             throw new RequirementExceptions.MissingFoodException();
         }
     }
 
     private void validateEconomy(EconomyCarriageRequirement req) {
         if (req.seatsLimit() <= 0 || req.seatsLimit() > MAX_ECONOMY_SEATS) {
-            log.error("Validation failed: Economy carriage seats limit {} is out of range [{}, {}]",
-                    req.seatsLimit(), MIN_SEATS, MAX_ECONOMY_SEATS);
             throw new RequirementExceptions.InvalidSeatsCountException(
                     Carriages.ECONOMY,
                     MIN_SEATS,

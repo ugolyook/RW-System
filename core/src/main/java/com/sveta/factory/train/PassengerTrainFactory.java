@@ -66,7 +66,7 @@ public class PassengerTrainFactory {
         Train train = new PassengerTrain(generateTrainNumber(), locomotive);
 
         carriageList.forEach(train::addCarriage);
-        log.info("Train №{} successfully built with assigned locomotive.", train.getTrainNumber());
+        log.info("Train successfully built with assigned locomotive.(Train № {})", train.getTrainNumber());
         return train;
     }
 
@@ -91,7 +91,6 @@ public class PassengerTrainFactory {
         boolean isAllPassengerCarriages = carriageList.stream()
                 .allMatch(carriage -> carriage instanceof PassengerCarriage);
         if (!isAllPassengerCarriages) {
-            log.error("Validation failed: Non-passenger carriage detected in a passenger train composition.");
             throw new TrainExceptions.NotOneTypeException();
         }
     }
@@ -101,7 +100,6 @@ public class PassengerTrainFactory {
         boolean hasNonElectric = carriageList.stream().anyMatch(c -> !(c instanceof ElectricCarriage));
 
         if (hasElectric && hasNonElectric) {
-            log.error("Validation failed: Attempted to mix electric and non-electric carriages in one train.");
             throw new TrainExceptions("Train cannot contain a mix of electric and non-electric carriages!");
         }
 
@@ -111,12 +109,10 @@ public class PassengerTrainFactory {
     private void validateCarriageLimits(List<Carriage> carriageList, long diningCount) {
         int maxDiningCar = 1;
         if (diningCount > maxDiningCar) {
-            log.error("Validation failed: Too many dining cars. Provided: {}, Allowed: {}", diningCount, maxDiningCar);
             throw new TrainExceptions.ToManyDiningCarriageTrainException(diningCount, maxDiningCar);
         }
 
         if (carriageList.size() > this.sizeLimit) {
-            log.error("Validation failed: Train capacity limit exceeded. Size: {}, Limit: {}", carriageList.size(), this.sizeLimit);
             throw new TrainExceptions.TrainCapacityException(carriageList.size(), this.sizeLimit);
         }
     }

@@ -29,9 +29,6 @@ public class Cashier {
         TrainRun trainRun = searchResult.trainRun();
 
         if (searchResult.seat() != null && trainRun.isSeatOccupied(searchResult.carriage(), searchResult.seat())) {
-            log.error("Ticket issuing failed: Seat {} in carriage {} on run is already occupied!",
-                    searchResult.seat(),
-                    searchResult.carriage().getClass().getSimpleName());
             throw new CashierExceptions.OccupiedSeatException();
         }
         BigDecimal price = priceCalculator.calculatePrice(searchResult, departure, arrival);
