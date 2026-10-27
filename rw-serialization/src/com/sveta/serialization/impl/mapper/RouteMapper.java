@@ -14,15 +14,14 @@ import static main.java.com.sveta.utils.ObjectUtils.applyIfNotNull;
 @Builder
 public class RouteMapper {
     public static RouteSerializationDto toDto(@NonNull Route route) {
-        RouteSerializationDto dto = new RouteSerializationDto();
-        dto.setDirection(route.direction());
-
-        dto.setStops(applyIfNotNull(route.stops(), stops ->
-                stops.stream()
-                        .map(StationMapper::toDto)
-                        .toList()
-        ));
-        return dto;
+        return RouteSerializationDto.builder()
+                .direction(route.direction())
+                .stops(applyIfNotNull(route.stops(), stops ->
+                        stops.stream()
+                                .map(StationMapper::toDto)
+                                .toList()
+                ))
+                .build();
     }
 
     public static @NonNull Route toDomain(@NonNull RouteSerializationDto dto) {

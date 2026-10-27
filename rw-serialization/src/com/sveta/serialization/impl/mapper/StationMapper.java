@@ -5,16 +5,18 @@ import com.sveta.serialization.impl.dto.StationSerializationDto;
 import lombok.Builder;
 import lombok.NonNull;
 
-@Builder
 public class StationMapper {
     public static StationSerializationDto toDto(@NonNull Station station) {
-        StationSerializationDto dto = new StationSerializationDto();
-        dto.setStationName(station.stationName());
-        dto.setCode(station.code());
-        return dto;
+        return StationSerializationDto.builder()
+                .stationName(station.stationName())
+                .code(station.code())
+                .build();
     }
 
     public static @NonNull Station toDomain(@NonNull StationSerializationDto dto) {
-        return new Station(dto.getStationName(), dto.getCode());
+        return Station.builder()
+                .stationName(dto.getStationName())
+                .code(dto.getCode())
+                .build();
     }
 }

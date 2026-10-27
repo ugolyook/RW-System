@@ -4,6 +4,7 @@ import com.esotericsoftware.kryo.Kryo;
 import com.esotericsoftware.kryo.io.Input;
 import com.esotericsoftware.kryo.io.Output;
 import com.sveta.serialization.ObjectSerializer;
+import com.sveta.serialization.SerializerName;
 import com.sveta.serialization.SuperSerializationDto;
 
 import java.io.FileInputStream;
@@ -16,6 +17,11 @@ public class KryoSerializer implements ObjectSerializer {
         this.kryo = new Kryo();
         this.kryo.setRegistrationRequired(false);
         this.kryo.setClassLoader(Thread.currentThread().getContextClassLoader());
+    }
+
+    @Override
+    public SerializerName getSerializerName() {
+        return SerializerName.KryoSerializer;
     }
 
     @Override

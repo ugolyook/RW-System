@@ -1,5 +1,7 @@
 package com.sveta.serialization.impl.config;
 
+import com.sveta.serialization.SerializerName;
+
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
@@ -30,7 +32,24 @@ public class StorageConfigManager {
         return storagePath;
     }
 
-    public static String resolveFilePath(String fileName) {
-        return resolveStorageDirectory().resolve(fileName).toAbsolutePath().toString();
+    public static String resolveFilePath(String serializerName, String subDirectory, String fileName) {
+        try {
+            Path targetPath = resolveStorageDirectory()
+                    .resolve(serializerName)
+                    .resolve(subDirectory);
+
+            if (!Files.exists(targetPath)) {
+                Files.createDirectories(targetPath);
+            }
+
+            return targetPath.resolve(fileName).toAbsolutePath().toString();
+        } catch (Exception e) {
+            throw new RuntimeException("Failed to resolve file path for serializer: " + serializerName, e);
+        }
+    }
+
+    public static String resolveFilePath(SerializerName serializerName, String subDirectory, String fileName) {
+        String folderName = serializerName.name().toLowerCase();
+        return resolveFilePath(folderName, subDirectory, fileName);
     }
 }

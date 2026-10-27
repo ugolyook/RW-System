@@ -11,23 +11,22 @@ import static main.java.com.sveta.utils.ObjectUtils.applyIfNotNull;
 @Builder
 public class TrainRunMapper {
     public static TrainRunSerializationDto toDto(@NonNull TrainRun trainRun) {
-        TrainRunSerializationDto dto = new TrainRunSerializationDto();
-
-        if (trainRun.getTrain() instanceof PassengerTrain passengerTrain) {
-            dto.setTrain(TrainMapper.toDto(passengerTrain));
-        }
-
-        dto.setRoute(applyIfNotNull(trainRun.getRoute(), RouteMapper::toDto));
-        dto.setDepartureTime(trainRun.getDepartureTime());
-        dto.setExpress(trainRun.isExpress());
-
-        dto.setTickets(applyIfNotNull(trainRun.getTickets(), tickets ->
-                tickets.stream()
-                        .map(TicketMapper::toDto)
-                        .toList()
-        ));
-
-        return dto;
+        return TrainRunSerializationDto.builder()
+                .train(applyIfNotNull(trainRun.getTrain(), train -> {
+                    if (train instanceof PassengerTrain passengerTrain) {
+                        return TrainMapper.toDto(passengerTrain);
+                    }
+                    return null;
+                }))
+                .route(applyIfNotNull(trainRun.getRoute(), RouteMapper::toDto))
+                .departureTime(trainRun.getDepartureTime())
+                .isExpress(trainRun.isExpress())
+                .tickets(applyIfNotNull(trainRun.getTickets(), tickets ->
+                        tickets.stream()
+                                .map(TicketMapper::toDto)
+                                .toList()
+                ))
+                .build();
     }
 
     public static @NonNull TrainRun toDomain(@NonNull TrainRunSerializationDto dto) {

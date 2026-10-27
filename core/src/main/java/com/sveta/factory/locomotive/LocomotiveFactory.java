@@ -5,7 +5,10 @@ import lombok.NoArgsConstructor;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import java.util.List;
 import java.util.Objects;
+import java.util.function.Predicate;
+import java.util.function.Supplier;
 
 @NoArgsConstructor
 public class LocomotiveFactory {
@@ -66,6 +69,13 @@ public class LocomotiveFactory {
     private static final int TEM18_TRACTION_FORCE = 120;
     private static final boolean TEM18_IS_ELECTRIC = false;
 
+    private record LocomotiveRule(
+            Predicate<LocomotiveRequirements> validator,
+            String name,
+            Supplier<Locomotive> creator
+    ) {
+    }
+
     public Locomotive createLocomotive(LocomotiveRequirements requirements) {
         if (Objects.isNull(requirements)) {
             throw new IllegalArgumentException("Requirements cant be null...");
@@ -85,26 +95,14 @@ public class LocomotiveFactory {
     }
 
     private Locomotive createElectricLocomotive(LocomotiveRequirements requirements) {
-        return switch (true) {
-            case boolean _ when canCreateVL80C(requirements) -> {
-                log.info("Selected electric locomotive: VL80C");
-                yield createVL80C();
-            }
-            case boolean _ when canCreateES4K(requirements) -> {
-                log.info("Selected electric locomotive: ES4K (Lastochka/Sinara)");
-                yield createES4K();
-            }
-            case boolean _ when canCreateVL85(requirements) -> {
-                log.info("Selected electric locomotive: VL85");
-                yield createVL85();
-            }
-            case boolean _ when canCreateEP20(requirements) -> {
-                log.info("Selected electric locomotive: EP20");
-                yield createEP20();
-            }
-            default ->
-                    throw new RuntimeException("No suitable electric locomotive found for requirements: " + requirements);
-        };
+        List<LocomotiveRule> rules = List.of(
+                new LocomotiveRule(this::canCreateVL80C, "VL80C", this::createVL80C),
+                new LocomotiveRule(this::canCreateES4K, "ES4K (Lastochka/Sinara)", this::createES4K),
+                new LocomotiveRule(this::canCreateVL85, "VL85", this::createVL85),
+                new LocomotiveRule(this::canCreateEP20, "EP20", this::createEP20)
+        );
+
+        return evaluateRules(rules, requirements, "electric");
     }
 
     private boolean canCreateVL80C(LocomotiveRequirements requirements) {
@@ -180,25 +178,23 @@ public class LocomotiveFactory {
     }
 
     private Locomotive createDieselLocomotive(LocomotiveRequirements requirements) {
-        return switch (true) {
-            case boolean _ when canCreatePeresvet(requirements) -> {
-                log.info("Selected diesel locomotive: Peresvet");
-                yield createPeresvet();
-            }
-            case boolean _ when canCreateTEP116(requirements) -> {
-                log.info("Selected diesel locomotive: TEP116");
-                yield createTEP116();
-            }
-            case boolean _ when canCreateTEP70(requirements) -> {
-                log.info("Selected diesel locomotive: TEP70");
-                yield createTEP70();
-            }
-            case boolean _ when canCreateTEM18(requirements) -> {
-                log.info("Selected diesel locomotive: TEM18");
-                yield createTEM18();
-            }
-            default -> throw new RuntimeException("No suitable diesel locomotive found for requirements: " + requirements);
-        };
+        List<LocomotiveRule> rules = List.of(
+                new LocomotiveRule(this::canCreatePeresvet, "Peresvet", this::createPeresvet),
+                new LocomotiveRule(this::canCreateTEP116, "TEP116", this::createTEP116),
+                new LocomotiveRule(this::canCreateTEP70, "TEP70", this::createTEP70),
+                new LocomotiveRule(this::canCreateTEM18, "TEM18", this::createTEM18)
+        );
+
+        return evaluateRules(rules, requirements, "diesel");
+    }
+
+    private Locomotive evaluateRules(List<LocomotiveRule> rules, LocomotiveRequirements requirements, String type) {
+        return rules.stream()
+                .filter(rule -> rule.validator().test(requirements))
+                .peek(rule -> log.info("Selected {} locomotive: {}", type, rule.name()))
+                .map(rule -> rule.creator().get())
+                .findFirst()
+                .orElseThrow(() -> new RuntimeException("No suitable " + type + " locomotive found for requirements: " + requirements));
     }
 
     private boolean canCreatePeresvet(LocomotiveRequirements requirements) {

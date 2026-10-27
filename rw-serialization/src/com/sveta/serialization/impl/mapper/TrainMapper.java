@@ -4,29 +4,25 @@ import com.sveta.locomotive.Locomotive;
 import com.sveta.serialization.impl.dto.TrainSerializationDto;
 import com.sveta.serialization.impl.dto.carriagesDto.*;
 import com.sveta.train.PassengerTrain;
+import com.sveta.train.Train;
 import com.sveta.train.carriage.Carriage;
 import com.sveta.train.carriage.passenger.*;
-import lombok.Builder;
 import lombok.NonNull;
 
-import java.util.List;
 
 import static main.java.com.sveta.utils.ObjectUtils.applyIfNotNull;
 
-@Builder
 public class TrainMapper {
-    public static TrainSerializationDto toDto(@NonNull PassengerTrain train) {
-        TrainSerializationDto dto = new TrainSerializationDto();
-        dto.setTrainNumber(train.getTrainNumber());
-
-        dto.setLocomotive(applyIfNotNull(train.getLocomotive(), LocomotiveMapper::toDto));
-        dto.setCarriages(applyIfNotNull(train.getCarriages(), carriages ->
-                carriages.stream()
-                        .map(TrainMapper::carriageToDto)
-                        .toList()
-        ));
-
-        return dto;
+    public static TrainSerializationDto toDto(@NonNull Train train) {
+        return TrainSerializationDto.builder()
+                .trainNumber(train.getTrainNumber())
+                .locomotive(applyIfNotNull(train.getLocomotive(), LocomotiveMapper::toDto))
+                .carriages(applyIfNotNull(train.getCarriages(), carriages ->
+                        carriages.stream()
+                                .map(TrainMapper::carriageToDto)
+                                .toList()
+                ))
+                .build();
     }
 
     public static CarriageSerializationDto carriageToDto(@NonNull Carriage carriage) {

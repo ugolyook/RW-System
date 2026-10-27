@@ -8,10 +8,10 @@ import lombok.NonNull;
 @Builder
 public class SeatMapper {
     public static SeatSerializationDto toDto(@NonNull Seat seat) {
-        SeatSerializationDto dto = new SeatSerializationDto();
-        dto.setNumber(seat.number());
-        dto.setType(seat.type());
-        return dto;
+        return SeatSerializationDto.builder()
+                .number(seat.number())
+                .type(seat.type())
+                .build();
     }
 
     public static @NonNull Seat toDomain(@NonNull SeatSerializationDto dto) {

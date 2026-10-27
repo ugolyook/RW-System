@@ -1,6 +1,7 @@
 package com.sveta.serialization.impl.serializer;
 
 import com.sveta.serialization.ObjectSerializer;
+import com.sveta.serialization.SerializerName;
 import com.sveta.serialization.SuperSerializationDto;
 
 import java.beans.XMLDecoder;
@@ -11,6 +12,11 @@ import java.io.FileInputStream;
 import java.io.FileOutputStream;
 
 public class XmlSerializer implements ObjectSerializer {
+    @Override
+    public SerializerName getSerializerName() {
+        return SerializerName.XmlSerializer;
+    }
+
     @Override
     public <T extends SuperSerializationDto> void save(T object, String filePath) throws Exception {
         try (XMLEncoder encoder = new XMLEncoder(new BufferedOutputStream(new FileOutputStream(filePath)))) {

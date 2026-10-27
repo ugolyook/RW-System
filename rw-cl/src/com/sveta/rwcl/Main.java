@@ -8,15 +8,18 @@ import com.sveta.serialization.impl.config.TrainRunStorageService;
 import com.sveta.serialization.impl.serializer.JsonJacksonSerializer;
 import com.sveta.view.TrainView;
 import storage.JsonTrainRunStorageService;
+import storage.JsonTrainStorageService;
 
 
 public class Main {
     static void main(String[] args) {
         ObjectSerializer serializer = new JsonJacksonSerializer();
+
         TrainRunStorageService storageService = new JsonTrainRunStorageService(serializer);
+        JsonTrainStorageService trainStorageService = new JsonTrainStorageService(serializer);
 
         TrainView view = new ConsoleTrainView(new BaseTrainInfoFormatter());
-        TrainController controller = new TrainController(view, storageService);
+        TrainController controller = new TrainController(view, storageService, trainStorageService);
         controller.run();
     }
 }

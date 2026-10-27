@@ -1,10 +1,7 @@
 package com.sveta.serialization.impl.dto;
 
 import com.sveta.serialization.SuperSerializationDto;
-import lombok.AllArgsConstructor;
-import lombok.Getter;
-import lombok.NoArgsConstructor;
-import lombok.Setter;
+import lombok.*;
 
 import java.time.LocalDateTime;
 import java.util.List;
@@ -13,6 +10,7 @@ import java.util.List;
 @Getter
 @NoArgsConstructor
 @AllArgsConstructor
+@Builder
 public class TrainRunSerializationDto implements SuperSerializationDto {
     private TrainSerializationDto train;
     private RouteSerializationDto route;

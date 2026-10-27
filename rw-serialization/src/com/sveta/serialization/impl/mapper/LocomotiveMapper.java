@@ -8,16 +8,16 @@ import lombok.NonNull;
 @Builder
 public class LocomotiveMapper {
     public static LocomotiveSerializationDto toDto(@NonNull Locomotive locomotive) {
-        LocomotiveSerializationDto dto = new LocomotiveSerializationDto();
-        dto.setWagonLimit(locomotive.wagonLimit());
-        dto.setMaxSpeed(locomotive.maxSpeed());
-        dto.setMaxTransportedWeight(locomotive.maxTransportedWeight());
-        dto.setPower(locomotive.power());
-        dto.setTraction(locomotive.tractionForce());
-        dto.setWeight(locomotive.maxTransportedWeight());
-        dto.setElectric(locomotive.electric());
-        dto.setModel(locomotive.model());
-        return dto;
+        return LocomotiveSerializationDto.builder()
+                .wagonLimit(locomotive.wagonLimit())
+                .maxSpeed(locomotive.maxSpeed())
+                .maxTransportedWeight(locomotive.maxTransportedWeight())
+                .power(locomotive.power())
+                .traction(locomotive.tractionForce())
+                .weight(locomotive.maxTransportedWeight())
+                .isElectric(locomotive.electric())
+                .model(locomotive.model())
+                .build();
     }
 
     public static @NonNull Locomotive toDomain(@NonNull LocomotiveSerializationDto dto) {

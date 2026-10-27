@@ -9,27 +9,33 @@ import com.sveta.serialization.impl.config.TrainRunStorageService;
 import com.sveta.serialization.impl.config.StorageConfigManager;
 import com.sveta.tickets.*;
 import com.sveta.tickets.calculate.BaseTicketPriceCalculator;
+import com.sveta.train.PassengerTrain;
 import com.sveta.train.Train;
 import com.sveta.train.carriage.Carriage;
 import com.sveta.train.carriage.passenger.CoupeCarriage;
 import com.sveta.view.TrainView;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import storage.JsonTrainStorageService;
 
 import java.util.List;
 
 public class TrainController {
     private static final Logger log = LoggerFactory.getLogger(TrainController.class);
-    private static final String STATE_FILE_PATH = System.getProperty("user.home") + "/.rw-system/train_run_state.dat";
 
     private final TicketSearchService ticketSearchService;
     private final Cashier cashier;
     private final TrainView view;
     private final TrainRunStorageService storageService;
+    private final JsonTrainStorageService trainStorageService;
 
-    public TrainController(TrainView view, TrainRunStorageService storageService) {
+    public TrainController(
+            TrainView view,
+            TrainRunStorageService storageService,
+            JsonTrainStorageService trainStorageService) {
         this.view = view;
         this.storageService = storageService;
+        this.trainStorageService = trainStorageService;
         this.ticketSearchService = new TicketSearchService();
         this.cashier = new Cashier(new BaseTicketPriceCalculator());
     }
@@ -42,13 +48,22 @@ public class TrainController {
         Train train = trainFactory.createTrain(carriages);
         view.showTrainCreated(train);
 
+        try {
+            trainStorageService.save(train);
+            log.info("Train successfully saved to file!");
+
+            Train loadedTrain = trainStorageService.load(train.getTrainNumber());
+            log.info("Train successfully loaded from file, train number: {}", loadedTrain.getTrainNumber());
+        } catch (Exception e) {
+            log.error("Error saving/loading train: {}", e.getMessage(), e);
+        }
+
         TrainRun run = TestDataFactory.createTrainRun(train);
         view.showTrainRunInfo(run);
 
-        String filePath = StorageConfigManager.resolveFilePath(STATE_FILE_PATH);
-        saveTrainRunState(run, filePath);
+        saveTrainRunState(run);
 
-        TrainRun loadedRun = loadTrainRunState(STATE_FILE_PATH);
+        TrainRun loadedRun = loadTrainRunState(run.getTrain().getTrainNumber());
         if (loadedRun != null) {
             log.info("TrainRun successfully loaded and mapped back to Domain model!");
         }
@@ -57,21 +72,21 @@ public class TrainController {
         log.info("TrainController workflow finished successfully.");
     }
 
-    private void saveTrainRunState(TrainRun run, String filename) {
+    private void saveTrainRunState(TrainRun run) {
         try {
-            storageService.save(run, filename);
-            log.info("TrainRun state successfully saved to '{}'", filename);
+            storageService.save(run);
+            log.info("TrainRun state successfully saved ");
         } catch (Exception e) {
-            log.error("Error saving train run state to '{}': {}", filename, e.getMessage(), e);
+            log.error("Error saving train run state: {}", e.getMessage(), e);
         }
     }
 
-    private TrainRun loadTrainRunState(String filename) {
+    private TrainRun loadTrainRunState(int trainNumber) {
         try {
-            log.info("Loading TrainRun from '{}'...", filename);
-            return storageService.load(filename);
+            log.info("Loading TrainRun for train number {}...", trainNumber);
+            return storageService.load(trainNumber);
         } catch (Exception e) {
-            log.error("Error loading train run state from '{}': {}", filename, e.getMessage(), e);
+            log.error("Error loading train run state for train number {}: {}", trainNumber, e.getMessage(), e);
             return null;
         }
     }

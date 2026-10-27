@@ -2,12 +2,10 @@ package com.sveta.serialization.impl.mapper;
 
 import com.sveta.serialization.impl.dto.TicketSerializationDto;
 import com.sveta.tickets.Ticket;
-import lombok.Builder;
 import lombok.NonNull;
 
 import static main.java.com.sveta.utils.ObjectUtils.applyIfNotNull;
 
-@Builder
 public class TicketMapper {
     public static TicketSerializationDto toDto(Ticket ticket) {
         TicketSerializationDto dto = new TicketSerializationDto();

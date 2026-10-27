@@ -1,15 +1,13 @@
 package com.sveta.serialization.impl.dto;
 
 import com.sveta.serialization.SuperSerializationDto;
-import lombok.AllArgsConstructor;
-import lombok.Getter;
-import lombok.NoArgsConstructor;
-import lombok.Setter;
+import lombok.*;
 
 @Setter
 @Getter
 @NoArgsConstructor
 @AllArgsConstructor
+@Builder
 public class LocomotiveSerializationDto implements SuperSerializationDto {
     private int wagonLimit;
     private int maxSpeed;

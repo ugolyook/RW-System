@@ -14,5 +14,4 @@ import java.util.List;
 public class CoupeCarriageSerializationDto extends CarriageSerializationDto {
     private int coupeLimit;
     private List<CoupeSerializationDto> coupes;
-
 }
