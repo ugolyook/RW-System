@@ -1,8 +1,8 @@
 package com.sveta.serialization.impl.serializer;
 
-import com.sveta.serialization.ObjectSerializer;
-import com.sveta.serialization.SerializerName;
-import com.sveta.serialization.SuperSerializationDto;
+import com.sveta.serialization.impl.test.ObjectSerializer;
+import com.sveta.serialization.impl.test.SerializerType;
+import com.sveta.serialization.impl.test.SuperSerializationDto;
 
 import java.beans.XMLDecoder;
 import java.beans.XMLEncoder;
@@ -13,8 +13,8 @@ import java.io.FileOutputStream;
 
 public class XmlSerializer implements ObjectSerializer {
     @Override
-    public SerializerName getSerializerName() {
-        return SerializerName.XmlSerializer;
+    public SerializerType getSerializerType() {
+        return SerializerType.XmlSerializer;
     }
 
     @Override

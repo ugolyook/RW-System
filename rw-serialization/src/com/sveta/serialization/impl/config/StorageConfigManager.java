@@ -1,6 +1,7 @@
 package com.sveta.serialization.impl.config;
 
-import com.sveta.serialization.SerializerName;
+import com.sveta.serialization.impl.test.SerializationConfig;
+import com.sveta.serialization.impl.test.SerializerType;
 
 import java.nio.file.Files;
 import java.nio.file.Path;
@@ -48,8 +49,12 @@ public class StorageConfigManager {
         }
     }
 
-    public static String resolveFilePath(SerializerName serializerName, String subDirectory, String fileName) {
+    public static String resolveFilePath(SerializerType serializerName, String subDirectory, String fileName) {
         String folderName = serializerName.name().toLowerCase();
         return resolveFilePath(folderName, subDirectory, fileName);
+    }
+
+    public Object resolveBasePath(SerializationConfig config) {
+
     }
 }

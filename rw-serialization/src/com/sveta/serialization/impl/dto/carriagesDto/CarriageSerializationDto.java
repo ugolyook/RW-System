@@ -2,7 +2,7 @@ package com.sveta.serialization.impl.dto.carriagesDto;
 
 import com.fasterxml.jackson.annotation.JsonSubTypes;
 import com.fasterxml.jackson.annotation.JsonTypeInfo;
-import com.sveta.serialization.SuperSerializationDto;
+import com.sveta.serialization.impl.test.SuperSerializationDto;
 import lombok.*;
 
 @Setter

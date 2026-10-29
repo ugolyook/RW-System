@@ -1,4 +1,4 @@
-package com.sveta.serialization;
+package com.sveta.serialization.impl.test;
 
 public interface SuperSerializationDto {
 }

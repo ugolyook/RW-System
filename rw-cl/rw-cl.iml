@@ -6,6 +6,16 @@
       <sourceFolder url="file://$MODULE_DIR$/src" isTestSource="false" />
     </content>
     <orderEntry type="inheritedJdk" />
+    <orderEntry type="module-library" exported="">
+      <library>
+        <CLASSES>
+          <root url="file://$MODULE_DIR$/../lib" />
+        </CLASSES>
+        <JAVADOC />
+        <SOURCES />
+        <jarDirectory url="file://$MODULE_DIR$/../lib" recursive="false" />
+      </library>
+    </orderEntry>
     <orderEntry type="sourceFolder" forTests="false" />
     <orderEntry type="module" module-name="core" exported="" />
     <orderEntry type="module-library" exported="" scope="PROVIDED">
@@ -18,7 +28,10 @@
       </library>
     </orderEntry>
     <orderEntry type="module" module-name="rw-serialization" exported="" />
-    <orderEntry type="module" module-name="rw-serialization" />
-    <orderEntry type="library" name="Maven: org.slf4j:slf4j-api:2.0.9" level="project" />
+    <orderEntry type="module" module-name="rw-serialization" exported="" />
+    <orderEntry type="library" exported="" name="Maven: ch.qos.logback:logback-classic:1.4.14" level="project" />
+    <orderEntry type="library" name="Maven: ch.qos.logback:logback-core:1.4.14" level="project" />
+    <orderEntry type="library" exported="" name="Maven: org.projectlombok:lombok:1.18.38" level="project" />
+    <orderEntry type="library" exported="" name="Maven: org.slf4j:slf4j-api:2.0.9" level="project" />
   </component>
 </module>

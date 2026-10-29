@@ -1,8 +1,8 @@
 package com.sveta.serialization.impl.serializer;
 
-import com.sveta.serialization.ObjectSerializer;
-import com.sveta.serialization.SerializerName;
-import com.sveta.serialization.SuperSerializationDto;
+import com.sveta.serialization.impl.test.ObjectSerializer;
+import com.sveta.serialization.impl.test.SerializerType;
+import com.sveta.serialization.impl.test.SuperSerializationDto;
 
 import java.io.FileInputStream;
 import java.io.FileOutputStream;
@@ -11,8 +11,8 @@ import java.io.ObjectOutputStream;
 
 class JavaIoSerializer implements ObjectSerializer {
     @Override
-    public SerializerName getSerializerName() {
-        return SerializerName.JavaIoSerializer;
+    public SerializerType getSerializerType() {
+        return SerializerType.JavaIoSerializer;
     }
 
     @Override

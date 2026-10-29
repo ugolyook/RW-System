@@ -1,10 +1,9 @@
 package storage;
 
-import com.sveta.serialization.ObjectSerializer;
+import com.sveta.serialization.impl.test.ObjectSerializer;
 import com.sveta.serialization.impl.config.StorageConfigManager;
 import com.sveta.serialization.impl.dto.TrainSerializationDto;
 import com.sveta.serialization.impl.mapper.TrainMapper;
-import com.sveta.train.PassengerTrain;
 import com.sveta.train.Train;
 
 public class JsonTrainStorageService {
@@ -23,7 +22,7 @@ public class JsonTrainStorageService {
         String fileName = "train_" + train.getTrainNumber() + ".json";
 
         String filePath = StorageConfigManager.resolveFilePath(
-                serializer.getSerializerName(),
+                serializer.getSerializerType(),
                 "trains",
                 fileName
         );
@@ -35,7 +34,7 @@ public class JsonTrainStorageService {
         String fileName = "train_" + trainNumber + ".json";
 
         String filePath = StorageConfigManager.resolveFilePath(
-                serializer.getSerializerName(),
+                serializer.getSerializerType(),
                 "trains",
                 fileName
         );

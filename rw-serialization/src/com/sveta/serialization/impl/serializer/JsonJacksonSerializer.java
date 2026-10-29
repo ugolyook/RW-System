@@ -5,9 +5,9 @@ import com.fasterxml.jackson.annotation.JsonTypeInfo;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.databind.SerializationFeature;
 import com.fasterxml.jackson.datatype.jsr310.JavaTimeModule;
-import com.sveta.serialization.ObjectSerializer;
-import com.sveta.serialization.SerializerName;
-import com.sveta.serialization.SuperSerializationDto;
+import com.sveta.serialization.impl.test.ObjectSerializer;
+import com.sveta.serialization.impl.test.SerializerType;
+import com.sveta.serialization.impl.test.SuperSerializationDto;
 import com.sveta.serialization.impl.dto.carriagesDto.CoupeCarriageSerializationDto;
 import com.sveta.serialization.impl.dto.carriagesDto.DiningCarriageSerializationDto;
 import com.sveta.serialization.impl.dto.carriagesDto.EconomyCarriageSerializationDto;
@@ -34,8 +34,8 @@ public class JsonJacksonSerializer implements ObjectSerializer {
             .registerModule(new JavaTimeModule());
 
     @Override
-    public SerializerName getSerializerName() {
-        return SerializerName.JsonJacksonSerializer;
+    public SerializerType getSerializerType() {
+        return SerializerType.JsonJacksonSerializer;
     }
 
     @Override

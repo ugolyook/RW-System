@@ -1,6 +1,6 @@
 package com.sveta.serialization.impl.dto;
 
-import com.sveta.serialization.SuperSerializationDto;
+import com.sveta.serialization.impl.test.SuperSerializationDto;
 import lombok.*;
 
 import java.time.LocalDateTime;

@@ -1,7 +1,7 @@
 package storage;
 
 import com.sveta.route.TrainRun;
-import com.sveta.serialization.ObjectSerializer;
+import com.sveta.serialization.impl.test.ObjectSerializer;
 import com.sveta.serialization.impl.config.StorageConfigManager;
 import com.sveta.serialization.impl.config.TrainRunStorageService;
 import com.sveta.serialization.impl.dto.TrainRunSerializationDto;
@@ -20,7 +20,7 @@ public class JsonTrainRunStorageService implements TrainRunStorageService {
         String fileName = "train_run_" + trainRun.getTrain().getTrainNumber() + ".json";
 
         String filePath = StorageConfigManager.resolveFilePath(
-                serializer.getSerializerName(),
+                serializer.getSerializerType(),
                 "train-runs",
                 fileName
         );
@@ -32,7 +32,7 @@ public class JsonTrainRunStorageService implements TrainRunStorageService {
     public TrainRun load(int trainNumber) throws Exception {
         String fileName = "train_run_" + trainNumber + ".json";
         String filePath = StorageConfigManager.resolveFilePath(
-                serializer.getSerializerName(),
+                serializer.getSerializerType(),
                 "train-runs",
                 fileName
         );
