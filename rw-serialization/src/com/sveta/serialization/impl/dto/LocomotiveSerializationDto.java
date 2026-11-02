@@ -14,7 +14,6 @@ public class LocomotiveSerializationDto implements SuperSerializationDto {
     private int maxTransportedWeight;
     private int power;
     private int traction;
-    private double weight;
     private boolean isElectric;
     private String model;
 }

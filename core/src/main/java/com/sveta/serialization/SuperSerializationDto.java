@@ -1,4 +1,6 @@
 package com.sveta.serialization;
 
-public interface SuperSerializationDto {
+import java.io.Serializable;
+
+public interface SuperSerializationDto extends Serializable {
 }

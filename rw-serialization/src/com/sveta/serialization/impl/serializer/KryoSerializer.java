@@ -9,15 +9,16 @@ import com.sveta.serialization.SuperSerializationDto;
 
 import java.io.FileInputStream;
 import java.io.FileOutputStream;
+import java.nio.file.Files;
+import java.nio.file.Path;
 
-public class KryoSerializer implements ObjectSerializer {
-    private final Kryo kryo;
-
-    public KryoSerializer() {
-        this.kryo = new Kryo();
-        this.kryo.setRegistrationRequired(false);
-        this.kryo.setClassLoader(Thread.currentThread().getContextClassLoader());
-    }
+public class KryoSerializer extends AbstractFileSerializer {
+    private static final ThreadLocal<Kryo> KRYO = ThreadLocal.withInitial(() -> {
+        Kryo kryo = new Kryo();
+        kryo.setRegistrationRequired(false);
+        kryo.setClassLoader(Thread.currentThread().getContextClassLoader());
+        return kryo;
+    });
 
     @Override
     public SerializerType getSerializerName() {
@@ -25,17 +26,16 @@ public class KryoSerializer implements ObjectSerializer {
     }
 
     @Override
-    public <T extends SuperSerializationDto> void save(T object, String filePath) throws Exception {
-        try (Output output = new Output(new FileOutputStream(filePath))) {
-            kryo.writeClassAndObject(output, object);
+    protected void write(SuperSerializationDto object, Path path) throws Exception {
+        try (Output output = new Output(Files.newOutputStream(path))) {
+            KRYO.get().writeClassAndObject(output, object);
         }
     }
 
     @Override
-    @SuppressWarnings("unchecked")
-    public <T extends SuperSerializationDto> T load(String filePath, Class<T> clazz) throws Exception {
-        try (Input input = new Input(new FileInputStream(filePath))) {
-            return (T) kryo.readClassAndObject(input);
+    protected Object read(Path path, Class<? extends SuperSerializationDto> clazz) throws Exception {
+        try (Input input = new Input(Files.newInputStream(path))) {
+            return KRYO.get().readClassAndObject(input);
         }
     }
 }

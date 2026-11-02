@@ -1,32 +1,31 @@
 package com.sveta.serialization.impl.serializer;
 
-import com.sveta.serialization.ObjectSerializer;
 import com.sveta.serialization.SerializerType;
 import com.sveta.serialization.SuperSerializationDto;
 
-import java.io.FileInputStream;
-import java.io.FileOutputStream;
-import java.io.ObjectInputStream;
-import java.io.ObjectOutputStream;
+import java.io.*;
+import java.nio.file.Files;
+import java.nio.file.Path;
 
-class JavaIoSerializer implements ObjectSerializer {
+class JavaIoSerializer extends AbstractFileSerializer {
     @Override
     public SerializerType getSerializerName() {
         return SerializerType.JAVA_IO_SERIALIZER;
     }
 
     @Override
-    public <T extends SuperSerializationDto> void save(T object, String filePath) throws Exception {
-        try (ObjectOutputStream oos = new ObjectOutputStream(new FileOutputStream(filePath))) {
+    protected void write(SuperSerializationDto object, Path path) throws Exception {
+        try (ObjectOutputStream oos = new ObjectOutputStream(
+                new BufferedOutputStream(Files.newOutputStream(path)))) {
             oos.writeObject(object);
         }
     }
 
     @Override
-    @SuppressWarnings("unchecked")
-    public <T extends SuperSerializationDto> T load(String filePath, Class<T> clazz) throws Exception {
-        try (ObjectInputStream ois = new ObjectInputStream(new FileInputStream(filePath))) {
-            return (T) ois.readObject();
+    protected Object read(Path path, Class<? extends SuperSerializationDto> clazz) throws Exception {
+        try (ObjectInputStream ois = new ObjectInputStream(
+                new BufferedInputStream(Files.newInputStream(path)))) {
+            return ois.readObject();
         }
     }
 }

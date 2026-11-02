@@ -1,13 +1,13 @@
 package com.sveta.serialization.impl.dto.carriagesDto;
 
 import lombok.*;
+import lombok.experimental.SuperBuilder;
 
 @Getter
 @Setter
 @NoArgsConstructor
 @AllArgsConstructor
-@Builder
+@SuperBuilder
 public class EconomyCarriageSerializationDto extends CarriageSerializationDto {
     private boolean hasBioToilets;
-    private int baseCarriageWeightKg;
 }

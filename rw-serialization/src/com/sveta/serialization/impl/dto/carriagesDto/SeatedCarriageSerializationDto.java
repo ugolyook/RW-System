@@ -1,6 +1,7 @@
 package com.sveta.serialization.impl.dto.carriagesDto;
 
 import lombok.*;
+import lombok.experimental.SuperBuilder;
 
 import java.util.List;
 
@@ -8,8 +9,7 @@ import java.util.List;
 @Setter
 @NoArgsConstructor
 @AllArgsConstructor
-@Builder
+@SuperBuilder
 public class SeatedCarriageSerializationDto extends CarriageSerializationDto {
     private List<SeatSerializationDto> seats;
-    private int baseCarriageWeightKg;
 }

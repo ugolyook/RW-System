@@ -6,6 +6,9 @@ import com.sveta.train.PassengerTrain;
 import lombok.Builder;
 import lombok.NonNull;
 
+import java.util.ArrayList;
+import java.util.stream.Collectors;
+
 import static main.java.com.sveta.utils.ObjectUtils.applyIfNotNull;
 
 @Builder
@@ -15,25 +18,14 @@ public class TrainRunMapper {
     }
 
     private static TrainRunSerializationDto getTrainRunSerializationDto(TrainRun trainRun) {
-        return getRunSerializationDto(trainRun);
-    }
-
-    private static TrainRunSerializationDto getRunSerializationDto(TrainRun trainRun) {
         return TrainRunSerializationDto.builder()
-                .train(applyIfNotNull(trainRun.getTrain(), train -> {
-                    if (train instanceof PassengerTrain passengerTrain) {
-                        return TrainMapper.toDto(passengerTrain);
-                    }
-                    return null;
-                }))
+                .train(applyIfNotNull(trainRun.getTrain(), TrainMapper::toDto))
                 .route(applyIfNotNull(trainRun.getRoute(), RouteMapper::toDto))
                 .departureTime(trainRun.getDepartureTime())
                 .isExpress(trainRun.isExpress())
-                .tickets(applyIfNotNull(trainRun.getTickets(), tickets ->
-                        tickets.stream()
-                                .map(TicketMapper::toDto)
-                                .toList()
-                ))
+                .tickets(applyIfNotNull(trainRun.getTickets(), list -> list.stream()
+                        .map(TicketMapper::toDto)
+                        .collect(Collectors.toCollection(ArrayList::new))))
                 .build();
     }
 
@@ -46,9 +38,10 @@ public class TrainRunMapper {
         );
 
         if (dto.getTickets() != null) {
-            dto.getTickets().stream()
-                    .map(TicketMapper::toDomain)
-                    .forEach(trainRun::addTicket);
+            dto.getTickets().forEach(
+                    t -> trainRun
+                            .addTicket(TicketMapper.toDomain(t, trainRun))
+            );
         }
 
         return trainRun;

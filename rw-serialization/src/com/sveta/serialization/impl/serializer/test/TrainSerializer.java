@@ -1,35 +1,35 @@
 package com.sveta.serialization.impl.serializer.test;
 
-import com.sveta.serialization.CoreEntitySerializationException;
 import com.sveta.serialization.ObjectSerializer;
-import com.sveta.serialization.impl.config.StorageConfigManager;
+import storage.StoragePathService;
 import com.sveta.serialization.impl.dto.TrainSerializationDto;
+import com.sveta.serialization.impl.mapper.TrainMapper;
 import com.sveta.train.Train;
-import lombok.RequiredArgsConstructor;
 
 import java.util.List;
 
-@RequiredArgsConstructor
-public class TrainSerializer {
-
-    private String TRAIN_SAVE_PATH = "train";
-
-    private final ObjectSerializer objectSerializer;
-    private final StorageConfigManager pathManager;
-
-    public void save(List<Train> trains) throws CoreEntitySerializationException {
-        String pathToSave = getPathToSave(objectSerializer);
-        objectSerializer.save(trains, pathToSave);
+public class TrainSerializer extends AbstractEntitySerializer<Train, TrainSerializationDto> {
+    public TrainSerializer(StoragePathService p, List<ObjectSerializer> s) {
+        super(p, s);
     }
 
-    private String getPathToSave(ObjectSerializer objectSerializer) {
-        var serializerPath = pathManager.getSerializerPath(objectSerializer);
-        return serializerPath + TRAIN_SAVE_PATH;
+    @Override
+    protected String folderName() {
+        return "trains";
     }
 
-    public List<Train> load() throws CoreEntitySerializationException {
-        var path = getPathToSave(objectSerializer.getFirst());
-        TrainSerializationDto serializationDto = objectSerializer.load(path, TrainSerializationDto.class);
-        return mapper.toObject(serializationDto);
+    @Override
+    protected Class<TrainSerializationDto> dtoClass() {
+        return TrainSerializationDto.class;
+    }
+
+    @Override
+    protected TrainSerializationDto toDto(Train t) {
+        return TrainMapper.toDto(t);
+    }
+
+    @Override
+    protected Train toDomain(TrainSerializationDto d) {
+        return TrainMapper.toDomain(d);
     }
 }

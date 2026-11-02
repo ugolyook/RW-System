@@ -12,7 +12,6 @@ import java.util.List;
 @AllArgsConstructor
 @SuperBuilder
 public class DiningCarriageSerializationDto extends CarriageSerializationDto {
-    private int baseCarriageWeightKg;
     private boolean hasHotKitchen;
     private boolean deliveryToTheRoom;
     private List<Food> food;

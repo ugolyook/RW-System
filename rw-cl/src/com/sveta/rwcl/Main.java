@@ -3,22 +3,21 @@ package com.sveta.rwcl;
 import com.sveta.rwcl.controller.TrainController;
 import com.sveta.rwcl.formatter.BaseTrainInfoFormatter;
 import com.sveta.rwcl.viewer.ConsoleTrainView;
-import com.sveta.serialization.impl.config.TrainRunStorageService;
-import com.sveta.serialization.impl.serializer.JsonJacksonSerializer;
+import com.sveta.serialization.CoreSerializer;
+import com.sveta.serialization.impl.serializer.SerializerFactory;
+import com.sveta.serialization.impl.serializer.test.BaseCoreSerializer;
+import com.sveta.serialization.impl.config.SerializationConfig;
 import com.sveta.view.TrainView;
-import storage.JsonTrainRunStorageService;
-import storage.JsonTrainStorageService;
-
 
 public class Main {
     static void main(String[] args) {
-        JsonJacksonSerializer serializer = new JsonJacksonSerializer();
-
-        TrainRunStorageService storageService = new JsonTrainRunStorageService(serializer);
-        JsonTrainStorageService trainStorageService = new JsonTrainStorageService(serializer);
+        CoreSerializer coreSerializer = new BaseCoreSerializer(
+                SerializerFactory.createAll(),
+                SerializationConfig.defaultConfig()
+        );
 
         TrainView view = new ConsoleTrainView(new BaseTrainInfoFormatter());
-        TrainController controller = new TrainController(view, storageService, trainStorageService);
+        TrainController controller = new TrainController(view, coreSerializer);
         controller.run();
     }
 }

@@ -1,9 +1,7 @@
 package com.sveta.serialization.impl.dto.carriagesDto;
 
-import lombok.AllArgsConstructor;
-import lombok.Getter;
-import lombok.NoArgsConstructor;
-import lombok.Setter;
+import com.sveta.serialization.SuperSerializationDto;
+import lombok.*;
 
 import java.util.List;
 
@@ -11,6 +9,7 @@ import java.util.List;
 @Setter
 @Getter
 @NoArgsConstructor
-public class CoupeSerializationDto extends CarriageSerializationDto {
+@Builder
+public class CoupeSerializationDto implements SuperSerializationDto {
     private List<SeatSerializationDto> seats;
 }

@@ -4,25 +4,21 @@ import com.sveta.serialization.CoreEntitySerializationException;
 import com.sveta.serialization.CoreSerializationDto;
 import com.sveta.serialization.CoreSerializer;
 import com.sveta.serialization.ObjectSerializer;
-import com.sveta.serialization.impl.config.StorageConfigManager;
+import com.sveta.serialization.impl.config.SerializationConfig;
+import storage.StoragePathService;
 
 import java.util.List;
 
 public class BaseCoreSerializer implements CoreSerializer {
-
-    private final List<ObjectSerializer> objectSerializers;
-
-    private final StorageConfigManager pathManager;
-
     private final TrainSerializer trainSerializer;
     private final TrainRunSerializer trainRunSerializer;
 
 
     public BaseCoreSerializer(List<ObjectSerializer> objectSerializers,
                               SerializationConfig config) {
-        this.objectSerializers = objectSerializers;
-        this.pathManager = new StorageConfigManager(config);
-        this.objectSerializers = new TrainSerializer(pathManager, objectSerializers);
+        StoragePathService pathService = new StoragePathService(config);
+        this.trainSerializer = new TrainSerializer(pathService, objectSerializers);
+        this.trainRunSerializer = new TrainRunSerializer(pathService, objectSerializers);
     }
 
     @Override
@@ -33,8 +29,6 @@ public class BaseCoreSerializer implements CoreSerializer {
 
     @Override
     public CoreSerializationDto load() throws CoreEntitySerializationException {
-        List<Train> trains = trainSerializer.load();
-        List<TrainRun> run = trainRunSerializer.load();
-        return new CoreSerializationDto(run, trains);
+        return new CoreSerializationDto(trainRunSerializer.load(), trainSerializer.load());
     }
 }

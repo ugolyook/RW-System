@@ -1,37 +1,19 @@
 package com.sveta.serialization.impl.serializer;
 
-import com.fasterxml.jackson.annotation.JsonSubTypes;
-import com.fasterxml.jackson.annotation.JsonTypeInfo;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.databind.SerializationFeature;
 import com.fasterxml.jackson.datatype.jsr310.JavaTimeModule;
-import com.sveta.serialization.ObjectSerializer;
 import com.sveta.serialization.SerializerType;
 import com.sveta.serialization.SuperSerializationDto;
-import com.sveta.serialization.impl.dto.carriagesDto.CoupeCarriageSerializationDto;
-import com.sveta.serialization.impl.dto.carriagesDto.DiningCarriageSerializationDto;
-import com.sveta.serialization.impl.dto.carriagesDto.EconomyCarriageSerializationDto;
-import com.sveta.serialization.impl.dto.carriagesDto.SeatedCarriageSerializationDto;
 
-import java.io.File;
+import java.nio.file.Path;
 
-@JsonTypeInfo(
-        use = JsonTypeInfo.Id.NAME,
-        include = JsonTypeInfo.As.PROPERTY,
-        property = "type"
-)
-@JsonSubTypes({
-        @JsonSubTypes.Type(value = CoupeCarriageSerializationDto.class, name = "coupe"),
-        @JsonSubTypes.Type(value = SeatedCarriageSerializationDto.class, name = "seated"),
-        @JsonSubTypes.Type(value = DiningCarriageSerializationDto.class, name = "dining"),
-        @JsonSubTypes.Type(value = EconomyCarriageSerializationDto.class, name = "economy")
-})
 
-public class JsonJacksonSerializer implements ObjectSerializer {
-
+public class JsonJacksonSerializer extends AbstractFileSerializer {
     private final ObjectMapper objectMapper = new ObjectMapper()
             .enable(SerializationFeature.INDENT_OUTPUT)
-            .registerModule(new JavaTimeModule());
+            .registerModule(new JavaTimeModule())
+            .disable(SerializationFeature.WRITE_DATES_AS_TIMESTAMPS);
 
     @Override
     public SerializerType getSerializerName() {
@@ -39,15 +21,12 @@ public class JsonJacksonSerializer implements ObjectSerializer {
     }
 
     @Override
-    public <T extends SuperSerializationDto> void save(T object, String filePath) throws Exception {
-        if (object == null) {
-            throw new IllegalArgumentException("Object to save cannot be null");
-        }
-        objectMapper.writeValue(new File(filePath), object);
+    protected void write(SuperSerializationDto object, Path path) throws Exception {
+        objectMapper.writeValue(path.toFile(), object);
     }
 
     @Override
-    public <T extends SuperSerializationDto> T load(String filePath, Class<T> clazz) throws Exception {
-        return objectMapper.readValue(new File(filePath), clazz);
+    protected Object read(Path path, Class<? extends SuperSerializationDto> clazz) throws Exception {
+        return objectMapper.readValue(path.toFile(), clazz);
     }
 }

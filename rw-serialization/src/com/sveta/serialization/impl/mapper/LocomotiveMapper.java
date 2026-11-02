@@ -2,10 +2,8 @@ package com.sveta.serialization.impl.mapper;
 
 import com.sveta.locomotive.Locomotive;
 import com.sveta.serialization.impl.dto.LocomotiveSerializationDto;
-import lombok.Builder;
 import lombok.NonNull;
 
-@Builder
 public class LocomotiveMapper {
     public static LocomotiveSerializationDto toDto(@NonNull Locomotive locomotive) {
         return getLocomotiveSerializationDto(locomotive);
@@ -18,7 +16,6 @@ public class LocomotiveMapper {
                 .maxTransportedWeight(locomotive.maxTransportedWeight())
                 .power(locomotive.power())
                 .traction(locomotive.tractionForce())
-                .weight(locomotive.maxTransportedWeight())
                 .isElectric(locomotive.electric())
                 .model(locomotive.model())
                 .build();

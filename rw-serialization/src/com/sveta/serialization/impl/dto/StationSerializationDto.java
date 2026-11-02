@@ -1,5 +1,6 @@
 package com.sveta.serialization.impl.dto;
 
+import com.sveta.serialization.SuperSerializationDto;
 import lombok.*;
 
 @AllArgsConstructor
@@ -7,7 +8,7 @@ import lombok.*;
 @Setter
 @Getter
 @Builder
-public class StationSerializationDto {
+public class StationSerializationDto implements SuperSerializationDto {
     private String stationName;
     private int code;
 }

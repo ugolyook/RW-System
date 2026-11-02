@@ -1,18 +1,19 @@
 package com.sveta.serialization;
 
+import lombok.Getter;
+
+@Getter
 public enum SerializerType {
-    JAVA_IO_SERIALIZER("java_io"),
-    JSON_JACKSON_SERIALIZER("json_jackson"),
-    KRYO_SERIALIZER("kryo"),
-    XML_SERIALIZER("xml");
+    JAVA_IO_SERIALIZER("java_io", "bin"),
+    JSON_JACKSON_SERIALIZER("json_jackson", "json"),
+    KRYO_SERIALIZER("kryo", "bin"),
+    XML_SERIALIZER("xml", "xml");
 
-    private String folderName;
+    private final String folderName;
+    private final String extension;
 
-    SerializerType(String folder) {
-        folderName = folder;
-    }
-
-    public String getFolderName() {
-        return folderName;
+    SerializerType(String folderName, String extension) {
+        this.folderName = folderName;
+        this.extension = extension;
     }
 }

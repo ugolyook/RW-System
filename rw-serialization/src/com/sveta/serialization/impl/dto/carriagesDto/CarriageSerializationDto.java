@@ -4,11 +4,13 @@ import com.fasterxml.jackson.annotation.JsonSubTypes;
 import com.fasterxml.jackson.annotation.JsonTypeInfo;
 import com.sveta.serialization.SuperSerializationDto;
 import lombok.*;
+import lombok.experimental.SuperBuilder;
 
 @Setter
 @Getter
 @NoArgsConstructor
 @AllArgsConstructor
+@SuperBuilder
 @JsonTypeInfo(
         use = JsonTypeInfo.Id.NAME,
         include = JsonTypeInfo.As.PROPERTY,

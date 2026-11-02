@@ -5,19 +5,18 @@ import com.sveta.factory.carriage.BaseCarriageFactory;
 import com.sveta.factory.train.PassengerTrainFactory;
 import com.sveta.route.Station;
 import com.sveta.route.TrainRun;
-import com.sveta.serialization.impl.config.TrainRunStorageService;
-import com.sveta.serialization.impl.config.StorageConfigManager;
+import com.sveta.serialization.CoreSerializationDto;
+import com.sveta.serialization.CoreSerializer;
 import com.sveta.tickets.*;
 import com.sveta.tickets.calculate.BaseTicketPriceCalculator;
-import com.sveta.train.PassengerTrain;
 import com.sveta.train.Train;
 import com.sveta.train.carriage.Carriage;
 import com.sveta.train.carriage.passenger.CoupeCarriage;
 import com.sveta.view.TrainView;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import storage.JsonTrainStorageService;
 
+import java.util.ArrayList;
 import java.util.List;
 
 public class TrainController {
@@ -26,16 +25,16 @@ public class TrainController {
     private final TicketSearchService ticketSearchService;
     private final Cashier cashier;
     private final TrainView view;
-    private final TrainRunStorageService storageService;
-    private final JsonTrainStorageService trainStorageService;
+    private final CoreSerializer coreSerializer;
+
+    private final List<Train> trains = new ArrayList<>();
+    private final List<TrainRun> trainRuns = new ArrayList<>();
 
     public TrainController(
             TrainView view,
-            TrainRunStorageService storageService,
-            JsonTrainStorageService trainStorageService) {
+            CoreSerializer coreSerializer) {
         this.view = view;
-        this.storageService = storageService;
-        this.trainStorageService = trainStorageService;
+        this.coreSerializer = coreSerializer;
         this.ticketSearchService = new TicketSearchService();
         this.cashier = new Cashier(new BaseTicketPriceCalculator());
     }
@@ -48,46 +47,36 @@ public class TrainController {
         Train train = trainFactory.createTrain(carriages);
         view.showTrainCreated(train);
 
-        try {
-            trainStorageService.save(train);
-            log.info("Train successfully saved to file!");
-
-            Train loadedTrain = trainStorageService.load(train.getTrainNumber());
-            log.info("Train successfully loaded from file, train number: {}", loadedTrain.getTrainNumber());
-        } catch (Exception e) {
-            log.error("Error saving/loading train: {}", e.getMessage(), e);
-        }
-
         TrainRun run = TestDataFactory.createTrainRun(train);
         view.showTrainRunInfo(run);
 
-        saveTrainRunState(run);
+        trains.add(train);
+        trainRuns.add(run);
 
-        TrainRun loadedRun = loadTrainRunState(run.getTrain().getTrainNumber());
-        if (loadedRun != null) {
-            log.info("TrainRun successfully loaded and mapped back to Domain model!");
-        }
+        saveState();
+        verifyLoad();
 
         processBooking(run);
+        saveState();
         log.info("TrainController workflow finished successfully.");
     }
 
-    private void saveTrainRunState(TrainRun run) {
+    private void saveState() {
         try {
-            storageService.save(run);
-            log.info("TrainRun state successfully saved ");
+            coreSerializer.save(new CoreSerializationDto(trainRuns, trains));
+            log.info("State successfully saved ");
         } catch (Exception e) {
-            log.error("Error saving train run state: {}", e.getMessage(), e);
+            log.error("Error saving state: {}", e.getMessage(), e);
         }
     }
 
-    private TrainRun loadTrainRunState(int trainNumber) {
+    private void verifyLoad() {
         try {
-            log.info("Loading TrainRun for train number {}...", trainNumber);
-            return storageService.load(trainNumber);
+            CoreSerializationDto loaded = coreSerializer.load();
+            log.info("State loaded: {} trains, {} train runs",
+                    loaded.trains().size(), loaded.trainRuns().size());
         } catch (Exception e) {
-            log.error("Error loading train run state for train number {}: {}", trainNumber, e.getMessage(), e);
-            return null;
+            log.error("Error loading state {}",e.getMessage(), e);
         }
     }
 

@@ -5,7 +5,6 @@ import com.sveta.train.carriage.passenger.models.Seat;
 import lombok.Builder;
 import lombok.NonNull;
 
-@Builder
 public class SeatMapper {
     public static SeatSerializationDto toDto(@NonNull Seat seat) {
         return getSeatSerializationDto(seat);
