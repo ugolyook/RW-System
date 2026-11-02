@@ -111,6 +111,7 @@ public class TrainMapper {
                     .build();
             case SeatedCarriageSerializationDto s -> SeatedCarriage.builder()
                     .seatsLimit(s.getSeatsLimit())
+                    .baseCarriageWeightInKg((int) s.getWeight())
                     .build();
             case EconomyCarriageSerializationDto e -> EconomyCarriage.builder()
                     .seatsLimit(e.getSeatsLimit())

@@ -11,7 +11,7 @@ public class SerializerFactory {
         return List.of(
                 new JsonJacksonSerializer(),
                 new JavaIoSerializer(),
-                new KryoSerializer(),
-                new XmlSerializer());
+                new KryoSerializer());
+//                new XmlSerializer());
     }
 }

@@ -14,10 +14,10 @@ import java.util.List;
 @Getter
 @Setter
 @ToString(callSuper = true)
-@SuperBuilder
+@Builder
 public class CoupeCarriage extends PassengerCarriage implements ElectricCarriage {
-    private final int coupeLimit;
     private final List<Coupe> coupes;
+    private final int coupeLimit;
 
     public CoupeCarriage(
             List<Coupe> coupes,
