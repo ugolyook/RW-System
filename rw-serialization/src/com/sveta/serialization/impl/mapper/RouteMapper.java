@@ -14,6 +14,10 @@ import static main.java.com.sveta.utils.ObjectUtils.applyIfNotNull;
 @Builder
 public class RouteMapper {
     public static RouteSerializationDto toDto(@NonNull Route route) {
+        return getRouteSerializationDto(route);
+    }
+
+    private static RouteSerializationDto getRouteSerializationDto(Route route) {
         return RouteSerializationDto.builder()
                 .direction(route.direction())
                 .stops(applyIfNotNull(route.stops(), stops ->

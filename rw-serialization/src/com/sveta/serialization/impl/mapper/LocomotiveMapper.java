@@ -8,6 +8,10 @@ import lombok.NonNull;
 @Builder
 public class LocomotiveMapper {
     public static LocomotiveSerializationDto toDto(@NonNull Locomotive locomotive) {
+        return getLocomotiveSerializationDto(locomotive);
+    }
+
+    private static LocomotiveSerializationDto getLocomotiveSerializationDto(Locomotive locomotive) {
         return LocomotiveSerializationDto.builder()
                 .wagonLimit(locomotive.wagonLimit())
                 .maxSpeed(locomotive.maxSpeed())

@@ -14,6 +14,14 @@ import static main.java.com.sveta.utils.ObjectUtils.applyIfNotNull;
 
 public class TrainMapper {
     public static TrainSerializationDto toDto(@NonNull Train train) {
+        return getTrainSerializationDto(train);
+    }
+
+    private static TrainSerializationDto getTrainSerializationDto(Train train) {
+        return getSerializationDto(train);
+    }
+
+    private static TrainSerializationDto getSerializationDto(Train train) {
         return TrainSerializationDto.builder()
                 .trainNumber(train.getTrainNumber())
                 .locomotive(applyIfNotNull(train.getLocomotive(), LocomotiveMapper::toDto))
@@ -30,6 +38,10 @@ public class TrainMapper {
     }
 
     private static CarriageSerializationDto getCarriageSerializationDto(Carriage carriage) {
+        return getSerializationDto(carriage);
+    }
+
+    private static CarriageSerializationDto getSerializationDto(Carriage carriage) {
         return switch (carriage) {
             case CoupeCarriage coupe -> {
                 CoupeCarriageSerializationDto dto = new CoupeCarriageSerializationDto();
@@ -38,16 +50,7 @@ public class TrainMapper {
                 dto.setCoupeLimit(coupe.getCoupeLimit());
                 yield dto;
             }
-            case DiningCarriage dining -> {
-                DiningCarriageSerializationDto dto = new DiningCarriageSerializationDto();
-                dto.setSeatsLimit(dining.getSeatsLimit());
-                dto.setWeight(dining.getKgWeight());
-                dto.setBaseCarriageWeightKg(dining.getKgWeight());
-                dto.setHasHotKitchen(dining.isHasHotKitchen());
-                dto.setDeliveryToTheRoom(dining.isDeliveryToTheRoom());
-                dto.setFood(dining.getFood());
-                yield dto;
-            }
+            case DiningCarriage dining -> getDiningCarriageSerializationDto(dining);
             case SeatedCarriage seated -> {
                 SeatedCarriageSerializationDto dto = new SeatedCarriageSerializationDto();
                 dto.setSeatsLimit(seated.getSeatsLimit());
@@ -55,17 +58,26 @@ public class TrainMapper {
                 dto.setBaseCarriageWeightKg(seated.getKgWeight());
                 yield dto;
             }
-            case EconomyCarriage economy -> {
-                EconomyCarriageSerializationDto dto = new EconomyCarriageSerializationDto();
-                dto.setSeatsLimit(economy.getSeatsLimit());
-                dto.setWeight(economy.getKgWeight());
-                dto.setHasBioToilets(economy.isHasBioToilets());
-                dto.setBaseCarriageWeightKg(economy.getKgWeight());
-                yield dto;
-            }
+            case EconomyCarriage economy -> getEconomyCarriageSerializationDto(economy);
             default ->
                     throw new IllegalArgumentException("Unsupported carriage type: " + carriage.getClass().getName());
         };
+    }
+
+    private static EconomyCarriageSerializationDto getEconomyCarriageSerializationDto(EconomyCarriage economy) {
+        return EconomyCarriageSerializationDto.builder()
+                .hasBioToilets(economy.isHasBioToilets())
+                .baseCarriageWeightKg(economy.getKgWeight())
+                .build();
+    }
+
+    private static DiningCarriageSerializationDto getDiningCarriageSerializationDto(DiningCarriage dining) {
+        return DiningCarriageSerializationDto.builder()
+                .baseCarriageWeightKg(dining.getKgWeight())
+                .hasHotKitchen(dining.isHasHotKitchen())
+                .deliveryToTheRoom(dining.isDeliveryToTheRoom())
+                .food(dining.getFood())
+                .build();
     }
 
     public static @NonNull PassengerTrain toDomain(@NonNull TrainSerializationDto dto) {
@@ -82,19 +94,24 @@ public class TrainMapper {
 
     public static @NonNull Carriage carriageToDomain(@NonNull CarriageSerializationDto carriageDto) {
         return switch (carriageDto) {
-            case CoupeCarriageSerializationDto c -> new CoupeCarriage(
-                    c.getCoupes() != null ? c.getCoupes().size() : 0,
-                    c.getCoupeLimit()
-            );
-            case DiningCarriageSerializationDto d -> new DiningCarriage(
-                    d.getSeatsLimit(), d.getBaseCarriageWeightKg(),
-                    d.isHasHotKitchen(), d.isDeliveryToTheRoom(), d.getFood()
-            );
-            case SeatedCarriageSerializationDto s -> new SeatedCarriage(s.getSeatsLimit(), s.getBaseCarriageWeightKg());
-            case EconomyCarriageSerializationDto e -> new EconomyCarriage(
-                    e.getSeatsLimit(), e.getBaseCarriageWeightKg(),
-                    e.isHasBioToilets()
-            );
+            case CoupeCarriageSerializationDto c -> CoupeCarriage.builder()
+                    .coupeLimit(c.getCoupeLimit())
+                    .build();
+            case DiningCarriageSerializationDto d -> DiningCarriage.builder()
+                    .seatsLimit(d.getSeatsLimit())
+                    .baseCarriageWeightKg(d.getBaseCarriageWeightKg())
+                    .hasHotKitchen(d.isHasHotKitchen())
+                    .deliveryToTheRoom(d.isDeliveryToTheRoom())
+                    .food(d.getFood())
+                    .build();
+            case SeatedCarriageSerializationDto s -> SeatedCarriage.builder()
+                    .seatsLimit(s.getSeatsLimit())
+                    .build();
+            case EconomyCarriageSerializationDto e -> EconomyCarriage.builder()
+                    .seatsLimit(e.getSeatsLimit())
+                    .baseCarriageWeightKg(e.getBaseCarriageWeightKg())
+                    .hasBioToilets(e.isHasBioToilets())
+                    .build();
             default ->
                     throw new IllegalArgumentException("Unsupported carriage DTO: " + carriageDto.getClass().getName());
         };

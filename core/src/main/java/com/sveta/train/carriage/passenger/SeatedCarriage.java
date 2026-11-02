@@ -2,6 +2,7 @@ package com.sveta.train.carriage.passenger;
 
 import com.sveta.train.carriage.ElectricCarriage;
 import com.sveta.train.carriage.passenger.models.Seat;
+import lombok.Builder;
 import lombok.Getter;
 import lombok.ToString;
 
@@ -12,6 +13,7 @@ import static com.sveta.train.carriage.passenger.models.SeatType.BICYCLE;
 
 @Getter
 @ToString(callSuper = true)
+@Builder
 public class SeatedCarriage extends PassengerCarriage implements ElectricCarriage {
     private int seatsLimit;
     private final List<Seat> seats = new ArrayList<>(seatsLimit);

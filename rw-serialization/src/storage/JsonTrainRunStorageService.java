@@ -9,6 +9,7 @@ import com.sveta.serialization.impl.mapper.TrainRunMapper;
 
 public class JsonTrainRunStorageService implements TrainRunStorageService {
     private final ObjectSerializer serializer;
+    private StorageConfigManager configManager;
 
     public JsonTrainRunStorageService(ObjectSerializer serializer) {
         this.serializer = serializer;
@@ -19,7 +20,7 @@ public class JsonTrainRunStorageService implements TrainRunStorageService {
         TrainRunSerializationDto dto = TrainRunMapper.toDto(trainRun);
         String fileName = "train_run_" + trainRun.getTrain().getTrainNumber() + ".json";
 
-        String filePath = StorageConfigManager.resolveFilePath(
+        String filePath = configManager.resolveFilePath(
                 serializer.getSerializerName(),
                 "train-runs",
                 fileName
@@ -31,7 +32,7 @@ public class JsonTrainRunStorageService implements TrainRunStorageService {
     @Override
     public TrainRun load(int trainNumber) throws Exception {
         String fileName = "train_run_" + trainNumber + ".json";
-        String filePath = StorageConfigManager.resolveFilePath(
+        String filePath = configManager.resolveFilePath(
                 serializer.getSerializerName(),
                 "train-runs",
                 fileName

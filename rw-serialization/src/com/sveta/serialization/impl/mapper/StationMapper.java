@@ -7,6 +7,10 @@ import lombok.NonNull;
 
 public class StationMapper {
     public static StationSerializationDto toDto(@NonNull Station station) {
+        return getStationSerializationDto(station);
+    }
+
+    private static StationSerializationDto getStationSerializationDto(Station station) {
         return StationSerializationDto.builder()
                 .stationName(station.stationName())
                 .code(station.code())
@@ -14,6 +18,10 @@ public class StationMapper {
     }
 
     public static @NonNull Station toDomain(@NonNull StationSerializationDto dto) {
+        return getStation(dto);
+    }
+
+    private static Station getStation(StationSerializationDto dto) {
         return Station.builder()
                 .stationName(dto.getStationName())
                 .code(dto.getCode())

@@ -4,7 +4,7 @@ import com.esotericsoftware.kryo.Kryo;
 import com.esotericsoftware.kryo.io.Input;
 import com.esotericsoftware.kryo.io.Output;
 import com.sveta.serialization.ObjectSerializer;
-import com.sveta.serialization.SerializerName;
+import com.sveta.serialization.SerializerType;
 import com.sveta.serialization.SuperSerializationDto;
 
 import java.io.FileInputStream;
@@ -20,8 +20,8 @@ public class KryoSerializer implements ObjectSerializer {
     }
 
     @Override
-    public SerializerName getSerializerName() {
-        return SerializerName.KryoSerializer;
+    public SerializerType getSerializerName() {
+        return SerializerType.KRYO_SERIALIZER;
     }
 
     @Override

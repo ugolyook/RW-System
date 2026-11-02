@@ -11,6 +11,14 @@ import static main.java.com.sveta.utils.ObjectUtils.applyIfNotNull;
 @Builder
 public class TrainRunMapper {
     public static TrainRunSerializationDto toDto(@NonNull TrainRun trainRun) {
+        return getTrainRunSerializationDto(trainRun);
+    }
+
+    private static TrainRunSerializationDto getTrainRunSerializationDto(TrainRun trainRun) {
+        return getRunSerializationDto(trainRun);
+    }
+
+    private static TrainRunSerializationDto getRunSerializationDto(TrainRun trainRun) {
         return TrainRunSerializationDto.builder()
                 .train(applyIfNotNull(trainRun.getTrain(), train -> {
                     if (train instanceof PassengerTrain passengerTrain) {

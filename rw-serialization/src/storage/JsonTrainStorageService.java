@@ -1,16 +1,16 @@
 package storage;
 
-import com.sveta.serialization.ObjectSerializer;
 import com.sveta.serialization.impl.config.StorageConfigManager;
 import com.sveta.serialization.impl.dto.TrainSerializationDto;
 import com.sveta.serialization.impl.mapper.TrainMapper;
-import com.sveta.train.PassengerTrain;
+import com.sveta.serialization.impl.serializer.JsonJacksonSerializer;
 import com.sveta.train.Train;
 
 public class JsonTrainStorageService {
-    private final ObjectSerializer serializer;
+    private final JsonJacksonSerializer serializer;
+    private StorageConfigManager configManager;
 
-    public JsonTrainStorageService(ObjectSerializer serializer) {
+    public JsonTrainStorageService(JsonJacksonSerializer serializer) {
         this.serializer = serializer;
     }
 
@@ -22,7 +22,7 @@ public class JsonTrainStorageService {
         TrainSerializationDto dto = TrainMapper.toDto(train);
         String fileName = "train_" + train.getTrainNumber() + ".json";
 
-        String filePath = StorageConfigManager.resolveFilePath(
+        String filePath = configManager.resolveFilePath(
                 serializer.getSerializerName(),
                 "trains",
                 fileName
@@ -34,7 +34,7 @@ public class JsonTrainStorageService {
     public Train load(int trainNumber) throws Exception {
         String fileName = "train_" + trainNumber + ".json";
 
-        String filePath = StorageConfigManager.resolveFilePath(
+        String filePath = configManager.resolveFilePath(
                 serializer.getSerializerName(),
                 "trains",
                 fileName

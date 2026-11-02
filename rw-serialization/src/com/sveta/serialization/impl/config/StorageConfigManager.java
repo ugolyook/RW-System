@@ -1,6 +1,7 @@
 package com.sveta.serialization.impl.config;
 
-import com.sveta.serialization.SerializerName;
+import com.fasterxml.jackson.databind.SerializationConfig;
+import com.sveta.serialization.SerializerType;
 
 import java.nio.file.Files;
 import java.nio.file.Path;
@@ -10,7 +11,7 @@ public class StorageConfigManager {
     private static final String ENV_VAR_NAME = "RW_STORAGE_DIR";
     private static final String DEFAULT_FOLDER_NAME = ".rw-system";
 
-    public static Path resolveStorageDirectory() {
+    public Path resolveStorageDirectory() {
         String customDir = System.getenv(ENV_VAR_NAME);
         Path storagePath;
 
@@ -32,7 +33,7 @@ public class StorageConfigManager {
         return storagePath;
     }
 
-    public static String resolveFilePath(String serializerName, String subDirectory, String fileName) {
+    public String resolveFilePath(String serializerName, String subDirectory, String fileName) {
         try {
             Path targetPath = resolveStorageDirectory()
                     .resolve(serializerName)
@@ -48,8 +49,12 @@ public class StorageConfigManager {
         }
     }
 
-    public static String resolveFilePath(SerializerName serializerName, String subDirectory, String fileName) {
+    public String resolveFilePath(SerializerType serializerName, String subDirectory, String fileName) {
         String folderName = serializerName.name().toLowerCase();
         return resolveFilePath(folderName, subDirectory, fileName);
+    }
+
+    public Object resolveBasePath(SerializationConfig config) {
+        return "base";
     }
 }

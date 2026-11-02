@@ -21,6 +21,10 @@ public class TicketMapper {
     }
 
     public static @NonNull Ticket toDomain(@NonNull TicketSerializationDto dto) {
+        return getTicket(dto);
+    }
+
+    private static Ticket getTicket(TicketSerializationDto dto) {
         return Ticket.builder()
                 .passengerName(dto.getPassengerName())
                 .price(dto.getPrice())
