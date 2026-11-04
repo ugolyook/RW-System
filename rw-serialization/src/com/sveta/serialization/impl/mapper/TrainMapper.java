@@ -102,6 +102,10 @@ public class TrainMapper {
         return switch (carriageDto) {
             case CoupeCarriageSerializationDto c -> CoupeCarriage.builder()
                     .coupeLimit(c.getCoupeLimit())
+                    .coupes(applyIfNotNull(c.getCoupes(),
+                            list -> list.stream()
+                            .map(CoupeMapper::toDomain)
+                            .toList()))
                     .build();
             case DiningCarriageSerializationDto d -> DiningCarriage.builder()
                     .seatsLimit(d.getSeatsLimit())
