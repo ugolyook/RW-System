@@ -5,22 +5,36 @@ import com.sveta.factory.carriage.BaseCarriageFactory;
 import com.sveta.factory.train.PassengerTrainFactory;
 import com.sveta.route.Station;
 import com.sveta.route.TrainRun;
+import com.sveta.serialization.CoreState;
+import com.sveta.serialization.CoreSerializer;
 import com.sveta.tickets.*;
 import com.sveta.tickets.calculate.BaseTicketPriceCalculator;
 import com.sveta.train.Train;
 import com.sveta.train.carriage.Carriage;
 import com.sveta.train.carriage.passenger.CoupeCarriage;
 import com.sveta.view.TrainView;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
+import java.util.ArrayList;
 import java.util.List;
 
 public class TrainController {
+    private static final Logger log = LoggerFactory.getLogger(TrainController.class);
+
     private final TicketSearchService ticketSearchService;
     private final Cashier cashier;
     private final TrainView view;
+    private final CoreSerializer coreSerializer;
 
-    public TrainController(TrainView view) {
+    private final List<Train> trains = new ArrayList<>();
+    private final List<TrainRun> trainRuns = new ArrayList<>();
+
+    public TrainController(
+            TrainView view,
+            CoreSerializer coreSerializer) {
         this.view = view;
+        this.coreSerializer = coreSerializer;
         this.ticketSearchService = new TicketSearchService();
         this.cashier = new Cashier(new BaseTicketPriceCalculator());
     }
@@ -36,10 +50,38 @@ public class TrainController {
         TrainRun run = TestDataFactory.createTrainRun(train);
         view.showTrainRunInfo(run);
 
+        trains.add(train);
+        trainRuns.add(run);
+
+        saveState();
+        verifyLoad();
+
         processBooking(run);
+        saveState();
+        log.info("TrainController workflow finished successfully.");
+    }
+
+    private void saveState() {
+        try {
+            coreSerializer.save(new CoreState(trainRuns, trains));
+            log.info("State successfully saved ");
+        } catch (Exception e) {
+            log.error("Error saving state: {}", e.getMessage(), e);
+        }
+    }
+
+    private void verifyLoad() {
+        try {
+            CoreState loaded = coreSerializer.load();
+            log.info("State loaded: {} trains, {} train runs",
+                    loaded.trains().size(), loaded.trainRuns().size());
+        } catch (Exception e) {
+            log.error("Error loading state {}",e.getMessage(), e);
+        }
     }
 
     private void processBooking(TrainRun run) {
+        log.info("Initiating ticket booking process...");
         Station departureStation = findStationByCode(run, 2200001);
         Station arrivalStation = findStationByCode(run, 2200030);
 
@@ -58,6 +100,7 @@ public class TrainController {
         view.showSearchResults(searchResults);
 
         if (searchResults.isEmpty()) {
+            log.warn("No available seats found for the given requirements.");
             return;
         }
 
@@ -68,6 +111,7 @@ public class TrainController {
 
         List<SearchResult> updatedResults = ticketSearchService.searchSeats(List.of(run), requirement);
         view.showRemainingSeats(updatedResults.size());
+        log.info("Ticket booking process completed successfully.");
     }
 
     private Station findStationByCode(TrainRun run, int code) {

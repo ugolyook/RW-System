@@ -4,9 +4,11 @@ import com.sveta.route.Station;
 import com.sveta.route.TrainRun;
 import com.sveta.train.carriage.Carriage;
 import com.sveta.train.carriage.passenger.models.Seat;
+import lombok.Builder;
 
 import java.math.BigDecimal;
 
+@Builder
 public record Ticket(
         String passengerName,
         TrainRun trainRun,

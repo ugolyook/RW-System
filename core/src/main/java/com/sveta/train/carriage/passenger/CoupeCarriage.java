@@ -2,9 +2,11 @@ package com.sveta.train.carriage.passenger;
 
 import com.sveta.train.carriage.ElectricCarriage;
 import com.sveta.train.carriage.passenger.models.Seat;
+import lombok.Builder;
 import lombok.Getter;
 import lombok.Setter;
 import lombok.ToString;
+import lombok.experimental.SuperBuilder;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -12,9 +14,10 @@ import java.util.List;
 @Getter
 @Setter
 @ToString(callSuper = true)
+@Builder
 public class CoupeCarriage extends PassengerCarriage implements ElectricCarriage {
-    private final int coupeLimit;
     private final List<Coupe> coupes;
+    private final int coupeLimit;
 
     public CoupeCarriage(
             List<Coupe> coupes,
@@ -46,9 +49,11 @@ public class CoupeCarriage extends PassengerCarriage implements ElectricCarriage
 
     @Getter
     @Setter
+    @SuperBuilder
     public static class Coupe {
         public final static int SEATS_PER_COUPE = 4;
         private final List<Seat> seats;
+
         public Coupe() {
             this.seats = new ArrayList<>(SEATS_PER_COUPE);
         }

@@ -1,0 +1,35 @@
+package com.sveta.serialization.impl.mapper;
+
+import com.sveta.locomotive.Locomotive;
+import com.sveta.serialization.impl.dto.LocomotiveSerializationDto;
+import lombok.NonNull;
+
+public class LocomotiveMapper {
+    public static LocomotiveSerializationDto toDto(@NonNull Locomotive locomotive) {
+        return getLocomotiveSerializationDto(locomotive);
+    }
+
+    private static LocomotiveSerializationDto getLocomotiveSerializationDto(Locomotive locomotive) {
+        return LocomotiveSerializationDto.builder()
+                .wagonLimit(locomotive.wagonLimit())
+                .maxSpeed(locomotive.maxSpeed())
+                .maxTransportedWeight(locomotive.maxTransportedWeight())
+                .power(locomotive.power())
+                .traction(locomotive.tractionForce())
+                .isElectric(locomotive.electric())
+                .model(locomotive.model())
+                .build();
+    }
+
+    public static @NonNull Locomotive toDomain(@NonNull LocomotiveSerializationDto dto) {
+        return new Locomotive(
+                dto.getWagonLimit(),
+                dto.getMaxSpeed(),
+                dto.getMaxTransportedWeight(),
+                dto.getPower(),
+                dto.getTraction(),
+                dto.isElectric(),
+                dto.getModel()
+        );
+    }
+}

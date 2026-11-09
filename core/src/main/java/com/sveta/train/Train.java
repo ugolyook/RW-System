@@ -4,7 +4,9 @@ import com.sveta.locomotive.Locomotive;
 import com.sveta.train.carriage.Carriage;
 import com.sveta.train.carriage.passenger.DiningCarriage;
 import com.sveta.train.carriage.passenger.models.Food;
+import lombok.AllArgsConstructor;
 import lombok.Getter;
+import lombok.NoArgsConstructor;
 import lombok.RequiredArgsConstructor;
 
 import java.util.ArrayList;
@@ -14,6 +16,7 @@ import java.util.Optional;
 
 @RequiredArgsConstructor
 @Getter
+@NoArgsConstructor(force = true)
 public abstract class Train {
     private final List<Carriage> carriages = new ArrayList<>();
     private final int trainNumber;

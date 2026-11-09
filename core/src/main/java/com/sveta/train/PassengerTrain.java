@@ -2,8 +2,11 @@ package com.sveta.train;
 
 import com.sveta.locomotive.Locomotive;
 
-public class PassengerTrain extends Train {
-    public PassengerTrain(int trainNumber, Locomotive locomotive) {
+import java.io.Serializable;
+
+public class PassengerTrain extends Train implements Serializable {
+    public PassengerTrain(int trainNumber, Locomotive locomotive)
+    {
         super(trainNumber, locomotive);
     }
 }
