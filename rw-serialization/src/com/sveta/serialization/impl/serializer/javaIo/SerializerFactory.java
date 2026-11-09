@@ -1,4 +1,6 @@
-package com.sveta.serialization.impl.serializer;
+package com.sveta.serialization.impl.serializer.javaIo;
+
+import com.sveta.serialization.impl.serializer.files.ObjectSerializer;
 
 import java.util.List;
 

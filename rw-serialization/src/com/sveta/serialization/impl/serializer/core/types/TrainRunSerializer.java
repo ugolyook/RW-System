@@ -1,7 +1,8 @@
-package com.sveta.serialization.impl.serializer.test;
+package com.sveta.serialization.impl.serializer.core.types;
 
 import com.sveta.route.TrainRun;
-import com.sveta.serialization.impl.serializer.ObjectSerializer;
+import com.sveta.serialization.impl.serializer.files.ObjectSerializer;
+import com.sveta.serialization.impl.serializer.core.AbstractEntitySerializer;
 import com.sveta.serialization.impl.storage.StoragePathService;
 import com.sveta.serialization.impl.dto.TrainRunSerializationDto;
 import com.sveta.serialization.impl.mapper.TrainRunMapper;

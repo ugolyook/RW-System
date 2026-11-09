@@ -1,14 +1,17 @@
 package com.sveta.serialization.impl.mapper;
 
 import com.sveta.route.TrainRun;
+import com.sveta.serialization.impl.dto.TicketSerializationDto;
 import com.sveta.serialization.impl.dto.TrainRunSerializationDto;
 import com.sveta.train.PassengerTrain;
 import lombok.Builder;
 import lombok.NonNull;
 
 import java.util.ArrayList;
+import java.util.List;
 import java.util.stream.Collectors;
 
+import static main.java.com.sveta.utils.MapListUtils.mapList;
 import static main.java.com.sveta.utils.ObjectUtils.applyIfNotNull;
 
 @Builder
@@ -23,9 +26,7 @@ public class TrainRunMapper {
                 .route(applyIfNotNull(trainRun.getRoute(), RouteMapper::toDto))
                 .departureTime(trainRun.getDepartureTime())
                 .isExpress(trainRun.isExpress())
-                .tickets(applyIfNotNull(trainRun.getTickets(), list -> list.stream()
-                        .map(TicketMapper::toDto)
-                        .collect(Collectors.toCollection(ArrayList::new))))
+                .tickets(mapList(trainRun.getTickets(), TicketMapper::toDto))
                 .build();
     }
 
@@ -38,12 +39,14 @@ public class TrainRunMapper {
         );
 
         if (dto.getTickets() != null) {
-            dto.getTickets().forEach(
-                    t -> trainRun
-                            .addTicket(TicketMapper.toDomain(t, trainRun))  /// TODO
-            );
+            fillTickets(dto.getTickets(), trainRun);
         }
 
         return trainRun;
+    }
+
+    private static void fillTickets(List<TicketSerializationDto> tickets, TrainRun trainRun) {
+        tickets.forEach(t -> trainRun.addTicket(TicketMapper.toDomain(t, trainRun))
+        );
     }
 }

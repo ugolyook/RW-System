@@ -1,9 +1,8 @@
-package com.sveta.serialization.impl.serializer.test;
+package com.sveta.serialization.impl.serializer.core;
 
 import com.sveta.serialization.CoreEntitySerializationException;
-import com.sveta.serialization.impl.serializer.ObjectSerializer;
-import com.sveta.serialization.impl.serializer.SerializerType;
-import com.sveta.serialization.impl.serializer.SuperSerializationDto;
+import com.sveta.serialization.impl.serializer.files.ObjectSerializer;
+import com.sveta.serialization.impl.serializer.files.SerializerType;
 import com.sveta.serialization.impl.storage.StoragePathService;
 
 import java.nio.file.Path;

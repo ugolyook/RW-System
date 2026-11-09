@@ -9,10 +9,11 @@ import com.sveta.train.carriage.Carriage;
 import com.sveta.train.carriage.passenger.*;
 import lombok.NonNull;
 
-
 import java.util.ArrayList;
+import java.util.List;
 import java.util.stream.Collectors;
 
+import static main.java.com.sveta.utils.MapListUtils.mapList;
 import static main.java.com.sveta.utils.ObjectUtils.applyIfNotNull;
 
 public class TrainMapper {
@@ -24,66 +25,38 @@ public class TrainMapper {
         return TrainSerializationDto.builder()
                 .trainNumber(train.getTrainNumber())
                 .locomotive(applyIfNotNull(train.getLocomotive(), LocomotiveMapper::toDto))
-                .carriages(applyIfNotNull(train.getCarriages(), carriages ->
-                        carriages.stream()
-                                .map(TrainMapper::carriageToDto)
-                                .toList()
-                ))
+                .carriages(mapList(train.getCarriages(), TrainMapper::carriageToDto))
                 .build();
     }
 
     public static CarriageSerializationDto carriageToDto(@NonNull Carriage carriage) {
-        return getCarriageSerializationDto(carriage);
-    }
-
-    private static CarriageSerializationDto getCarriageSerializationDto(Carriage carriage) {
         return switch (carriage) {
-            case CoupeCarriage c -> getCoupeCarriageSerializationDto(c);
-            case DiningCarriage dining -> getDiningCarriageSerializationDto(dining);
-            case SeatedCarriage seated -> getSeatedCarriageSerializationDto(seated);
-            case EconomyCarriage economy -> getEconomyCarriageSerializationDto(economy);
+            case CoupeCarriage c -> CoupeCarriageSerializationDto.builder()
+                    .seatsLimit(c.getAllSeats().size())
+                    .weight(c.getKgWeight())
+                    .coupeLimit(c.getCoupeLimit())
+                    .coupes(mapList(c.getCoupes(), CoupeMapper::toDto))
+                    .build();
+            case DiningCarriage dining -> DiningCarriageSerializationDto.builder()
+                    .seatsLimit(dining.getSeatsLimit())
+                    .weight(dining.getKgWeight())
+                    .hasHotKitchen(dining.isHasHotKitchen())
+                    .deliveryToTheRoom(dining.isDeliveryToTheRoom())
+                    .food(dining.getFood())
+                    .build();
+            case SeatedCarriage seated -> SeatedCarriageSerializationDto.builder()
+                    .seatsLimit(seated.getSeatsLimit())
+                    .weight(seated.getKgWeight())
+                    .seats(mapList(seated.getSeats(), SeatMapper::toDto))
+                    .build();
+            case EconomyCarriage economy -> EconomyCarriageSerializationDto.builder()
+                    .seatsLimit(economy.getSeatsLimit())
+                    .weight(economy.getKgWeight())
+                    .hasBioToilets(economy.isHasBioToilets())
+                    .build();
             default ->
                     throw new IllegalArgumentException("Unsupported carriage type: " + carriage.getClass().getName());
         };
-    }
-
-    private static SeatedCarriageSerializationDto getSeatedCarriageSerializationDto(SeatedCarriage seated) {
-        return SeatedCarriageSerializationDto.builder()
-                .seatsLimit(seated.getSeatsLimit())
-                .weight(seated.getKgWeight())
-                .seats(applyIfNotNull(seated.getSeats(), list -> list.stream()
-                        .map(SeatMapper::toDto)
-                        .collect(Collectors.toCollection(ArrayList::new))))
-                .build();
-    }
-
-    private static CoupeCarriageSerializationDto getCoupeCarriageSerializationDto(CoupeCarriage c) {
-        return CoupeCarriageSerializationDto.builder()
-                .seatsLimit(c.getAllSeats().size())
-                .weight(c.getKgWeight())
-                .coupeLimit(c.getCoupeLimit())
-                .coupes(applyIfNotNull(c.getCoupes(), list -> list.stream()
-                        .map(CoupeMapper::toDto)
-                        .collect(Collectors.toCollection(ArrayList::new))))
-                .build();
-    }
-
-    private static EconomyCarriageSerializationDto getEconomyCarriageSerializationDto(EconomyCarriage economy) {
-        return EconomyCarriageSerializationDto.builder()
-                .seatsLimit(economy.getSeatsLimit())
-                .weight(economy.getKgWeight())
-                .hasBioToilets(economy.isHasBioToilets())
-                .build();
-    }
-
-    private static DiningCarriageSerializationDto getDiningCarriageSerializationDto(DiningCarriage dining) {
-        return DiningCarriageSerializationDto.builder()
-                .seatsLimit(dining.getSeatsLimit())
-                .weight(dining.getKgWeight())
-                .hasHotKitchen(dining.isHasHotKitchen())
-                .deliveryToTheRoom(dining.isDeliveryToTheRoom())
-                .food(dining.getFood())
-                .build();
     }
 
     public static @NonNull PassengerTrain toDomain(@NonNull TrainSerializationDto dto) {
@@ -91,21 +64,22 @@ public class TrainMapper {
         PassengerTrain train = new PassengerTrain(dto.getTrainNumber(), locomotive);
 
         if (dto.getCarriages() != null) {
-            dto.getCarriages().forEach(carriageDto ->
-                    train.addCarriage(carriageToDomain(carriageDto))); /// TODO
+            fillCarriages(dto.getCarriages(), train);
         }
 
         return train;
+    }
+
+    private static void fillCarriages(List<CarriageSerializationDto> carriages, PassengerTrain train) {
+        carriages.forEach(carriageDto -> train.addCarriage(carriageToDomain(carriageDto))
+        );
     }
 
     public static @NonNull Carriage carriageToDomain(@NonNull CarriageSerializationDto carriageDto) {
         return switch (carriageDto) {
             case CoupeCarriageSerializationDto c -> CoupeCarriage.builder()
                     .coupeLimit(c.getCoupeLimit())
-                    .coupes(applyIfNotNull(c.getCoupes(),
-                            list -> list.stream()
-                            .map(CoupeMapper::toDomain)
-                            .toList()))
+                    .coupes(mapList(c.getCoupes(), CoupeMapper::toDomain))
                     .build();
             case DiningCarriageSerializationDto d -> DiningCarriage.builder()
                     .seatsLimit(d.getSeatsLimit())

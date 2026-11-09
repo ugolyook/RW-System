@@ -1,8 +1,11 @@
-package com.sveta.serialization.impl.serializer;
+package com.sveta.serialization.impl.serializer.javaIo;
 
 import com.fasterxml.jackson.databind.SerializationFeature;
 import com.fasterxml.jackson.dataformat.xml.XmlMapper;
 import com.fasterxml.jackson.datatype.jsr310.JavaTimeModule;
+import com.sveta.serialization.impl.serializer.files.AbstractFileSerializer;
+import com.sveta.serialization.impl.serializer.files.SerializerType;
+import com.sveta.serialization.impl.serializer.core.SuperSerializationDto;
 
 import java.nio.file.Path;
 

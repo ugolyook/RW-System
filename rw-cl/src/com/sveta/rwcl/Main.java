@@ -4,8 +4,8 @@ import com.sveta.rwcl.controller.TrainController;
 import com.sveta.rwcl.formatter.BaseTrainInfoFormatter;
 import com.sveta.rwcl.viewer.ConsoleTrainView;
 import com.sveta.serialization.CoreSerializer;
-import com.sveta.serialization.impl.serializer.SerializerFactory;
-import com.sveta.serialization.impl.serializer.test.BaseCoreSerializer;
+import com.sveta.serialization.impl.serializer.javaIo.SerializerFactory;
+import com.sveta.serialization.impl.serializer.core.BaseCoreSerializer;
 import com.sveta.serialization.impl.config.SerializationConfig;
 import com.sveta.view.TrainView;
 

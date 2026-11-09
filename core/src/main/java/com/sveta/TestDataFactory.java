@@ -20,14 +20,13 @@ import com.sveta.route.TrainRun;
 import com.sveta.train.Train;
 import com.sveta.train.carriage.Carriage;
 import com.sveta.train.carriage.passenger.models.Food;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
+import lombok.extern.slf4j.Slf4j;
 
 import java.time.LocalDateTime;
 import java.util.List;
 
+@Slf4j
 public class TestDataFactory {
-    private static final Logger log = LoggerFactory.getLogger(TestDataFactory.class);
 
     private static final int DEFAULT_CARRIAGE_LIMIT = 18;
 

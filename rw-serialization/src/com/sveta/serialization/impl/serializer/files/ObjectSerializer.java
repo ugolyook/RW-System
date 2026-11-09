@@ -1,4 +1,6 @@
-package com.sveta.serialization.impl.serializer;
+package com.sveta.serialization.impl.serializer.files;
+
+import com.sveta.serialization.impl.serializer.core.SuperSerializationDto;
 
 public interface ObjectSerializer {
     SerializerType getSerializerName();

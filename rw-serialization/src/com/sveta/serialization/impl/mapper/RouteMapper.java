@@ -7,6 +7,7 @@ import lombok.NonNull;
 
 import java.util.List;
 
+import static main.java.com.sveta.utils.MapListUtils.mapList;
 import static main.java.com.sveta.utils.ObjectUtils.applyIfNotNull;
 
 public class RouteMapper {
@@ -17,21 +18,11 @@ public class RouteMapper {
     private static RouteSerializationDto getRouteSerializationDto(Route route) {
         return RouteSerializationDto.builder()
                 .direction(route.direction())
-                .stops(applyIfNotNull(route.stops(), stops ->
-                        stops.stream()
-                                .map(StationMapper::toDto)
-                                .toList()
-                ))
+                .stops(mapList(route.stops(), StationMapper::toDto))
                 .build();
     }
 
     public static @NonNull Route toDomain(@NonNull RouteSerializationDto dto) {
-        List<Station> stations = applyIfNotNull(dto.getStops(), stops ->
-                stops.stream()
-                        .map(StationMapper::toDomain)
-                        .toList()
-        );
-
-        return new Route(stations, dto.getDirection());
+        return new Route(mapList(dto.getStops(), StationMapper::toDomain), dto.getDirection());
     }
 }

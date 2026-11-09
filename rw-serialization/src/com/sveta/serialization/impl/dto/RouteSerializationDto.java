@@ -1,7 +1,7 @@
 package com.sveta.serialization.impl.dto;
 
 import com.sveta.route.Directions;
-import com.sveta.serialization.impl.serializer.SuperSerializationDto;
+import com.sveta.serialization.impl.serializer.core.SuperSerializationDto;
 import lombok.*;
 
 import java.util.List;

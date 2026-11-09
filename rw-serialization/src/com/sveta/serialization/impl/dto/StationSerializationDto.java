@@ -1,6 +1,6 @@
 package com.sveta.serialization.impl.dto;
 
-import com.sveta.serialization.impl.serializer.SuperSerializationDto;
+import com.sveta.serialization.impl.serializer.core.SuperSerializationDto;
 import lombok.*;
 
 @AllArgsConstructor

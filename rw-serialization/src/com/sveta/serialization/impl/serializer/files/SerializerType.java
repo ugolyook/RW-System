@@ -1,4 +1,4 @@
-package com.sveta.serialization.impl.serializer;
+package com.sveta.serialization.impl.serializer.files;
 
 import lombok.Getter;
 

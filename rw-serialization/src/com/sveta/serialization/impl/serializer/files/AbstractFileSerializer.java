@@ -1,4 +1,6 @@
-package com.sveta.serialization.impl.serializer;
+package com.sveta.serialization.impl.serializer.files;
+
+import com.sveta.serialization.impl.serializer.core.SuperSerializationDto;
 
 import java.io.FileNotFoundException;
 import java.nio.file.Files;

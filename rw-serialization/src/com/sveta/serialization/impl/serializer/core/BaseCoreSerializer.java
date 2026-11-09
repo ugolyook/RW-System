@@ -1,10 +1,12 @@
-package com.sveta.serialization.impl.serializer.test;
+package com.sveta.serialization.impl.serializer.core;
 
 import com.sveta.serialization.CoreEntitySerializationException;
 import com.sveta.serialization.CoreState;
 import com.sveta.serialization.CoreSerializer;
-import com.sveta.serialization.impl.serializer.ObjectSerializer;
+import com.sveta.serialization.impl.serializer.files.ObjectSerializer;
 import com.sveta.serialization.impl.config.SerializationConfig;
+import com.sveta.serialization.impl.serializer.core.types.TrainRunSerializer;
+import com.sveta.serialization.impl.serializer.core.types.TrainSerializer;
 import com.sveta.serialization.impl.storage.StoragePathService;
 
 import java.util.List;
