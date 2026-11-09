@@ -3,12 +3,7 @@ package com.sveta.serialization.impl.serializer;
 import com.esotericsoftware.kryo.Kryo;
 import com.esotericsoftware.kryo.io.Input;
 import com.esotericsoftware.kryo.io.Output;
-import com.sveta.serialization.ObjectSerializer;
-import com.sveta.serialization.SerializerType;
-import com.sveta.serialization.SuperSerializationDto;
 
-import java.io.FileInputStream;
-import java.io.FileOutputStream;
 import java.nio.file.Files;
 import java.nio.file.Path;
 

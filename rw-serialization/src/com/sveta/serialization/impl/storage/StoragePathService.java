@@ -1,7 +1,7 @@
-package storage;
+package com.sveta.serialization.impl.storage;
 
 import com.sveta.serialization.CoreEntitySerializationException;
-import com.sveta.serialization.SerializerType;
+import com.sveta.serialization.impl.serializer.SerializerType;
 import com.sveta.serialization.impl.config.SerializationConfig;
 
 import java.io.IOException;

@@ -5,7 +5,7 @@ import com.sveta.factory.carriage.BaseCarriageFactory;
 import com.sveta.factory.train.PassengerTrainFactory;
 import com.sveta.route.Station;
 import com.sveta.route.TrainRun;
-import com.sveta.serialization.CoreSerializationDto;
+import com.sveta.serialization.CoreState;
 import com.sveta.serialization.CoreSerializer;
 import com.sveta.tickets.*;
 import com.sveta.tickets.calculate.BaseTicketPriceCalculator;
@@ -63,7 +63,7 @@ public class TrainController {
 
     private void saveState() {
         try {
-            coreSerializer.save(new CoreSerializationDto(trainRuns, trains));
+            coreSerializer.save(new CoreState(trainRuns, trains));
             log.info("State successfully saved ");
         } catch (Exception e) {
             log.error("Error saving state: {}", e.getMessage(), e);
@@ -72,7 +72,7 @@ public class TrainController {
 
     private void verifyLoad() {
         try {
-            CoreSerializationDto loaded = coreSerializer.load();
+            CoreState loaded = coreSerializer.load();
             log.info("State loaded: {} trains, {} train runs",
                     loaded.trains().size(), loaded.trainRuns().size());
         } catch (Exception e) {

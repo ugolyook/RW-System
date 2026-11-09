@@ -5,7 +5,7 @@ import com.sveta.train.Train;
 
 import java.util.List;
 
-public record CoreSerializationDto(
+public record CoreState(
         List<TrainRun> trainRuns,
         List<Train> trains
 ){}

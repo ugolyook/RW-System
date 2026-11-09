@@ -3,16 +3,7 @@ package com.sveta.serialization.impl.serializer;
 import com.fasterxml.jackson.databind.SerializationFeature;
 import com.fasterxml.jackson.dataformat.xml.XmlMapper;
 import com.fasterxml.jackson.datatype.jsr310.JavaTimeModule;
-import com.sveta.serialization.ObjectSerializer;
-import com.sveta.serialization.SerializerType;
-import com.sveta.serialization.SuperSerializationDto;
 
-import java.beans.XMLDecoder;
-import java.beans.XMLEncoder;
-import java.io.BufferedInputStream;
-import java.io.BufferedOutputStream;
-import java.io.FileInputStream;
-import java.io.FileOutputStream;
 import java.nio.file.Path;
 
 public class XmlSerializer extends AbstractFileSerializer {

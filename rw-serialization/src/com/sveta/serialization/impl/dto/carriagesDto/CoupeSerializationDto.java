@@ -1,6 +1,6 @@
 package com.sveta.serialization.impl.dto.carriagesDto;
 
-import com.sveta.serialization.SuperSerializationDto;
+import com.sveta.serialization.impl.serializer.SuperSerializationDto;
 import lombok.*;
 
 import java.util.List;

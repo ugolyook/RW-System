@@ -1,7 +1,5 @@
 package com.sveta.serialization.impl.serializer;
 
-import com.sveta.serialization.ObjectSerializer;
-
 import java.util.List;
 
 public class SerializerFactory {

@@ -1,8 +1,5 @@
 package com.sveta.serialization.impl.serializer;
 
-import com.sveta.serialization.SerializerType;
-import com.sveta.serialization.SuperSerializationDto;
-
 import java.io.*;
 import java.nio.file.Files;
 import java.nio.file.Path;
