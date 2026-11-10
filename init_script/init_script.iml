@@ -6,6 +6,10 @@
       <sourceFolder url="file://$MODULE_DIR$/src" isTestSource="false" />
     </content>
     <orderEntry type="inheritedJdk" />
+    <orderEntry type="module" module-name="core" exported="" />
+    <orderEntry type="module" module-name="rw-serialization" exported="" />
+    <orderEntry type="module" module-name="rw-utils" exported="" />
+    <orderEntry type="library" exported="" name="lib" level="project" />
     <orderEntry type="sourceFolder" forTests="false" />
   </component>
 </module>

@@ -11,15 +11,14 @@ import com.sveta.train.Train;
 import com.sveta.train.carriage.passenger.DiningCarriage;
 import com.sveta.train.carriage.passenger.PassengerCarriage;
 import lombok.RequiredArgsConstructor;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
+import lombok.extern.slf4j.Slf4j;
 
 import java.util.List;
 import java.util.concurrent.atomic.AtomicLong;
 
+@Slf4j
 @RequiredArgsConstructor
 public class PassengerTrainFactory {
-    private static final Logger log = LoggerFactory.getLogger(PassengerTrainFactory.class);
     final AtomicLong trainNumber = new AtomicLong(100);
 
     private static final double WEIGHT_TO_POWER_RATIO = 60.0;

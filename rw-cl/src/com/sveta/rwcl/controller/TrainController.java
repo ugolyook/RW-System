@@ -1,8 +1,5 @@
 package com.sveta.rwcl.controller;
 
-import com.sveta.TestDataFactory;
-import com.sveta.factory.carriage.BaseCarriageFactory;
-import com.sveta.factory.train.PassengerTrainFactory;
 import com.sveta.route.Station;
 import com.sveta.route.TrainRun;
 import com.sveta.serialization.CoreState;
@@ -10,17 +7,16 @@ import com.sveta.serialization.CoreSerializer;
 import com.sveta.tickets.*;
 import com.sveta.tickets.calculate.BaseTicketPriceCalculator;
 import com.sveta.train.Train;
-import com.sveta.train.carriage.Carriage;
 import com.sveta.train.carriage.passenger.CoupeCarriage;
 import com.sveta.view.TrainView;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
+import lombok.extern.slf4j.Slf4j;
 
 import java.util.ArrayList;
 import java.util.List;
 
+@Slf4j
 public class TrainController {
-    private static final Logger log = LoggerFactory.getLogger(TrainController.class);
+    private static final int DEMO_TRAIN_NUMBER = 101;
 
     private final TicketSearchService ticketSearchService;
     private final Cashier cashier;
@@ -40,21 +36,22 @@ public class TrainController {
     }
 
     public void run() {
-        BaseCarriageFactory carriageFactory = TestDataFactory.createBaseCarriageFactory();
-        PassengerTrainFactory trainFactory = TestDataFactory.createTrainFactory();
+        if (!loadState()) {
+            return;
+        }
 
-        List<Carriage> carriages = TestDataFactory.createCarriages(carriageFactory);
-        Train train = trainFactory.createTrain(carriages);
-        view.showTrainCreated(train);
+        TrainRun run = trainRuns.stream()
+                .filter(r -> r.getTrain().getTrainNumber() == DEMO_TRAIN_NUMBER)
+                .min(java.util.Comparator.comparing(TrainRun::getDepartureTime))
+                .orElse(null);
 
-        TrainRun run = TestDataFactory.createTrainRun(train);
+        if (run == null) {
+            log.warn("Train run for train {} not found in storage.", DEMO_TRAIN_NUMBER);
+            return;
+        }
+
+        view.showTrainCreated(run.getTrain());
         view.showTrainRunInfo(run);
-
-        trains.add(train);
-        trainRuns.add(run);
-
-        saveState();
-        verifyLoad();
 
         processBooking(run);
         saveState();
@@ -70,14 +67,21 @@ public class TrainController {
         }
     }
 
-    private void verifyLoad() {
+    private boolean loadState() {
         try {
             CoreState loaded = coreSerializer.load();
+            trains.addAll(loaded.trains());
+            trainRuns.addAll(loaded.trainRuns());
             log.info("State loaded: {} trains, {} train runs",
                     loaded.trains().size(), loaded.trainRuns().size());
         } catch (Exception e) {
-            log.error("Error loading state {}",e.getMessage(), e);
+            log.error("Error loading state {}", e.getMessage(), e);
         }
+        if (trainRuns.isEmpty()) {
+            log.warn("Storage is empty. Run the init script first (make run_init_script).");
+            return false;
+        }
+        return true;
     }
 
     private void processBooking(TrainRun run) {

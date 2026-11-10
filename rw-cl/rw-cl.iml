@@ -7,7 +7,6 @@
     </content>
     <orderEntry type="inheritedJdk" />
     <orderEntry type="sourceFolder" forTests="false" />
-    <orderEntry type="module" module-name="core" exported="" />
     <orderEntry type="module-library" exported="" scope="PROVIDED">
       <library>
         <CLASSES>
@@ -17,6 +16,7 @@
         <SOURCES />
       </library>
     </orderEntry>
+    <orderEntry type="module" module-name="core" exported="" />
     <orderEntry type="module" module-name="rw-serialization" exported="" />
     <orderEntry type="module" module-name="rw-serialization" />
     <orderEntry type="library" name="Maven: org.slf4j:slf4j-api:2.0.9" level="project" />
