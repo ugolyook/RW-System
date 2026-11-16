@@ -16,7 +16,6 @@
 <?import javafx.scene.layout.BorderPane?>
 <?import javafx.scene.layout.FlowPane?>
 <?import javafx.scene.layout.HBox?>
-<?import javafx.scene.layout.Region?>
 <?import javafx.scene.layout.StackPane?>
 <?import javafx.scene.layout.VBox?>
 <?import javafx.scene.text.Font?>
@@ -115,7 +114,7 @@
                         <Insets top="14.0" />
                      </padding>
                      <children>
-                        <Label alignment="TOP_LEFT" prefHeight="18.0" prefWidth="163.0" text="Selected train" textAlignment="CENTER">
+                        <Label alignment="CENTER" contentDisplay="CENTER" prefHeight="34.0" prefWidth="328.0" text="Selected train" textAlignment="CENTER">
                            <font>
                               <Font name="System Bold" size="16.0" />
                            </font>
@@ -125,7 +124,7 @@
                         </Label>
                         <StackPane layoutX="48.0" layoutY="48.0" prefHeight="150.0" prefWidth="200.0">
                            <children>
-                              <Label fx:id="selectedTrainLabel" text="—" textAlignment="CENTER" />
+                              <Label fx:id="selectedTrainLabel" alignment="CENTER" contentDisplay="CENTER" prefHeight="18.0" prefWidth="321.0" text="—" textAlignment="CENTER" />
                            </children>
                            <effect>
                               <Bloom />
@@ -138,30 +137,27 @@
                         <Insets top="16.0" />
                      </padding>
                      <children>
-                        <Label text="Summary">
+                        <Label alignment="CENTER" contentDisplay="CENTER" prefHeight="20.0" prefWidth="317.0" text="Summary">
                            <font>
                               <Font name="System Italic" size="14.0" />
                            </font>
                         </Label>
                         <HBox prefHeight="100.0" prefWidth="200.0">
                            <children>
-                              <Label alignment="TOP_CENTER" contentDisplay="TOP" minHeight="24.0" prefHeight="18.0" prefWidth="181.0" text="Trains in the schedule" />
-                              <Region prefHeight="41.0" prefWidth="81.0" />
-                              <Label fx:id="trainCountLabel" text="12" textOverrun="CENTER_ELLIPSIS" />
+                              <Label alignment="CENTER" contentDisplay="CENTER" minHeight="24.0" prefHeight="24.0" prefWidth="162.0" text="Trains in the schedule" />
+                              <Label fx:id="trainCountLabel" alignment="CENTER" contentDisplay="CENTER" prefHeight="18.0" prefWidth="154.0" text="12" textAlignment="CENTER" textOverrun="CENTER_ELLIPSIS" />
                            </children>
                         </HBox>
                         <HBox prefHeight="100.0" prefWidth="200.0">
                            <children>
-                              <Label alignment="TOP_CENTER" contentDisplay="TOP" prefHeight="24.0" prefWidth="163.0" text="Total available seats" />
-                              <Region prefHeight="41.0" prefWidth="97.0" />
-                              <Label fx:id="totalSeatsLabel" text="348" textOverrun="CENTER_WORD_ELLIPSIS" />
+                              <Label alignment="CENTER" contentDisplay="CENTER" prefHeight="24.0" prefWidth="163.0" text="Total available seats" />
+                              <Label fx:id="totalSeatsLabel" alignment="CENTER" contentDisplay="CENTER" prefHeight="18.0" prefWidth="152.0" text="348" textAlignment="CENTER" textOverrun="CENTER_WORD_ELLIPSIS" />
                            </children>
                         </HBox>
                         <HBox alignment="TOP_CENTER" prefHeight="100.0" prefWidth="200.0">
                            <children>
-                              <Label alignment="TOP_CENTER" contentDisplay="CENTER" minHeight="24.0" prefHeight="24.0" prefWidth="138.0" text="Next departure" />
-                              <Region prefHeight="42.0" prefWidth="144.0" />
-                              <Label fx:id="nextDepartureLabel" prefHeight="18.0" prefWidth="73.0" text="14:20" />
+                              <Label alignment="CENTER" contentDisplay="TOP" minHeight="24.0" prefHeight="24.0" prefWidth="321.0" text="Next departure" />
+                              <Label fx:id="nextDepartureLabel" alignment="CENTER" contentDisplay="CENTER" prefHeight="18.0" prefWidth="330.0" text="14:20" textAlignment="CENTER" />
                            </children>
                         </HBox>
                      </children>
