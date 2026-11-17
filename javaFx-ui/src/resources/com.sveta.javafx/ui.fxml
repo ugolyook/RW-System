@@ -10,13 +10,11 @@
 <?import javafx.scene.control.TableColumn?>
 <?import javafx.scene.control.TableView?>
 <?import javafx.scene.control.TextField?>
-<?import javafx.scene.effect.Bloom?>
 <?import javafx.scene.effect.ColorAdjust?>
 <?import javafx.scene.effect.Glow?>
 <?import javafx.scene.layout.BorderPane?>
 <?import javafx.scene.layout.FlowPane?>
 <?import javafx.scene.layout.HBox?>
-<?import javafx.scene.layout.StackPane?>
 <?import javafx.scene.layout.VBox?>
 <?import javafx.scene.text.Font?>
 
@@ -40,14 +38,6 @@
                      </font>
                   </TextField>
                   <Button fx:id="updateButton" alignment="TOP_CENTER" contentDisplay="TOP" mnemonicParsing="false" onAction="#onButtonUpdateAction" prefHeight="26.0" prefWidth="134.0" style="-fx-border-radius: 12; -fx-background-radius: 12; -fx-background-color: #8af293; -fx-border-color: #186926;" text="Update" textFill="#748df2" wrapText="true">
-                     <font>
-                        <Font size="18.0" />
-                     </font>
-                     <cursor>
-                        <Cursor fx:constant="HAND" />
-                     </cursor>
-                  </Button>
-                  <Button fx:id="infoButton" alignment="TOP_CENTER" contentDisplay="TOP" mnemonicParsing="false" onAction="#onButtonInfoAction" prefHeight="26.0" prefWidth="134.0" style="-fx-border-radius: 12; -fx-background-radius: 12; -fx-border-color: grey;" text="Info" textFill="#0e101b" wrapText="true">
                      <font>
                         <Font size="18.0" />
                      </font>
@@ -105,95 +95,6 @@
                         <TableView fx:constant="CONSTRAINED_RESIZE_POLICY" />
                      </columnResizePolicy>
                   </TableView>
-               </children>
-            </VBox>
-            <VBox fx:id="infoPanel" maxWidth="360.0" minWidth="320.0" prefHeight="406.0" prefWidth="257.0" spacing="12.0" style="-fx-background-radius: 12;">
-               <children>
-                  <VBox alignment="CENTER" prefHeight="0.0" prefWidth="100.0" spacing="8.0" style="-fx-border-color: black; -fx-background-color: #bbd0f2;" VBox.vgrow="NEVER">
-                     <padding>
-                        <Insets top="14.0" />
-                     </padding>
-                     <children>
-                        <Label alignment="CENTER" contentDisplay="CENTER" prefHeight="34.0" prefWidth="328.0" text="Selected train" textAlignment="CENTER">
-                           <font>
-                              <Font name="System Bold" size="16.0" />
-                           </font>
-                           <padding>
-                              <Insets top="12.0" />
-                           </padding>
-                        </Label>
-                        <StackPane layoutX="48.0" layoutY="48.0" prefHeight="150.0" prefWidth="200.0">
-                           <children>
-                              <Label fx:id="selectedTrainLabel" alignment="CENTER" contentDisplay="CENTER" prefHeight="18.0" prefWidth="321.0" text="—" textAlignment="CENTER" />
-                           </children>
-                           <effect>
-                              <Bloom />
-                           </effect>
-                        </StackPane>
-                     </children>
-                  </VBox>
-                  <VBox alignment="CENTER" prefHeight="200.0" prefWidth="100.0" spacing="10.0" style="-fx-background-color: #bbd0f2; -fx-border-color: black; -fx-opacity: 50;">
-                     <padding>
-                        <Insets top="16.0" />
-                     </padding>
-                     <children>
-                        <Label alignment="CENTER" contentDisplay="CENTER" prefHeight="20.0" prefWidth="317.0" text="Summary">
-                           <font>
-                              <Font name="System Italic" size="14.0" />
-                           </font>
-                        </Label>
-                        <HBox prefHeight="100.0" prefWidth="200.0">
-                           <children>
-                              <Label alignment="CENTER" contentDisplay="CENTER" minHeight="24.0" prefHeight="24.0" prefWidth="162.0" text="Trains in the schedule" />
-                              <Label fx:id="trainCountLabel" alignment="CENTER" contentDisplay="CENTER" prefHeight="18.0" prefWidth="154.0" text="12" textAlignment="CENTER" textOverrun="CENTER_ELLIPSIS" />
-                           </children>
-                        </HBox>
-                        <HBox prefHeight="100.0" prefWidth="200.0">
-                           <children>
-                              <Label alignment="CENTER" contentDisplay="CENTER" prefHeight="24.0" prefWidth="163.0" text="Total available seats" />
-                              <Label fx:id="totalSeatsLabel" alignment="CENTER" contentDisplay="CENTER" prefHeight="18.0" prefWidth="152.0" text="348" textAlignment="CENTER" textOverrun="CENTER_WORD_ELLIPSIS" />
-                           </children>
-                        </HBox>
-                        <HBox alignment="TOP_CENTER" prefHeight="100.0" prefWidth="200.0">
-                           <children>
-                              <Label alignment="CENTER" contentDisplay="TOP" minHeight="24.0" prefHeight="24.0" prefWidth="321.0" text="Next departure" />
-                              <Label fx:id="nextDepartureLabel" alignment="CENTER" contentDisplay="CENTER" prefHeight="18.0" prefWidth="330.0" text="14:20" textAlignment="CENTER" />
-                           </children>
-                        </HBox>
-                     </children>
-                  </VBox>
-                  <VBox prefHeight="200.0" prefWidth="100.0" spacing="10.0" style="-fx-background-radius: 12; -fx-border-color: black; -fx-background-color: #bbd0f2;" styleClass="card-title">
-                     <padding>
-                        <Insets top="16.0" />
-                     </padding>
-                     <children>
-                        <Label alignment="TOP_CENTER" contentDisplay="CENTER" prefHeight="18.0" prefWidth="318.0" text="Available spots" />
-                        <HBox prefHeight="100.0" prefWidth="200.0">
-                           <children>
-                              <Label alignment="TOP_CENTER" prefHeight="18.0" prefWidth="80.0" text="≥ 50" />
-                              <Label prefHeight="18.0" prefWidth="271.0" text="   plenty of spots available" />
-                           </children>
-                        </HBox>
-                        <HBox prefHeight="100.0" prefWidth="200.0">
-                           <children>
-                              <Label alignment="TOP_CENTER" prefHeight="18.0" prefWidth="63.0" text="10–49" />
-                              <Label text="   few ​​spots left, better hurry" />
-                           </children>
-                        </HBox>
-                        <HBox prefHeight="100.0" prefWidth="200.0">
-                           <children>
-                              <Label alignment="TOP_CENTER" prefHeight="18.0" prefWidth="66.0" text="0" />
-                              <Label text="   bad, no spots left" />
-                           </children>
-                           <effect>
-                              <Glow level="0.46" />
-                           </effect>
-                        </HBox>
-                     </children>
-                     <effect>
-                        <Glow />
-                     </effect>
-                  </VBox>
                </children>
             </VBox>
          </children>

@@ -42,12 +42,8 @@ public class RwController {
     @FXML
     private CheckBox specialSeatsCheckBox;
     @FXML
-    private VBox infoPanel;
     private Stage infoStage;
-    private static final String PASSENGER = "Passenger";
-    private static final String EXPRESS = "Express";
-    private static final String ALL_TYPES = "All types";
-    private static final String ALL_DIRECTIONS = "All directions";
+    private TrainTableAdapter tableAdapter;
 
     @FXML
     private TableView<TrainRun> trainTable;
@@ -62,18 +58,6 @@ public class RwController {
     @FXML
     private TableColumn<TrainRun, String> freeSeatsColumn;
 
-    @FXML
-    private Label selectedTrainLabel;
-    @FXML
-    private Label trainCountLabel;
-    @FXML
-    private Label totalSeatsLabel;
-    @FXML
-    private Label nextDepartureLabel;
-
-    private static final DateTimeFormatter TIME =
-            DateTimeFormatter.ofPattern("HH:mm");
-
     private final ObservableList<TrainRun> allRuns =
             FXCollections.observableArrayList();
 
@@ -85,35 +69,30 @@ public class RwController {
         configureCombos();
         configureTable();
         loadDemoData();
-        updateSummary();
-        toHideInfo();
     }
 
-    @FXML
-    private void onButtonInfoAction() {
+    private void openInfoWindow() {
         if (infoStage == null) {
-            infoPanel.relocate(0, 0);
-            infoPanel.setPrefHeight(Region.USE_COMPUTED_SIZE);
-
-            infoStage = new Stage();
-            infoStage.setTitle("Train info");
-            infoStage.initOwner(root.getScene().getWindow());
-            infoStage.setScene(new Scene(infoPanel, 340, 520));
+            getInfoStage();
         }
         infoStage.show();
         infoStage.toFront();
     }
 
-    private void toHideInfo() {
-        if (infoPanel.getParent() instanceof Pane parent) {
-            parent.getChildren().remove(infoPanel);
-        }
+    private void getInfoStage() {
+        infoStage = InfoController.open(
+                root.getScene().getWindow(),
+                filteredRuns,
+                tableAdapter.selectedProperty());
     }
 
     private void configureCombos() {
-        typeComboBox.getItems().setAll(ALL_TYPES, PASSENGER, EXPRESS);
+        typeComboBox.getItems().setAll(
+                TrainRunFilter.ALL_TYPES,
+                TrainRunView.PASSENGER,
+                TrainRunView.EXPRESS);
         directionComboBox.getItems().setAll(
-                ALL_DIRECTIONS,
+                TrainRunFilter.ALL_DIRECTIONS,
                 Directions.FORWARD.name(),
                 Directions.BACKWARD.name()
         );
@@ -123,15 +102,15 @@ public class RwController {
     }
 
     private void configureTable() {
-        setTrainNumberToColumn();
-        setRouteToColumn();
-        setTypeToColumn();
-        setDepartureTimeToColumn();
-        setAvailableSpotsToColumn();
+        addAdapter();
+        tableAdapter.setItems(filteredRuns);
+        tableAdapter.onSelected(run -> openInfoWindow());
+    }
 
-        trainTable.setItems(filteredRuns);
-        trainTable.getSelectionModel().selectedItemProperty().addListener(
-                (obs, oldRun, newRun) -> showDetails(newRun));
+    private void addAdapter() {
+        tableAdapter = new TrainTableAdapter(
+                trainTable, numberColumn, routeColumn,
+                typeColumn, departureColumn, freeSeatsColumn);
     }
 
     private void loadDemoData() {
@@ -158,8 +137,7 @@ public class RwController {
 
     @FXML
     private void onButtonUpdateAction() {
-        filteredRuns.setPredicate(this::matchesFilter);
-        updateSummary();
+        filteredRuns.setPredicate(currentFilter());
     }
 
     @FXML
@@ -170,152 +148,16 @@ public class RwController {
         departureDatePicker.setValue(null);
         specialSeatsCheckBox.setSelected(false);
 
-        filteredRuns.setPredicate(run -> true);
-        trainTable.getSelectionModel().clearSelection();
-        showDetails(null);
-        updateSummary();
+        filteredRuns.setPredicate(TrainRunFilter.NONE);
+        tableAdapter.clearSelection();
     }
 
-    private boolean matchesFilter(TrainRun run) {
-        String query = searchField.getText();
-
-        if (matchByNumber(run, query)) return false;
-        if (matchTypes(run)) return false;
-        if (matchDirections(run)) return false;
-        if (matchDate(run)) return false;
-
-        return !specialSeatsCheckBox.isSelected() || hasSpecialSeats(run);
-    }
-
-    private boolean hasSpecialSeats(TrainRun run) {
-        return run.getTrain().getCarriages().stream()
-                .filter(PassengerCarriage.class::isInstance)
-                .map(PassengerCarriage.class::cast)
-                .flatMap(carriage -> carriage.getAllSeats().stream())
-                .anyMatch(seat -> seat.type() == SeatType.BICYCLE
-                        || seat.type() == SeatType.PET);
-    }
-
-    private int availableSpots(TrainRun run) {
-        return getNumberOfAvailableSpots(run);
-    }
-
-    private String formatRoute(TrainRun run) {
-        var stops = run.getRoute().stops();
-        if (stops.isEmpty()) {
-            return "";
-        }
-        return stops.getFirst().stationName() + " → "
-                + stops.getLast().stationName();
-    }
-
-    private void showDetails(TrainRun run) {
-        if (run == null) {
-            selectedTrainLabel.setText("—");
-            return;
-        }
-
-        setTableInfo(run);
-    }
-
-    private void updateSummary() {
-        trainCountLabel.setText(String.valueOf(filteredRuns.size()));
-        updateSeatsLabel();
-        updateNextDepartureLabel();
-    }
-
-    private void setAvailableSpotsToColumn() {
-        freeSeatsColumn.setCellValueFactory(cd ->
-                new ReadOnlyStringWrapper(
-                        String.valueOf(availableSpots(cd.getValue()))));
-    }
-
-    private void setDepartureTimeToColumn() {
-        departureColumn.setCellValueFactory(cd ->
-                new ReadOnlyStringWrapper(
-                        cd.getValue().getDepartureTime().format(TIME)));
-    }
-
-    private void setTypeToColumn() {
-        typeColumn.setCellValueFactory(cd ->
-                new ReadOnlyStringWrapper(
-                        cd.getValue().isExpress() ? EXPRESS : PASSENGER));
-    }
-
-    private void setRouteToColumn() {
-        routeColumn.setCellValueFactory(cd ->
-                new ReadOnlyStringWrapper(formatRoute(cd.getValue())));
-    }
-
-    private void setTrainNumberToColumn() {
-        numberColumn.setCellValueFactory(cd ->
-                new ReadOnlyStringWrapper(
-                        String.valueOf(cd.getValue().getTrain().getTrainNumber())));
-    }
-
-    private boolean matchByNumber(TrainRun run, String query) {
-        if (query != null && !query.isBlank()) {
-            String q = query.trim().toLowerCase();
-
-            boolean byNumber = String.valueOf(run.getTrain().getTrainNumber())
-                    .contains(q);
-            boolean byRoute = formatRoute(run).toLowerCase().contains(q);
-
-            return !byNumber && !byRoute;
-        }
-        return false;
-    }
-
-    private boolean matchDate(TrainRun run) {
-        return departureDatePicker.getValue() != null
-                && !run.getDepartureTime().toLocalDate()
-                .equals(departureDatePicker.getValue());
-    }
-
-    private boolean matchDirections(TrainRun run) {
-        String direction = directionComboBox.getValue();
-        return direction != null
-                && !ALL_DIRECTIONS.equals(direction)
-                && !run.getRoute().direction().name().equals(direction);
-    }
-
-    private boolean matchTypes(TrainRun run) {
-        String type = typeComboBox.getValue();
-        if (EXPRESS.equals(type) && !run.isExpress()) {
-            return true;
-        }
-        return PASSENGER.equals(type) && run.isExpress();
-    }
-
-    private static int getNumberOfAvailableSpots(TrainRun run) {
-        return Math.max(0,
-                run.getTrain().getTotalPassengerCap()
-                        - run.getTickets().size());
-    }
-
-    private void setTableInfo(TrainRun run) {
-        selectedTrainLabel.setText(
-                "№ " + run.getTrain().getTrainNumber() + "\n"
-                        + formatRoute(run) + "\n"
-                        + run.getDepartureTime().format(TIME) + " · "
-                        + (run.isExpress() ? EXPRESS : PASSENGER)
-        );
-    }
-
-    private void updateNextDepartureLabel() {
-        nextDepartureLabel.setText(
-                filteredRuns.stream()
-                        .map(TrainRun::getDepartureTime)
-                        .min(LocalDateTime::compareTo)
-                        .map(time -> time.format(TIME))
-                        .orElse("—")
-        );
-    }
-
-    private void updateSeatsLabel() {
-        int seats = filteredRuns.stream()
-                .mapToInt(this::availableSpots)
-                .sum();
-        totalSeatsLabel.setText(String.valueOf(seats));
+    private TrainRunFilter currentFilter() {
+        return new TrainRunFilter(
+                searchField.getText(),
+                typeComboBox.getValue(),
+                directionComboBox.getValue(),
+                departureDatePicker.getValue(),
+                specialSeatsCheckBox.isSelected());
     }
 }
